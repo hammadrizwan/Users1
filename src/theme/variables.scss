@@ -13,7 +13,7 @@ $app-direction: ltr;
 
 
 @import "ionic.globals";
-
+@import "ionicons";
 
 // Shared Variables
 // --------------------------------------------------
@@ -38,7 +38,10 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  themeblue: #033860,
+  lightthemeblue: #2a4255,
+  navbarcolor: #e52d27
 );
 
 
@@ -46,14 +49,27 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
-
-
+$navbar-ios-height: 200px;
+//$menu-ios-background: color($colors,themeblue);
+$card-ios-margin-left: 0;
+ $card-ios-margin-right: 0;
+$segment-button-ios-background-color-activated: color($colors,navbarcolor);
+$segment-button-ios-toolbar-button-max-width: 55px;
+$button-ios-outline-border-color:red;
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
+$card-md-margin-left: 0;
+ $card-md-margin-right: 0;
+$segment-button-md-border-bottom-width: 5px;
+$note-md-color: darken(rgb(104, 104, 104), 10%);
+$label-md-text-color-focused: color($colors,navbarcolor);
+$text-input-md-highlight-color: color($colors,navbarcolor);
+//$menu-md-background: color($colors,themeblue);
+$button-md-outline-border-color:red;
+$toolbar-background: color($colors,themeblue);
+$tabs-md-tab-icon-color-active: color($colors,navbarcolor);
+$tabs-md-tab-text-color-active: color($colors,navbarcolor);
 
 
 // App Windows Variables

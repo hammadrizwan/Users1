@@ -1,14 +1,78 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
+<ion-tabs selectedIndex="0" tabsPlacement="top">
+  <ion-tab [root]="LandRoot" tabTitle="Home" tabIcon="home" tabsHideOnSubPages="true"></ion-tab>
+  <ion-tab [root]="NotificationRoot" tabTitle="Notifications" tabIcon="notifications" tabsHideOnSubPages="true" ></ion-tab>
+</ion-tabs>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-</ion-content>
+ <!-- <ion-item no-lines>
+ <ion-slides pager="true" >
+   <ion-slide>
+     <img src="./assets/imgs/cat1.jpg">
+   </ion-slide>
+   <ion-slide>
+      <img src="./assets/imgs/cat2.jpg">
+    </ion-slide>
+    <ion-slide>
+        <img src="./assets/imgs/cat3.jpg">
+      </ion-slide>
+ </ion-slides>
+</ion-item>     
+<button ion-button large outline full mode="ios" color="danger" >Transport a Package</button>
+
+<ion-card class="bb">
+    <ion-card-header >
+    Stats
+  </ion-card-header>
+  <ion-card-content>
+  <ion-row>
+    <ion-col>
+        <div class="progress-wrapper">
+            <round-progress  
+            [background]="'white'"
+            [color]="'red'"
+            [current]="62" 
+            [max]="100" 
+            [radius]="35"
+            [stroke]="5"></round-progress>
+            <div class="text" >
+              62
+            </div>
+        </div>
+  </ion-col>
+  <ion-col>
+          
+        <div class="progress-wrapper">
+          <round-progress 
+          [background]="'white'"
+          [color]="'red'"
+          [current]="70" 
+          [max]="100" 
+          [radius]="35"
+          [stroke]="5"></round-progress>
+          
+          <div class="text">
+            70
+          </div>         
+        </div>
+</ion-col>
+<ion-col>
+    <div class="progress-wrapper">
+      <round-progress 
+      [background]="'white'"
+      [color]="'red'"
+      [current]="30" 
+      [max]="100" 
+      [radius]="35"
+      [stroke]="5"></round-progress>
+      <div class="text">
+        35
+      </div>
+    </div>
+</ion-col>
+</ion-row>
+</ion-card-content>
+ </ion-card>
+ <ion-item>
+   <ion-label>
+     Pending Reviews
+   </ion-label>
+ </ion-item> -->

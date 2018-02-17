@@ -1,0 +1,153 @@
+.cc-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+.mail{
+    background-image: url(../assets/imgs/envelop.svg);
+    max-height:50%;
+}
+
+.box{
+    background-image: url(../assets/imgs/dropbox.svg)
+}
+
+.tv{
+    background-image: url(../assets/imgs/television.svg)
+}
+
+.chair{
+    background-image: url(../assets/imgs/armchair.svg)
+}
+
+.DHL{
+    background-image: url(../assets/imgs/dhl.png)
+}
+
+.TCS{
+    background-image: url(../assets/imgs/TCS.png)
+}
+
+.UPS{
+    background-image: url(../assets/imgs/UPS.png)
+}
+
+.Leopard{
+    background-image: url(../assets/imgs/lcs.jpg)
+}
+
+.MP{
+    background-image: url(../assets/imgs/mnp.png);
+    
+}
+
+.FedEx{
+    background-image: url(../assets/imgs/fedex.jpg)
+}
+
+.Bike{
+    background-image: url(../assets/imgs/motorcycle.svg)
+}
+
+.Car{
+    background-image: url(../assets/imgs/sedan-car-model.svg)
+}
+
+.Pickup{
+    background-image: url(../assets/imgs/loaded-truck-side-view.svg)
+}
+
+.Truck{
+    background-image: url(../assets/imgs/delivery-truck.svg)
+}
+.cc-selector input:active +.drinkcard-cc{opacity: .9;}
+.cc-selector input:checked +.drinkcard-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.drinkcard-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:70px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.4);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.4);
+            filter: brightness(1.8) grayscale(1) opacity(.4);
+}
+.drinkcard-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+
+ion-chip ion-label{
+    font-size: 20px;
+}
+
+.lbl{
+    font-size: 20px;
+}
+.donate-now {
+    //list-style-type:none;
+    /* margin:25px 0 0 0;
+    padding:0; */
+}
+
+.donate-now ion-item {
+    //float:left;
+   //margin:0 5px 0 0;
+   //width:100px;
+   height:40px;
+  position:relative;
+  text-align: center;
+}
+
+.donate-now label, .donate-now input {
+   display:block;
+   position:absolute;
+   top:0;
+   left:0;
+   right:0;
+   bottom:0;
+}
+
+.donate-now input[type="radio"] {
+   opacity:0.011;
+   //z-index:100;
+}
+
+.donate-now input[type="radio"]:checked + label {
+   background:#bec0c4;
+}
+
+.donate-now label {
+    padding:5px;
+    //border:1px solid #CCC; 
+    cursor:pointer;
+    -webkit-transition: all 100ms ease-in;
+      -moz-transition: all 100ms ease-in;
+             transition: all 100ms ease-in;
+   //z-index:90;
+}
+
+.donate-now label:hover {
+    background:#bec0c4;
+}
+
+.center{
+    text-align: center;
+}
+
+.bgg{
+    background-color: color($colors,light);
+}
+
+

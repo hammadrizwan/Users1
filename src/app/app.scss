@@ -14,3 +14,48 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+$a : 120px;
+ion-avatar img  {
+    width:$a !important;
+    height : $a !important;
+    // max-width: $a !important;  //any size
+    // max-height: $a !important; //any size
+    }
+    // .menu-inner {
+    //     .content {
+    //       //background: rgb(165, 12, 12);
+          
+    //     }
+      
+    //     .item {
+    //       background: rgb(165, 12, 12);
+    //     }
+    //   }
+
+    // .head{
+    //   background: #ff3019;
+    //   background: -moz-linear-gradient(45deg, #ff3019 0%, #cf0404 100%);
+    //   background: -webkit-linear-gradient(45deg, #ff3019 0%,#cf0404 100%);
+    //   background: linear-gradient(45deg, #ff3019 0%,#cf0404 100%);
+    //   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=1 );
+      
+    // }
+      .textcolor{
+        color: white;
+    }
+
+    .menubg{
+      background-color: color($colors,themeblue);
+      color: white;
+    }
+
+  //   .toolbar-background{
+  //     background: #ff3019;
+  //     background: -moz-linear-gradient(45deg, #ff3019 0%, #cf0404 100%);
+  //     background: -webkit-linear-gradient(45deg, #ff3019 0%,#cf0404 100%);
+  //     background: linear-gradient(45deg, #ff3019 0%,#cf0404 100%);
+  //     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=1 );
+      
+  // }
+
+  

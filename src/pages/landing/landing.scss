@@ -1,0 +1,28 @@
+
+
+.aa{
+    background-color: #2a4262;
+}
+
+ion-slides .swiper-pagination
+ { @extend .swiper-pagination-white }
+
+ 
+
+ .progress-wrapper .text{
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    // text-align: center;
+    width: 100%;
+    z-index: 1;
+   
+}
+
+.bb{
+    background-color: rgb(236, 235, 235);
+}
+
+
