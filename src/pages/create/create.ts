@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { HomePage } from '../../pages/home/home';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
-import {Validators, FormBuilder, FormGroup, AbstractControl, } from '@angular/forms';
+import {Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
@@ -23,30 +23,79 @@ declare var cordova: any;
 })
 export class CreatePage {
 
-
-  slideOneForm: FormGroup;
-  slideTwoForm: FormGroup;
   submitAttempt: boolean = false;
   p = SignUpPage;
   q = HomePage;
   pet: string = "S1";
   lastImage1: string = null;
+   
+  data: FormGroup;
+  PackageName: AbstractControl;
+  PackageDesc: AbstractControl;
+  PickAddress: AbstractControl;
+  DestAddress: AbstractControl;
+  PSize: String;
+  CType: String;
+  VType: String;
+  TType: String;
 
   @ViewChild('signupSlider') signupSlider: any;
   @ViewChild('myInput') myInput: ElementRef;
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) {
-    this.slideOneForm = formBuilder.group({
-      PName: [''],
-      Desc: ['']
-    });
+   
+      this.data = this.formBuilder.group({
+        PackageName: ['',Validators.required],
+        PackageDesc: ['',Validators.required],
+        PickAddress: ['',Validators.required],
+        DestAddress: ['',Validators.required],
 
+    });
+    
+    this.PackageName=this.data.controls['PackageName'];
+    this.PackageDesc=this.data.controls['PackageDesc'];
+    this.PickAddress=this.data.controls['PickAddress'];
+    this.DestAddress=this.data.controls['DestAddress'];
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CreatePage');
+  
+
+  formSubmit(){
+    let Userdata;
+    if(this.TType == 'Flance'){
+      Userdata= {
+        'PackageName': this.PackageName.value,
+        'PackageDesc':this.PackageDesc.value,
+        'PickAddress':this.PickAddress.value,
+        'DestAddress':this.DestAddress.value,
+        'PackageSize':this.PSize,
+        'TransportType':this.TType,
+        'VehicleType':this.VType,        
+    };  
+    }
+    else{
+      Userdata= {
+        'PackageName': this.PackageName.value,
+        'PackageDesc':this.PackageDesc.value,
+        'PickAddress':this.PickAddress.value,
+        'DestAddress':this.DestAddress.value,
+        'PackageSize':this.PSize,
+        'TransportType':this.TType,
+        'CourierType':this.CType,        
+    }; 
+    }
+
+    
+ console.log(Userdata);
+//   this.http.post('http://localhost:5000/signup',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+//     let responseData = data;
+//     console.log(responseData);
+// },
+// err => {
+//     console.log('error');
+// });
   }
 
   next() {

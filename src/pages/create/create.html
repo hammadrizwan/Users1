@@ -32,11 +32,9 @@
 <ion-content padding class="bgg">
 
   <div [ngSwitch]="pet">
+    <form [formGroup]="data" (ngSubmit)="formSubmit()">
     <ion-list no-lines *ngSwitchCase="'S1'">
-
-      <form>
-
-        
+     
   <ion-item>
       <ion-avatar item-start>
         <ion-icon class="photo1" *ngIf="lastImage1==null" name="add-circle" large></ion-icon>
@@ -52,7 +50,7 @@
           <ion-col col-12>
             <ion-item>
               <ion-label floating>Package Name</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" formControlName="PackageName"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -60,14 +58,11 @@
           <ion-col col-12>
             <ion-item>
               <ion-label floating>Description</ion-label>
-              <ion-textarea></ion-textarea>
+              <ion-textarea formControlName="PackageDesc"></ion-textarea>
             </ion-item>
           </ion-col>
         </ion-row>
-      </form>
-
-      <form name="poka">
-
+     
         <ion-label class="lbl">Package size</ion-label>
         <div class="cc-selector">
           <ion-list no-padding>
@@ -76,7 +71,7 @@
               <ion-col>
                 <ion-item>
                   <div class="center">
-                    <input id="mail" name="PSize" [(ngModel)]="PSize" type="radio" value="Small">
+                    <input id="mail" name="PSize" [(ngModel)]="PSize" [ngModelOptions]="{standalone: true}" type="radio" value="Small">
                     <label class="drinkcard-cc mail" for="mail"></label>
                   </div>
                 </ion-item>
@@ -85,7 +80,7 @@
               <ion-col col-6>
                 <ion-item>
                   <div class="center">
-                    <input id="box" name="PSize" [(ngModel)]="PSize" type="radio" value="Medium">
+                    <input id="box" name="PSize" [(ngModel)]="PSize" [ngModelOptions]="{standalone: true}" type="radio" value="Medium">
                     <label class="drinkcard-cc box" for="box"></label>
                   </div>
                 </ion-item>
@@ -96,7 +91,7 @@
               <ion-col>
                 <ion-item>
                   <div class="center">
-                    <input id="tv" name="PSize" [(ngModel)]="PSize" type="radio" value="Large">
+                    <input id="tv" name="PSize" [(ngModel)]="PSize" [ngModelOptions]="{standalone: true}" type="radio" value="Large">
                     <label class="drinkcard-cc tv" for="tv"></label>
                   </div>
                 </ion-item>
@@ -105,7 +100,7 @@
               <ion-col>
                 <ion-item>
                   <div class="center">
-                    <input id="chair" name="PSize" [(ngModel)]="PSize" type="radio" value="X-Large">
+                    <input id="chair" name="PSize"  type="radio" value="X-Large">
                     <label class="drinkcard-cc chair" for="chair"></label>
                   </div>
                 </ion-item>
@@ -113,7 +108,7 @@
             </ion-row>
           </ion-list>
         </div>
-      </form>
+      
     </ion-list>
 
 
@@ -121,18 +116,19 @@
       <div class="center">
         <ion-label class="lbl">Select Transport Type</ion-label>
       </div>
-      <form name="dodo">
+      
 
         <ion-list class="donate-now">
 
 
           <ion-item>
+              <input id="FLance" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="FLance" />
             <label for="FLance">FREELANCE</label>
           </ion-item>
 
 
           <ion-item>
-            <input id="CService" name="TType" [(ngModel)]="TType" type="radio" value="CService" />
+            <input id="CService" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="CService" />
             <label for="CService">Courier</label>
           </ion-item>
 
@@ -143,7 +139,7 @@
 
 
 
-      </form>
+      
     </ion-list>
 
     <!-- Insert the cc selector here -->
@@ -156,7 +152,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="Bike" name="TType" type="radio" value="Bike">
+                <input id="Bike" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Bike">
                 <label class="drinkcard-cc Bike" for="Bike"></label>
               </div>
             </ion-item>
@@ -166,7 +162,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="Car" name="TType" type="radio" value="Car">
+                <input id="Car" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Car">
                 <label class="drinkcard-cc Car" for="Car"></label>
               </div>
             </ion-item>
@@ -176,7 +172,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="Pickup" name="TType" type="radio" value="Pickup">
+                <input id="Pickup" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Pickup">
                 <label class="drinkcard-cc Pickup" for="Pickup"></label>
               </div>
             </ion-item>
@@ -186,7 +182,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="Truck" name="TType" type="radio" value="Truck">
+                <input id="Truck" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Truck">
                 <label class="drinkcard-cc Truck" for="Truck"></label>
               </div>
             </ion-item>
@@ -205,7 +201,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="DHL" name="TType" type="radio" value="DHL">
+                <input id="DHL" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="DHL">
                 <label class="drinkcard-cc DHL" for="DHL"></label>
               </div>
             </ion-item>
@@ -217,7 +213,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="TCS" name="TType" type="radio" value="TCS">
+                <input id="TCS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="TCS">
                 <label class="drinkcard-cc TCS" for="TCS"></label>
               </div>
             </ion-item>
@@ -229,7 +225,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="UPS" name="TType" type="radio" value="UPS">
+                <input id="UPS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="UPS">
                 <label class="drinkcard-cc UPS" for="UPS"></label>
               </div>
             </ion-item>
@@ -241,7 +237,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="Leopard" name="TType" type="radio" value="Leopard">
+                <input id="Leopard" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="Leopard">
                 <label class="drinkcard-cc Leopard" for="Leopard"></label>
               </div>
             </ion-item>
@@ -253,7 +249,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="MP" name="TType" type="radio" value="MP">
+                <input id="MP" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="MP">
                 <label class="drinkcard-cc MP" for="MP"></label>
               </div>
             </ion-item>
@@ -265,7 +261,7 @@
             <ion-item>
               <!-- insert buttons stacked here -->
               <div class="center">
-                <input id="FedEx" name="TType" type="radio" value="FedEx">
+                <input id="FedEx" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="FedEx">
                 <label class="drinkcard-cc FedEx" for="FedEx"></label>
               </div>
             </ion-item>
@@ -282,12 +278,12 @@
 
       <ion-item>
         <ion-label floating>Pickup Address: </ion-label>
-        <ion-textarea></ion-textarea>
+        <ion-textarea formControlName="PickAddress"></ion-textarea>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Destination Address: </ion-label>
-        <ion-textarea></ion-textarea>
+        <ion-textarea formControlName="DestAddress"></ion-textarea>
       </ion-item>
 
       <ion-item>
@@ -350,11 +346,11 @@
       </ion-card>
 
       <ion-item>
-        <button ion-button full large color="secondary">CREATE</button>
+        <button ion-button full large color="secondary" type="submit">CREATE</button>
       </ion-item>
 
     </div>
-
+</form>
   </div>
 
 </ion-content>
