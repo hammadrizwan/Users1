@@ -13,10 +13,10 @@
     <ion-title mode="ios">Create Package</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top mode="ios">
-    <ion-segment mode="ios" [(ngModel)]="pet">
+    <ion-segment mode="ios" [(ngModel)]="pet" (ionChange)="segmentchanged($event)">
       <ion-segment-button value="S1">Step 1
       </ion-segment-button>
-      <ion-segment-button value="S2">Step 2
+      <ion-segment-button value="S2" disabled="true">Step 2
       </ion-segment-button>
       <ion-segment-button value="S3">Step 3
       </ion-segment-button>
@@ -355,13 +355,6 @@
 
 </ion-content>
 
-<!-- <ion-footer>
-    <ion-navbar mode="ios" color="primary">
-        <ion-buttons start>
-          <button ion-button icon-left (click)="prev()"><ion-icon name="arrow-back"></ion-icon> Prev</button>
-        </ion-buttons>
-        <ion-buttons end>
-          <button ion-button icon-right (click)="next()">Next <ion-icon name="arrow-forward"></ion-icon></button>
-        </ion-buttons>
-      </ion-navbar>
-</ion-footer> -->
+<ion-footer>
+   
+</ion-footer>

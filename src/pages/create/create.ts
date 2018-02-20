@@ -45,6 +45,7 @@ export class CreatePage {
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) {
    
+      
       this.data = this.formBuilder.group({
         PackageName: ['',Validators.required],
         PackageDesc: ['',Validators.required],
@@ -60,7 +61,9 @@ export class CreatePage {
 
   }
 
-  
+  segmentchanged($event){
+    console.log(event);
+  }
 
   formSubmit(){
     let Userdata;
