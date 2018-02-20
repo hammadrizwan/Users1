@@ -13,16 +13,16 @@
     <ion-title mode="ios">Create Package</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top mode="ios">
-    <ion-segment mode="ios" [(ngModel)]="pet" (ionChange)="segmentchanged($event)">
-      <ion-segment-button value="S1">Step 1
+    <ion-segment mode="ios" [(ngModel)]="pet" >
+      <ion-segment-button value="S1" disabled="true">Step 1
       </ion-segment-button>
       <ion-segment-button value="S2" disabled="true">Step 2
       </ion-segment-button>
-      <ion-segment-button value="S3">Step 3
+      <ion-segment-button value="S3" disabled="true">Step 3
       </ion-segment-button>
-      <ion-segment-button value="S4">Step 4
+      <ion-segment-button value="S4" disabled="true">Step 4
       </ion-segment-button>
-      <ion-segment-button value="S5">Step 5
+      <ion-segment-button value="S5" disabled="true">Step 5
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -52,6 +52,9 @@
               <ion-label floating>Package Name</ion-label>
               <ion-input type="text" formControlName="PackageName"></ion-input>
             </ion-item>
+            <ion-item *ngIf="(PackageName.hasError('required')  && Screen1)">
+              <p ion-text color="danger">*Please enter Package Name</p>
+            </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -60,10 +63,16 @@
               <ion-label floating>Description</ion-label>
               <ion-textarea formControlName="PackageDesc"></ion-textarea>
             </ion-item>
+            <ion-item *ngIf="(PackageDesc.hasError('required')  && Screen1)">
+              <p ion-text color="danger">*Please enter Package Description</p>
+            </ion-item>
           </ion-col>
         </ion-row>
      
         <ion-label class="lbl">Package size</ion-label>
+        <ion-item *ngIf="PSize == null && Screen1">
+          <p ion-text color="danger">*Please choose Package size</p>
+        </ion-item>
         <div class="cc-selector">
           <ion-list no-padding>
 
@@ -108,6 +117,8 @@
             </ion-row>
           </ion-list>
         </div>
+
+        <button full ion-button (click)="next()">NEXT</button>
       
     </ion-list>
 
@@ -117,10 +128,10 @@
         <ion-label class="lbl">Select Transport Type</ion-label>
       </div>
       
-
+      
         <ion-list class="donate-now">
 
-
+            
           <ion-item>
               <input id="FLance" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="FLance" />
             <label for="FLance">FREELANCE</label>
@@ -132,14 +143,24 @@
             <label for="CService">Courier</label>
           </ion-item>
 
+          <ion-item *ngIf="TType == null && Screen2">
+              <p ion-text color="danger">*Please choose Delivery Type</p>
+            </ion-item>
         </ion-list>
         <ion-item>
           <ion-label> Contact customer support for Expensive Items </ion-label>
         </ion-item>
 
-
-
-      
+<ion-row>
+  <ion-col col-6>
+      <button full ion-button (click)="prev()">PREVIOUS</button>
+</ion-col>
+<ion-col col-6>
+    <button full ion-button (click)="next()">NEXT</button>
+    
+</ion-col>
+</ion-row>
+        
     </ion-list>
 
     <!-- Insert the cc selector here -->
@@ -188,6 +209,9 @@
             </ion-item>
           </ion-row>
 
+          <ion-item *ngIf="VType == null && Screen3">
+              <p ion-text color="danger">*Please choose Transport Type</p>
+            </ion-item>
         </div>
       </div>
       <div *ngIf="TType === 'CService'">
@@ -197,6 +221,7 @@
               Select Courier Service
             </ion-label>
           </ion-item>
+          
           <ion-card>
             <ion-item>
               <!-- insert buttons stacked here -->
@@ -266,11 +291,21 @@
               </div>
             </ion-item>
           </ion-card>
-
+          <ion-item *ngIf="CType == null && Screen3">
+              <p ion-text color="danger">*Please choose Courier Brand</p>
+            </ion-item>
 
         </div>
       </div>
-
+      <ion-row>
+          <ion-col col-6>
+              <button full ion-button (click)="prev()">PREVIOUS</button>
+        </ion-col>
+        <ion-col col-6>
+            <button full ion-button (click)="next()">NEXT</button>
+            
+        </ion-col>
+        </ion-row>
     </ion-list>
 
     <ion-list no-padding *ngSwitchCase="'S4'">
@@ -280,15 +315,31 @@
         <ion-label floating>Pickup Address: </ion-label>
         <ion-textarea formControlName="PickAddress"></ion-textarea>
       </ion-item>
+      <ion-item *ngIf="(PickAddress.hasError('required')  && Screen4)">
+          <p ion-text color="danger">*Please enter Pickup Address</p>
+        </ion-item>
 
       <ion-item>
         <ion-label floating>Destination Address: </ion-label>
         <ion-textarea formControlName="DestAddress"></ion-textarea>
       </ion-item>
+      <ion-item *ngIf="(DestAddress.hasError('required')  && Screen4)">
+          <p ion-text color="danger">*Please enter Destination Address</p>
+        </ion-item>
 
       <ion-item>
         <img src="./assets/imgs/maps.png">
       </ion-item>
+
+      <ion-row>
+          <ion-col col-6>
+              <button full ion-button (click)="prev()">PREVIOUS</button>
+        </ion-col>
+        <ion-col col-6>
+            <button full ion-button (click)="next()">NEXT</button>
+            
+        </ion-col>
+        </ion-row>
     </ion-list>
 
     <div *ngSwitchCase="'S5'">
@@ -345,9 +396,17 @@
 
       </ion-card>
 
-      <ion-item>
-        <button ion-button full large color="secondary" type="submit">CREATE</button>
-      </ion-item>
+      <ion-row>
+          <ion-col col-6>
+              <button full ion-button (click)="prev()">PREVIOUS</button>
+        </ion-col>
+        <ion-col col-6>
+            <button ion-button full  color="secondary" type="submit">CREATE</button>
+            
+        </ion-col>
+        </ion-row>
+        
+     
 
     </div>
 </form>
@@ -356,5 +415,13 @@
 </ion-content>
 
 <ion-footer>
-   
+    <ion-row>
+        <ion-col col-6>
+            <button full ion-button (click)="prev()">PREVIOUS</button>
+      </ion-col>
+      <ion-col col-6>
+          <button full ion-button (click)="next()">NEXT</button>
+          
+      </ion-col>
+      </ion-row>
 </ion-footer>

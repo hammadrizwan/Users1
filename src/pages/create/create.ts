@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { HomePage } from '../../pages/home/home';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
-import {Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
@@ -28,7 +28,11 @@ export class CreatePage {
   q = HomePage;
   pet: string = "S1";
   lastImage1: string = null;
-   
+  Screen1: boolean;
+  Screen2: boolean;
+  Screen3: boolean;
+  Screen4: boolean;
+
   data: FormGroup;
   PackageName: AbstractControl;
   PackageDesc: AbstractControl;
@@ -44,69 +48,120 @@ export class CreatePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) {
-   
-      
-      this.data = this.formBuilder.group({
-        PackageName: ['',Validators.required],
-        PackageDesc: ['',Validators.required],
-        PickAddress: ['',Validators.required],
-        DestAddress: ['',Validators.required],
+
+
+    this.data = this.formBuilder.group({
+      PackageName: ['', Validators.required],
+      PackageDesc: ['', Validators.required],
+      PickAddress: ['', Validators.required],
+      DestAddress: ['', Validators.required],
 
     });
-    
-    this.PackageName=this.data.controls['PackageName'];
-    this.PackageDesc=this.data.controls['PackageDesc'];
-    this.PickAddress=this.data.controls['PickAddress'];
-    this.DestAddress=this.data.controls['DestAddress'];
+
+    this.PackageName = this.data.controls['PackageName'];
+    this.PackageDesc = this.data.controls['PackageDesc'];
+    this.PickAddress = this.data.controls['PickAddress'];
+    this.DestAddress = this.data.controls['DestAddress'];
+
+    this.pet="S1";
 
   }
 
-  segmentchanged($event){
+  segmentchanged($event) {
     console.log(event);
   }
 
-  formSubmit(){
+  formSubmit() {
     let Userdata;
-    if(this.TType == 'Flance'){
-      Userdata= {
+    if (this.TType == 'Flance') {
+      Userdata = {
         'PackageName': this.PackageName.value,
-        'PackageDesc':this.PackageDesc.value,
-        'PickAddress':this.PickAddress.value,
-        'DestAddress':this.DestAddress.value,
-        'PackageSize':this.PSize,
-        'TransportType':this.TType,
-        'VehicleType':this.VType,        
-    };  
+        'PackageDesc': this.PackageDesc.value,
+        'PickAddress': this.PickAddress.value,
+        'DestAddress': this.DestAddress.value,
+        'PackageSize': this.PSize,
+        'TransportType': this.TType,
+        'VehicleType': this.VType,
+      };
     }
-    else{
-      Userdata= {
+    else {
+      Userdata = {
         'PackageName': this.PackageName.value,
-        'PackageDesc':this.PackageDesc.value,
-        'PickAddress':this.PickAddress.value,
-        'DestAddress':this.DestAddress.value,
-        'PackageSize':this.PSize,
-        'TransportType':this.TType,
-        'CourierType':this.CType,        
-    }; 
+        'PackageDesc': this.PackageDesc.value,
+        'PickAddress': this.PickAddress.value,
+        'DestAddress': this.DestAddress.value,
+        'PackageSize': this.PSize,
+        'TransportType': this.TType,
+        'CourierType': this.CType,
+      };
     }
 
-    
- console.log(Userdata);
-//   this.http.post('http://localhost:5000/signup',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-//     let responseData = data;
-//     console.log(responseData);
-// },
-// err => {
-//     console.log('error');
-// });
+
+    console.log(Userdata);
+    //   this.http.post('http://localhost:5000/signup',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+    //     let responseData = data;
+    //     console.log(responseData);
+    // },
+    // err => {
+    //     console.log('error');
+    // });
   }
 
   next() {
-    // this.signupSlider.slideNext();
+    if (this.pet == "S1") 
+    {
+      this.Screen1 = true;
+      if (this.PSize != null && this.PackageName.value != "" && this.PackageDesc.value != "") {
+        this.pet = "S2";
+      }
+      return;
+    }
+
+    if (this.pet == "S2") 
+    {
+      this.Screen2 = true;
+      if (this.TType != null) {
+        this.pet = "S3";
+      }
+      return;
+    }
+
+    if (this.pet == "S3") 
+    {
+      this.Screen3 = true;
+      if (this.CType != null || this.VType != null) {
+        this.pet = "S4";
+      }
+      return;
+    }
+
+    if (this.pet == "S4") 
+    {
+      this.Screen4 = true;
+      if (this.PickAddress.value != "" && this.DestAddress.value != "") {
+        this.pet = "S5";
+      }
+      return;
+    }
   }
 
   prev() {
-    // this.signupSlider.slidePrev();
+    if(this.pet =="S2"){
+      this.pet = "S1"
+      return;
+    }
+    if(this.pet == "S3"){
+      this.pet = "S2"
+      return;
+    }
+    if(this.pet == "S4"){
+      this.pet = "S3"
+      return;
+    }
+    if(this.pet == "S5"){
+      this.pet = "S4"
+      return;
+    }
   }
 
   resize() {
@@ -178,8 +233,8 @@ export class CreatePage {
   // Copy the image to a local folder
   private copyFileToLocalDir(namePath, currentName, newFileName) {
     this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-        this.lastImage1 = newFileName;
-      
+      this.lastImage1 = newFileName;
+
     }, error => {
       this.presentToast('Error while storing file.');
     });
