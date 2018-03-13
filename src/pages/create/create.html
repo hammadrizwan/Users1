@@ -32,6 +32,7 @@
 <ion-content padding class="bgg">
 
   <div [ngSwitch]="pet">
+    <button ion-button (click)="getpackage()"></button>
     <form [formGroup]="data" (ngSubmit)="formSubmit()">
     <ion-list no-lines *ngSwitchCase="'S1'">
      

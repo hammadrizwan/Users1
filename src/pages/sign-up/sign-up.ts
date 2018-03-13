@@ -80,12 +80,12 @@ export class SignUpPage {
   logForm(){
     this.submitAttempted=true;
 
-    if(this.lastImage1 ==null){
-      let alert = this.alertCtrl.create({
-        title: 'Profile Image Missing',
-        subTitle: 'Please upload the required image',
-        buttons: ['Dismiss']
-      });
+    // if(this.lastImage1 ==null){
+    //   let alert = this.alertCtrl.create({
+    //     title: 'Profile Image Missing',
+    //     subTitle: 'Please upload the required image',
+    //     buttons: ['Dismiss']
+    //   });
       let Userdata= {
         'Name': this.Name.value,
         'Email':this.Email.value,
@@ -106,28 +106,28 @@ export class SignUpPage {
   err => {
       console.log('error');
   });
-      alert.present();
-      return;
-    }
+    //   alert.present();
+    //   return;
+    // }
 
-    if( this.lastImage2==null){
-      let alert = this.alertCtrl.create({
-        title: 'Liscence Image Missing',
-        subTitle: 'Please upload the required image',
-        buttons: ['Dismiss']  
-      });
-      alert.present();
-      return;
-    }
-    if( this.lastImage3==null){
-      let alert = this.alertCtrl.create({
-        title: 'Vehicle Registration Image Missing',
-        subTitle: 'Please upload all required image',
-        buttons: ['Dismiss']
-      });
-      alert.present();
-      return;
-    }
+    // if( this.lastImage2==null){
+    //   let alert = this.alertCtrl.create({
+    //     title: 'Liscence Image Missing',
+    //     subTitle: 'Please upload the required image',
+    //     buttons: ['Dismiss']  
+    //   });
+    //   alert.present();
+    //   return;
+    // }
+    // if( this.lastImage3==null){
+    //   let alert = this.alertCtrl.create({
+    //     title: 'Vehicle Registration Image Missing',
+    //     subTitle: 'Please upload all required image',
+    //     buttons: ['Dismiss']
+    //   });
+    //   alert.present();
+    //   return;
+    // }
     //ALL things are now set just need to send data to the back end check for valid!!!/
     
   }

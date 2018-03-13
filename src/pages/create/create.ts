@@ -9,6 +9,8 @@ import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { AlertController } from 'ionic-angular';
 declare var cordova: any;
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 /**
  * Generated class for the CreatePage page.
  *
@@ -23,6 +25,8 @@ declare var cordova: any;
 })
 export class CreatePage {
 
+  id: any;
+  lastrecord: any;
   submitAttempt: boolean = false;
   p = SignUpPage;
   q = HomePage;
@@ -47,7 +51,7 @@ export class CreatePage {
   @ViewChild('myInput') myInput: ElementRef;
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
-    public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) {
+    public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,public http: Http) {
 
 
     this.data = this.formBuilder.group({
@@ -71,10 +75,22 @@ export class CreatePage {
     console.log(event);
   }
 
+  getpackage(){//try code
+    this.http.get('http://localhost:5000/getpackageid').map(res => res.json()).subscribe(data => {
+     
+      this.lastrecord = data.content;
+      console.log(data.content)
+    err => {
+        console.log('error');
+    }});
+  }
+
   formSubmit() {
     let Userdata;
-    if (this.TType == 'Flance') {
+    
+    if (this.TType == 'FLance') {
       Userdata = {
+        'ID':0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
         'PickAddress': this.PickAddress.value,
@@ -82,10 +98,16 @@ export class CreatePage {
         'PackageSize': this.PSize,
         'TransportType': this.TType,
         'VehicleType': this.VType,
+        'Longitude':0,
+        'Latitude':0,
+        'TransporterID':null,
+        'Fare':0,
+
       };
     }
     else {
       Userdata = {
+        'ID':0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
         'PickAddress': this.PickAddress.value,
@@ -93,18 +115,22 @@ export class CreatePage {
         'PackageSize': this.PSize,
         'TransportType': this.TType,
         'CourierType': this.CType,
+        'Longitude':0,
+        'Latitude':0,
+        'TransporterID':null,
+        'Fare':0,
       };
     }
 
 
     console.log(Userdata);
-    //   this.http.post('http://localhost:5000/signup',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-    //     let responseData = data;
-    //     console.log(responseData);
-    // },
-    // err => {
-    //     console.log('error');
-    // });
+      this.http.post('http://localhost:5000/create',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+        let responseData = data;
+        console.log(responseData);
+    },
+    err => {
+        console.log('error');
+    });
   }
 
   next() {
