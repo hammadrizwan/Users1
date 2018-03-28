@@ -18,7 +18,7 @@ import { ProfilePage } from '../pages/profile/profile';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = LoginPage;
+  rootPage:any = CreatePage;
   @ViewChild(Nav) nav: Nav;
   pages: Array<{title: string, component: any}>;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,) {

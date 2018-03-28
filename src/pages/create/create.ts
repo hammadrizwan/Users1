@@ -75,15 +75,15 @@ export class CreatePage {
     console.log(event);
   }
 
-  getpackage(){//try code
-    this.http.get('http://localhost:5000/getpackageid').map(res => res.json()).subscribe(data => {
+  // getpackage(){//try code
+  //   this.http.get('http://localhost:5000/getpackageid').map(res => res.json()).subscribe(data => {
      
-      this.lastrecord = data.content;
-      console.log(data.content)
-    err => {
-        console.log('error');
-    }});
-  }
+  //     this.lastrecord = data.content;
+  //     console.log(data.content)
+  //   err => {
+  //       console.log('error');
+  //   }});
+  // }
 
   formSubmit() {
     let Userdata;
@@ -124,7 +124,7 @@ export class CreatePage {
 
 
     console.log(Userdata);
-      this.http.post('http://localhost:5000/create',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+      this.http.post('http://localhost:5000/createpackage',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
         let responseData = data;
         console.log(responseData);
     },
