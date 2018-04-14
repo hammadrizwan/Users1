@@ -59,6 +59,8 @@ export class CreatePage {
   Screen2: boolean;
   Screen3: boolean;
   Screen4: boolean;
+  Screen5: boolean;
+  Screen6: boolean;
 
   data: FormGroup;
   PackageName: AbstractControl;
@@ -73,13 +75,13 @@ export class CreatePage {
   @ViewChild('signupSlider') signupSlider: any;
   @ViewChild('myInput') myInput: ElementRef;
   
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,public http: Http,
     public geolocation: Geolocation,public app: App,
     public alertCtrl: AlertController,public zone: NgZone,) {
-
-    
+      this.platform.ready().then(() => this.loadMaps());
     this.data = this.formBuilder.group({
       PackageName: ['', Validators.required],
       PackageDesc: ['', Validators.required],
@@ -182,6 +184,7 @@ initAutocomplete(): void {
 }
 
 findPath(){
+  
   let directionsService = new google.maps.DirectionsService;
     let directionsDisplay = new google.maps.DirectionsRenderer;
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -250,6 +253,7 @@ createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
 }
 
 initializeMap() {
+  
   this.zone.run(() => {
     var mapEle = this.mapElement.nativeElement;
     this.map = new google.maps.Map(mapEle, {
@@ -463,30 +467,11 @@ addInfoWindow(marker, content) {
   }
 
   next() {
-    if (this.pet == "S1") 
-    {
-      this.Screen1 = true;
-      if (this.PSize != null && this.PackageName.value != "" && this.PackageDesc.value != "") {
-        this.pet = "S2";
-      }
-      return;
-    }
-
-    if (this.pet == "S2") 
-    {
-      this.Screen2 = true;
-      if (this.TType != null) {
-        this.pet = "S3";
-      }
-      return;
-    }
-
     if (this.pet == "S3") 
     {
       this.Screen3 = true;
-      if (this.CType != null || this.VType != null) {
+      if (this.PSize != null && this.PackageName.value != "" && this.PackageDesc.value != "") {
         this.pet = "S4";
-        this.platform.ready().then(() => this.loadMaps());
       }
       return;
     }
@@ -494,16 +479,40 @@ addInfoWindow(marker, content) {
     if (this.pet == "S4") 
     {
       this.Screen4 = true;
-      if (this.PickAddress.value != "" && this.DestAddress.value != "") {
+      if (this.TType != null) {
         this.pet = "S5";
       }
+      return;
+    }
+
+    if (this.pet == "S5") 
+    {
+      this.Screen5 = true;
+      if (this.CType != null || this.VType != null) {
+        this.pet = "S6";
+        
+      }
+      return;
+    }
+
+    if (this.pet == "S1") 
+    {
+      this.Screen1 = true;
+        this.pet = "S2";
+      return;
+    }
+    if (this.pet == "S2") 
+    {
+      this.Screen2 = true;
+        this.pet = "S3";
       return;
     }
   }
 
   prev() {
     if(this.pet =="S2"){
-      this.pet = "S1"
+      this.pet = "S1";
+      this.loadMaps();
       return;
     }
     if(this.pet == "S3"){
@@ -516,6 +525,10 @@ addInfoWindow(marker, content) {
     }
     if(this.pet == "S5"){
       this.pet = "S4"
+      return;
+    }
+    if(this.pet == "S6"){
+      this.pet = "S5"
       return;
     }
   }
