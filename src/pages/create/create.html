@@ -32,7 +32,7 @@
 <ion-content padding class="bgg">
 
   <div [ngSwitch]="pet">
-    <button ion-button (click)="getpackage()"></button>
+    
     <form [formGroup]="data" (ngSubmit)="formSubmit()">
     <ion-list no-lines *ngSwitchCase="'S1'">
      
@@ -310,9 +310,21 @@
     </ion-list>
 
     <ion-list no-padding *ngSwitchCase="'S4'">
-
-
+      
       <ion-item>
+        <div class="map">
+            
+          <ion-searchbar #searchbar1  placeholder="Enter Location:"></ion-searchbar>
+          <ion-item></ion-item>
+          <ion-searchbar #searchbar placeholder="Enter Destination:"></ion-searchbar>
+        <div id="map" #map></div>
+      </div>
+      </ion-item>
+      <ion-item></ion-item>
+      <ion-item>
+      <button ion-button (click)=findPath()>Find Path</button>
+      </ion-item>
+      <!-- <ion-item>
         <ion-label floating>Pickup Address: </ion-label>
         <ion-textarea formControlName="PickAddress"></ion-textarea>
       </ion-item>
@@ -330,7 +342,7 @@
 
       <ion-item>
         <img src="./assets/imgs/maps.png">
-      </ion-item>
+      </ion-item> -->
 
       <ion-row>
           <ion-col col-6>
