@@ -13,7 +13,7 @@
     <ion-title mode="ios">Create Package</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top mode="ios">
-    <ion-segment mode="ios" [(ngModel)]="pet" >
+    <ion-segment (ionChange)="updatePage(pet)" mode="ios" [(ngModel)]="pet">
       <ion-segment-button value="S1" disabled="false">Step 1
       </ion-segment-button>
       <ion-segment-button value="S2" disabled="false">Step 2
@@ -25,7 +25,7 @@
       <ion-segment-button value="S5" disabled="false">Step 5
       </ion-segment-button>
       <ion-segment-button value="S6" disabled="false">Step 6
-        </ion-segment-button>
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -34,24 +34,22 @@
 <ion-content padding class="bgg">
 
   <div [ngSwitch]="pet">
-      <ion-list no-padding *ngSwitchCase="'S1'">
-      
-          
-            <div class="map">
-                
-              <ion-searchbar #searchbar1  placeholder="Enter Location:"></ion-searchbar>
-              <ion-item></ion-item>
-              <ion-searchbar #searchbar placeholder="Enter Destination:"></ion-searchbar>
-            
-          </div>
-          
-          
-              <div id="map" #map></div>
-          
-          <ion-item></ion-item>
-          <button ion-button (click)=findPath()>Find Path</button>
-          
-          <!-- <ion-item>
+    <ion-list (onCreate)="loadMaps()" no-padding *ngSwitchCase="'S1'">
+
+
+      <div class="map">
+        <ion-searchbar #searchbar1 placeholder="Enter Location:"></ion-searchbar>
+        <ion-item></ion-item>
+        <ion-searchbar #searchbar placeholder="Enter Destination:"></ion-searchbar>
+      </div>
+      <div  id="map" #map></div>
+      <br>
+      <br>
+      <br>
+
+      <button ion-button (click)=findPath()>Find Path</button>
+
+      <!-- <ion-item>
             <ion-label floating>Pickup Address: </ion-label>
             <ion-textarea formControlName="PickAddress"></ion-textarea>
           </ion-item>
@@ -70,8 +68,8 @@
           <ion-item>
             <img src="./assets/imgs/maps.png">
           </ion-item> -->
-    
-          <!-- <ion-row>
+
+      <!-- <ion-row>
               <ion-col col-6>
                   <button full ion-button (click)="prev()">PREVIOUS</button>
             </ion-col>
@@ -80,25 +78,25 @@
                 
             </ion-col>
             </ion-row> -->
-        </ion-list>
-        <ion-list no-padding *ngSwitchCase="'S2'">
-            <ion-item>
-                <ion-avatar item-start>
-                  <ion-icon class="photo1" *ngIf="lastImage1==null" name="add-circle" large></ion-icon>
-                  <img src="{{pathForImage(lastImage1)}}" class="avatar1" *ngIf="lastImage1!=null">
-                </ion-avatar>
-                <h2>Take a Selfie!</h2>
-                <button ion-button icon-left (click)="presentActionSheet(1)">
-                  <ion-icon name="camera"></ion-icon>Select Image
-                </button>
-              </ion-item>
+    </ion-list>
+    <ion-list no-padding *ngSwitchCase="'S2'">
+      <ion-item>
+        <ion-avatar item-start>
+          <ion-icon class="photo1" *ngIf="lastImage1==null" name="add-circle" large></ion-icon>
+          <img src="{{pathForImage(lastImage1)}}" class="avatar1" *ngIf="lastImage1!=null">
+        </ion-avatar>
+        <h2>Take a Selfie!</h2>
+        <button ion-button icon-left (click)="presentActionSheet(1)">
+          <ion-icon name="camera"></ion-icon>Select Image
+        </button>
+      </ion-item>
 
-        </ion-list>
-    
+    </ion-list>
+
     <form [formGroup]="data" (ngSubmit)="formSubmit()">
-    <ion-list no-lines *ngSwitchCase="'S3'">
-     
-  
+      <ion-list no-lines *ngSwitchCase="'S3'">
+
+
 
         <ion-row>
           <ion-col col-12>
@@ -122,7 +120,7 @@
             </ion-item>
           </ion-col>
         </ion-row>
-     
+
         <ion-label class="lbl">Package size</ion-label>
         <ion-item *ngIf="PSize == null && Screen1">
           <p ion-text color="danger">*Please choose Package size</p>
@@ -163,7 +161,7 @@
               <ion-col>
                 <ion-item>
                   <div class="center">
-                    <input id="chair" name="PSize"  type="radio" value="X-Large">
+                    <input id="chair" name="PSize" type="radio" value="X-Large">
                     <label class="drinkcard-cc chair" for="chair"></label>
                   </div>
                 </ion-item>
@@ -173,39 +171,40 @@
         </div>
 
         <button full ion-button (click)="next()">NEXT</button>
-      
-    </ion-list>
+
+      </ion-list>
 
 
-    <ion-list no-lines *ngSwitchCase="'S4'">
-      <div class="center">
-        <ion-label class="lbl">Select Transport Type</ion-label>
-      </div>
-      
-      
+      <ion-list no-lines *ngSwitchCase="'S4'">
+        <div class="center">
+          <ion-label class="lbl">Select Transport Type</ion-label>
+        </div>
+
+
         <ion-list class="donate-now">
 
-            
+
           <ion-item>
-              <input id="FLance" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="FLance" />
+            <input id="FLance" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="FLance" />
             <label for="FLance">FREELANCE</label>
           </ion-item>
 
 
           <ion-item>
-            <input id="CService" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="CService" />
+            <input id="CService" name="TType" [(ngModel)]="TType" [ngModelOptions]="{standalone: true}" type="radio" value="CService"
+            />
             <label for="CService">Courier</label>
           </ion-item>
 
           <ion-item *ngIf="TType == null && Screen2">
-              <p ion-text color="danger">*Please choose Delivery Type</p>
-            </ion-item>
+            <p ion-text color="danger">*Please choose Delivery Type</p>
+          </ion-item>
         </ion-list>
         <ion-item>
           <ion-label> Contact customer support for Expensive Items </ion-label>
         </ion-item>
 
-<!-- <ion-row>
+        <!-- <ion-row>
   <ion-col col-6>
       <button full ion-button (click)="prev()">PREVIOUS</button>
 </ion-col>
@@ -214,236 +213,236 @@
     
 </ion-col>
 </ion-row> -->
-        
-    </ion-list>
 
-    <!-- Insert the cc selector here -->
+      </ion-list>
 
-    <ion-list no-lines *ngSwitchCase="'S5'">
+      <!-- Insert the cc selector here -->
 
-      <div *ngIf="TType === 'FLance'">
-        <div class="cc-selector">
-          <ion-row *ngIf="PSize === 'Small'">
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="Bike" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Bike">
-                <label class="drinkcard-cc Bike" for="Bike"></label>
-              </div>
-            </ion-item>
-          </ion-row>
+      <ion-list no-lines *ngSwitchCase="'S5'">
 
-          <ion-row *ngIf="PSize === 'Small' || PSize === 'Medium' || PSize === 'Large'">
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="Car" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Car">
-                <label class="drinkcard-cc Car" for="Car"></label>
-              </div>
-            </ion-item>
-          </ion-row>
+        <div *ngIf="TType === 'FLance'">
+          <div class="cc-selector">
+            <ion-row *ngIf="PSize === 'Small'">
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="Bike" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Bike">
+                  <label class="drinkcard-cc Bike" for="Bike"></label>
+                </div>
+              </ion-item>
+            </ion-row>
 
-          <ion-row *ngIf="PSize === 'Large' || PSize === 'X-Large'">
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="Pickup" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Pickup">
-                <label class="drinkcard-cc Pickup" for="Pickup"></label>
-              </div>
-            </ion-item>
-          </ion-row>
+            <ion-row *ngIf="PSize === 'Small' || PSize === 'Medium' || PSize === 'Large'">
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="Car" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Car">
+                  <label class="drinkcard-cc Car" for="Car"></label>
+                </div>
+              </ion-item>
+            </ion-row>
 
-          <ion-row *ngIf="PSize === 'X-Large'">
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="Truck" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Truck">
-                <label class="drinkcard-cc Truck" for="Truck"></label>
-              </div>
-            </ion-item>
-          </ion-row>
+            <ion-row *ngIf="PSize === 'Large' || PSize === 'X-Large'">
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="Pickup" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Pickup">
+                  <label class="drinkcard-cc Pickup" for="Pickup"></label>
+                </div>
+              </ion-item>
+            </ion-row>
 
-          <ion-item *ngIf="VType == null && Screen3">
+            <ion-row *ngIf="PSize === 'X-Large'">
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="Truck" name="TType" [(ngModel)]="VType" [ngModelOptions]="{standalone: true}" type="radio" value="Truck">
+                  <label class="drinkcard-cc Truck" for="Truck"></label>
+                </div>
+              </ion-item>
+            </ion-row>
+
+            <ion-item *ngIf="VType == null && Screen3">
               <p ion-text color="danger">*Please choose Transport Type</p>
             </ion-item>
+          </div>
         </div>
-      </div>
-      <div *ngIf="TType === 'CService'">
-        <div class="cc-selector">
-          <ion-item class="center">
-            <ion-label class="lbl">
-              Select Courier Service
-            </ion-label>
-          </ion-item>
-          
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="DHL" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="DHL">
-                <label class="drinkcard-cc DHL" for="DHL"></label>
-              </div>
+        <div *ngIf="TType === 'CService'">
+          <div class="cc-selector">
+            <ion-item class="center">
+              <ion-label class="lbl">
+                Select Courier Service
+              </ion-label>
             </ion-item>
-          </ion-card>
+
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="DHL" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="DHL">
+                  <label class="drinkcard-cc DHL" for="DHL"></label>
+                </div>
+              </ion-item>
+            </ion-card>
 
 
 
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="TCS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="TCS">
-                <label class="drinkcard-cc TCS" for="TCS"></label>
-              </div>
-            </ion-item>
-          </ion-card>
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="TCS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="TCS">
+                  <label class="drinkcard-cc TCS" for="TCS"></label>
+                </div>
+              </ion-item>
+            </ion-card>
 
 
 
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="UPS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="UPS">
-                <label class="drinkcard-cc UPS" for="UPS"></label>
-              </div>
-            </ion-item>
-          </ion-card>
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="UPS" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="UPS">
+                  <label class="drinkcard-cc UPS" for="UPS"></label>
+                </div>
+              </ion-item>
+            </ion-card>
 
 
 
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="Leopard" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="Leopard">
-                <label class="drinkcard-cc Leopard" for="Leopard"></label>
-              </div>
-            </ion-item>
-          </ion-card>
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="Leopard" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="Leopard">
+                  <label class="drinkcard-cc Leopard" for="Leopard"></label>
+                </div>
+              </ion-item>
+            </ion-card>
 
 
 
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="MP" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="MP">
-                <label class="drinkcard-cc MP" for="MP"></label>
-              </div>
-            </ion-item>
-          </ion-card>
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="MP" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="MP">
+                  <label class="drinkcard-cc MP" for="MP"></label>
+                </div>
+              </ion-item>
+            </ion-card>
 
 
 
-          <ion-card>
-            <ion-item>
-              <!-- insert buttons stacked here -->
-              <div class="center">
-                <input id="FedEx" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="FedEx">
-                <label class="drinkcard-cc FedEx" for="FedEx"></label>
-              </div>
-            </ion-item>
-          </ion-card>
-          <ion-item *ngIf="CType == null && Screen3">
+            <ion-card>
+              <ion-item>
+                <!-- insert buttons stacked here -->
+                <div class="center">
+                  <input id="FedEx" name="TType" [(ngModel)]="CType" [ngModelOptions]="{standalone: true}" type="radio" value="FedEx">
+                  <label class="drinkcard-cc FedEx" for="FedEx"></label>
+                </div>
+              </ion-item>
+            </ion-card>
+            <ion-item *ngIf="CType == null && Screen3">
               <p ion-text color="danger">*Please choose Courier Brand</p>
             </ion-item>
 
+          </div>
         </div>
-      </div>
-      <ion-row>
+        <ion-row>
           <ion-col col-6>
-              <button full ion-button (click)="prev()">PREVIOUS</button>
-        </ion-col>
-        <ion-col col-6>
+            <button full ion-button (click)="prev()">PREVIOUS</button>
+          </ion-col>
+          <ion-col col-6>
             <button full ion-button (click)="next()">NEXT</button>
-            
-        </ion-col>
+
+          </ion-col>
         </ion-row>
-    </ion-list>
-
-   
-
-    <div *ngSwitchCase="'S6'">
-
-      <ion-card>
-
-        <img src="./assets/imgs/welltaped.jpg">
+      </ion-list>
 
 
 
-        <ion-item>
-          <h2>Package Name:</h2>
-          <ion-note item-end>Fragile Box </ion-note>
-        </ion-item>
-        <ion-item>
-          <ion-note item-end>Fragile Box weighing 2 Kg to be delivered inter city on urgent basis. </ion-note>
-        </ion-item>
-        <ion-item>
-          <h2>Cost</h2>
-          <ion-note item-end>Rs. 250/-</ion-note>
-        </ion-item>
+      <div *ngSwitchCase="'S6'">
 
-        <ion-item>
-          <h2>Size:</h2>
-          <ion-note item-end> Medium </ion-note>
-        </ion-item>
+        <ion-card>
 
-        <ion-item>
-          <h2>Delivery Type:</h2>
-          <ion-note item-end> Freelance </ion-note>
-        </ion-item>
-        <ion-item>
-          <h2>Transport Type:</h2>
-          <ion-note item-end> Car </ion-note>
-        </ion-item>
-      </ion-card>
+          <img src="./assets/imgs/welltaped.jpg">
 
 
-      <ion-card>
-        <ion-item>
-          <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>
-          <h2>To: 24D Bahar Shah Rd, Lahore
-          </h2>
-        </ion-item>
 
-        <ion-item>
-          <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>
-          <h2>From: 161 main peco road Lahore
-          </h2>
-        </ion-item>
+          <ion-item>
+            <h2>Package Name:</h2>
+            <ion-note item-end>Fragile Box </ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-note item-end>Fragile Box weighing 2 Kg to be delivered inter city on urgent basis. </ion-note>
+          </ion-item>
+          <ion-item>
+            <h2>Cost</h2>
+            <ion-note item-end>Rs. 250/-</ion-note>
+          </ion-item>
 
-        <img src="./assets/imgs/maps.png">
+          <ion-item>
+            <h2>Size:</h2>
+            <ion-note item-end> Medium </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <h2>Delivery Type:</h2>
+            <ion-note item-end> Freelance </ion-note>
+          </ion-item>
+          <ion-item>
+            <h2>Transport Type:</h2>
+            <ion-note item-end> Car </ion-note>
+          </ion-item>
+        </ion-card>
 
 
-      </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>
+            <h2>To: 24D Bahar Shah Rd, Lahore
+            </h2>
+          </ion-item>
 
-      <ion-row>
+          <ion-item>
+            <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>
+            <h2>From: 161 main peco road Lahore
+            </h2>
+          </ion-item>
+
+          <img src="./assets/imgs/maps.png">
+
+
+        </ion-card>
+
+        <ion-row>
           <!-- <ion-col col-6>
               <button full ion-button (click)="prev()">PREVIOUS</button>
         </ion-col> -->
-        <ion-col col-6>
-            <button ion-button full  color="secondary" type="submit">CREATE</button>
-            
-        </ion-col>
-        </ion-row>
-        
-     
+          <ion-col col-6>
+            <button ion-button full color="secondary" type="submit">CREATE</button>
 
-    </div>
-</form>
+          </ion-col>
+        </ion-row>
+
+
+
+      </div>
+    </form>
   </div>
 
 </ion-content>
 
 <ion-footer>
-    <ion-row>
-        <ion-col col-6>
-            <button full ion-button (click)="prev()">PREVIOUS</button>
-      </ion-col>
-      <ion-col col-6>
-          <button full ion-button (click)="next()">NEXT</button>
-          
-      </ion-col>
-      </ion-row>
+  <ion-row>
+    <ion-col col-6>
+      <button full ion-button (click)="prev()">PREVIOUS</button>
+    </ion-col>
+    <ion-col col-6>
+      <button full ion-button (click)="next()">NEXT</button>
+
+    </ion-col>
+  </ion-row>
 </ion-footer>

@@ -1,7 +1,7 @@
 import { Component, ViewChild,NgZone, ElementRef } from '@angular/core';
 import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { HomePage } from '../../pages/home/home';
-import { IonicPage, NavController, NavParams, ActionSheetController,App, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, App, ToastController, Platform, LoadingController, Loading, Segment } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
@@ -28,8 +28,25 @@ declare var MarkerClusterer: any;
   templateUrl: 'create.html',
 })
 export class CreatePage {
-  //MAPS VARS_______________________________________________________________________________________________________
   
+  
+  updatePage(pet) {
+    if (pet == "S1") {
+      if(this.mapElement){
+        if(this.searchbar1){
+          this.searchbar1.nativeElement.querySelector('.searchbar-input').value=this.SourceString;          
+        }
+        if(this.searchbar){
+          this.searchbar.nativeElement.querySelector('.searchbar-input').value=this.DestinationString;
+        }
+        this.loadMaps();
+        this.findPath();
+      }
+      else{console.log("Fail to load");}
+  }
+}
+  //MAPS VARS_______________________________________________________________________________________________________
+
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('searchbar', { read: ElementRef }) searchbar: ElementRef;
   addressElement: HTMLInputElement = null;
@@ -37,6 +54,8 @@ export class CreatePage {
   addressElement1: HTMLInputElement = null;
   Source: any = null;
   Destination: any = null;
+  SourceString: any;
+  DestinationString: any;
   MyLocation: any;
   listSearch: string = '';
   map: any;
@@ -179,12 +198,12 @@ initAutocomplete(): void {
     };
     this.map.setOptions(options);
     this.addMarker(location, "Searched");
-    this.findPath();
   });
 }
 
 findPath(){
-  
+  this.SourceString=this.searchbar1.nativeElement.querySelector('.searchbar-input').value;
+  this.DestinationString=this.searchbar.nativeElement.querySelector('.searchbar-input').value;
   let directionsService = new google.maps.DirectionsService;
     let directionsDisplay = new google.maps.DirectionsRenderer;
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -255,6 +274,7 @@ createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
 initializeMap() {
   
   this.zone.run(() => {
+
     var mapEle = this.mapElement.nativeElement;
     this.map = new google.maps.Map(mapEle, {
       zoom: 12,
@@ -512,7 +532,7 @@ addInfoWindow(marker, content) {
   prev() {
     if(this.pet =="S2"){
       this.pet = "S1";
-      this.loadMaps();
+
       return;
     }
     if(this.pet == "S3"){
