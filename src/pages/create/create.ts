@@ -13,6 +13,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Base64 } from '@ionic-native/base64';
 declare var google: any;
 declare var MarkerClusterer: any;
 /**
@@ -108,7 +109,7 @@ export class CreatePage {
     private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public http: Http,
     public geolocation: Geolocation, public app: App,
-    public alertCtrl: AlertController, public zone: NgZone, ) {
+    public alertCtrl: AlertController, public zone: NgZone,private base64: Base64, ) {
       this.CurrentScreen = "S1";
     this.data = this.formBuilder.group({
       PackageName: ['', Validators.required],
@@ -237,6 +238,8 @@ export class CreatePage {
         }
       });
     }
+    
+    
   }
 
   createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
@@ -458,7 +461,9 @@ export class CreatePage {
 
   formSubmit() {
     let Userdata;
-
+    let Src = JSON.parse(JSON.stringify(this.Source));
+    let Dst = JSON.parse(JSON.stringify(this.Destination));
+    let Image = this.convertBase64(this.lastImage1);
     if (this.TransportType == 'Freelance') {
       Userdata = {
         'ID': 0,
@@ -469,9 +474,14 @@ export class CreatePage {
         'PackageSize': this.PackageSize,
         'TransporTransportType': this.TransportType,
         'VehicleType': this.VehicleType,
-        'Longitude': 0,
-        'Latitude': 0,
+        'SourceLongitude': Src["Lng"],
+        'SourceLatitude': Src["Lat"],
+        'DestinationLongitude':Dst["Lng"],
+        'DestinationLatitude':Dst["Lat"],
         'TransporterID': null,
+        'UserID': null,
+        'Status': "Active",
+        'PImage': Image,
         'Fare': 0,
 
       };
@@ -486,9 +496,14 @@ export class CreatePage {
         'PackageSize': this.PackageSize,
         'TransporType': this.TransportType,
         'CourierType': this.CourierType,
-        'Longitude': 0,
-        'Latitude': 0,
+        'SourceLongitude': Src["Lng"],
+        'SourceLatitude': Src["Lat"],
+        'DestinationLongitude':Dst["Lng"],
+        'DestinationLatitude':Dst["Lat"],
         'TransporterID': null,
+        'UserID': null,
+        'Status': "Active",
+        'PImage': Image,
         'Fare': 0,
       };
     }
@@ -640,6 +655,14 @@ export class CreatePage {
     }, error => {
       this.presentToast('Error while storing file.');
     });
+  }
+
+  private convertBase64(filePath){
+this.base64.encodeFile(filePath).then((base64File: string) => {
+  return base64File;
+}, (err) => {
+  console.log(err);
+});
   }
 
   private presentToast(text) {

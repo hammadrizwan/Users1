@@ -13,18 +13,18 @@
     <ion-title mode="ios">Create Package</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top mode="ios">
-    <ion-segment (ionChange)="updatePage(pet)" mode="ios" [(ngModel)]="pet">
+    <ion-segment (ionChange)="updatePage(CurrentScreen)" mode="ios" [(ngModel)]="CurrentScreen">
       <ion-segment-button value="S1" disabled="false">Step 1
       </ion-segment-button>
-      <ion-segment-button value="S2" disabled="false">Step 2
+      <ion-segment-button value="S2" disabled="true">Step 2
       </ion-segment-button>
-      <ion-segment-button value="S3" disabled="false">Step 3
+      <ion-segment-button value="S3" disabled="true">Step 3
       </ion-segment-button>
-      <ion-segment-button value="S4" disabled="false">Step 4
+      <ion-segment-button value="S4" disabled="true">Step 4
       </ion-segment-button>
-      <ion-segment-button value="S5" disabled="false">Step 5
+      <ion-segment-button value="S5" disabled="true">Step 5
       </ion-segment-button>
-      <ion-segment-button value="S6" disabled="false">Step 6
+      <ion-segment-button value="S6" disabled="true">Step 6
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -33,7 +33,7 @@
 
 <ion-content padding class="bgg">
 
-  <div [ngSwitch]="pet">
+  <div [ngSwitch]="CurrentScreen">
     <ion-list (onCreate)="loadMaps()" no-padding *ngSwitchCase="'S1'">
 
 
@@ -363,7 +363,7 @@
 
 
 
-      <div *ngSwitchCase="'S6'">
+      <div *ngSwitchCase="'S6'" (onCreate)="loadMaps()" >
 
         <ion-card>
 
@@ -412,11 +412,10 @@
             </h2>
           </ion-item>
 
-          <img src="./assets/imgs/maps.png">
 
 
         </ion-card>
-
+<div  id="map" #map></div>
         <ion-row>
           <!-- <ion-col col-6>
               <button full ion-button (click)="prev()">PREVIOUS</button>

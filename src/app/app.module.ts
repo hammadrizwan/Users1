@@ -25,6 +25,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Base64 } from '@ionic-native/base64';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { Geolocation } from '@ionic-native/geolocation';
     StatusBar,
     SplashScreen,
     Geolocation,
+    Base64,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

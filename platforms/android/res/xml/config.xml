@@ -68,4 +68,7 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
+    <feature name="Base64">
+        <param name="android-package" value="com.badrit.Base64.Base64Plugin" />
+    </feature>
 </widget>
