@@ -25,4 +25,14 @@ ion-slides .swiper-pagination
     background-color: rgb(236, 235, 235);
 }
 
+#map {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute!important;
+    overflow: hidden!important;
+
+}
+
 

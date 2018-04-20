@@ -38278,6 +38278,13 @@ ion-chip ion-label {
   overflow: hidden !important;
 }
 
+#map1 {
+  height: 100%;
+  width: 100%;
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
 .hidemap {
   visibility: hidden;
   margin-top: -1000px;
@@ -38384,6 +38391,15 @@ ion-searchbar {
 
 .bb {
   background-color: #ecebeb;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute !important;
+  overflow: hidden !important;
 }
 
 .hh ion-card-content {

@@ -89,6 +89,7 @@ export class CreatePage {
   Screen4: boolean;
   Screen5: boolean;
   Screen6: boolean;
+  Scr6: boolean = true;
   Global: boolean = true;
 
   data: FormGroup;
@@ -124,7 +125,9 @@ export class CreatePage {
     this.PickAddress = this.data.controls['PickAddress'];
     this.DestAddress = this.data.controls['DestAddress'];
 
-    this.platform.ready().then(() => this.loadMaps());
+    this.presentLoadingDefault();
+
+   // this.platform.ready().then(() => this.loadMaps());
 
   }
   //_________________GOOGLE MAPS________________________________________________________________________________________//
@@ -132,7 +135,17 @@ export class CreatePage {
     console.log('Clicked Marker', id);
   }
 
-
+  presentLoadingDefault() {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+  
+    loading.present();
+  
+    setTimeout(() => {
+      loading.dismiss();
+      this.platform.ready().then(() => this.loadMaps());
+    }, 4000);}
 
   loadMaps() {
 
@@ -140,6 +153,7 @@ export class CreatePage {
       
       this.initializeMap();
       this.initAutocomplete();
+      console.log("Hello");
       
     } else {
       this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
@@ -215,13 +229,59 @@ export class CreatePage {
   }
 
   findPath() {
-
+    
     this.SourceString = this.searchbar1.nativeElement.querySelector('.searchbar-input').value;
     this.DestinationString = this.searchbar.nativeElement.querySelector('.searchbar-input').value;
-    if (this.SourceString != "" || this.SourceString != "") {
-      let directionsService = new google.maps.DirectionsService;
+    if (this.SourceString != "" && this.DestinationString != "") {
+      let loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
+    
+      loading.present();
+    
+      setTimeout(() => {
+        loading.dismiss();
+       // this.platform.ready().then(() => this.loadMaps());
+    let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer;
+        const map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 9,
+          center: { lat: 41.85, lng: -87.65 }
+        });
+        directionsDisplay.setMap(map);
+        directionsService.route({
+          origin: this.Source,
+          destination: this.Destination,
+          travelMode: 'DRIVING'
+        }, function (response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      
+      
+    }, 2000);
+    }
+    console.log("I am not the one");
+    
+  }
+
+  findPath1() {
+console.log("Iam the one");
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+  
+    loading.present();
+  
+    setTimeout(() => {
+      loading.dismiss();
+     // this.platform.ready().then(() => this.loadMaps());
+  let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
-      const map = new google.maps.Map(document.getElementById('map'), {
+      const map = new google.maps.Map(document.getElementById('map1'), {
         zoom: 9,
         center: { lat: 41.85, lng: -87.65 }
       });
@@ -237,9 +297,9 @@ export class CreatePage {
           window.alert('Directions request failed due to ' + status);
         }
       });
-    }
     
     
+  }, 2000);
   }
 
   createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
@@ -382,28 +442,7 @@ export class CreatePage {
           };
           this.map.setOptions(options);
           this.addMarker(myPos, "I am Here!");
-          /*
-                    let alert = this.alertCtrl.create({
-                      title: 'Location',
-                      message: 'Do you want to save the Location?',
-                      buttons: [
-                        {
-                          text: 'Cancel'
-                        },
-                        {
-                          text: 'Save',
-                          handler: data => {
-                            let lastLocation = { lat: position.coords.latitude, long: position.coords.longitude };
-                            console.log(lastLocation);
-                            this.storage.set('lastLocation', lastLocation).then(() => {
-                              this.showToast('Location saved');
-                            });
-                          }
-                        }
-                      ]
-                    });
-                    alert.present();
-          */
+          
         });
       },
       (error) => {
@@ -469,8 +508,8 @@ export class CreatePage {
         'ID': 0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.PickAddress.value,
-        'DestAddress': this.DestAddress.value,
+        'PickAddress': this.SourceString,
+        'DestAddress': this.DestinationString,
         'PackageSize': this.PackageSize,
         'TransporTransportType': this.TransportType,
         'VehicleType': this.VehicleType,
@@ -491,15 +530,15 @@ export class CreatePage {
         'ID': 0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.PickAddress.value,
-        'DestAddress': this.DestAddress.value,
+        'PickAddress': this.SourceString,
+        'DestAddress': this.DestinationString,
         'PackageSize': this.PackageSize,
         'TransporType': this.TransportType,
         'CourierType': this.CourierType,
-        'SourceLongitude': Src["Lng"],
-        'SourceLatitude': Src["Lat"],
-        'DestinationLongitude':Dst["Lng"],
-        'DestinationLatitude':Dst["Lat"],
+        'SourceLongitude': Src["lng"],
+        'SourceLatitude': Src["lat"],
+        'DestinationLongitude':Dst["lng"],
+        'DestinationLatitude':Dst["lat"],
         'TransporterID': null,
         'UserID': null,
         'Status': "Active",
@@ -510,13 +549,16 @@ export class CreatePage {
 
 
     console.log(Userdata);
-    this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-      let responseData = data;
-      console.log(responseData);
-    },
-      err => {
-        console.log('error');
-      });
+    console.log(Src);
+    console.log(Src[0]);
+    console.log(Src["lat"]);
+    // this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+    //   let responseData = data;
+    //   console.log(responseData);
+    // },
+    //   err => {
+    //     console.log(err);
+    //   });
   }
 
   next() {
@@ -540,7 +582,8 @@ export class CreatePage {
       this.Screen5 = true;
       if (this.CourierType != null || this.VehicleType != null) {
         this.CurrentScreen = "S6";
-
+        this.Scr6 = false;
+        this.findPath1();
       }
       return;
     }

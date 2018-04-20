@@ -18,7 +18,7 @@ import { ProfilePage } from '../pages/profile/profile';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = CreatePage;
+  rootPage:any = HomePage;
   @ViewChild(Nav) nav: Nav;
   pages: Array<{title: string, component: any}>;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,) {
@@ -30,7 +30,8 @@ export class MyApp {
       
     });
     this.pages = [
-      { title: 'Home', component: HomePage },   
+      { title: 'Home', component: HomePage }, 
+      { title: 'Create Package', component: CreatePage },   
       { title: 'All Packages', component: AllPage },
       { title: 'Active Packages', component: ActivePage },
       { title: 'In Transit', component: InprogressPage },
