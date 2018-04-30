@@ -48,12 +48,12 @@ presentLoadingDefault() {
   }, 2000);}
 
 loadMaps() {
-
+  
   if (!!google) {
     
     this.initializeMap();
    // this.initAutocomplete();
-    console.log("Hello");
+    console.log("Hellooo");
     
   } else {
     this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
@@ -80,6 +80,7 @@ errorAlert(title, message) {
 
 
 initializeMap() {
+   
   if (this.mapElement) {
     this.zone.run(() => {
 
@@ -96,24 +97,28 @@ initializeMap() {
         zoomControl: true,
         scaleControl: true,
       });
+      
       this.getCurrentPosition();
+      
       this.dummymarkers();
-    });
+    }
+  );
   }
 }
 
 addMarker(position, content) {
+  console.log("add marker"); 
   let marker = new google.maps.Marker({
     map: this.map,
     animation: google.maps.Animation.DROP,
     position: position
   });
-
+  
   return marker;
 }
 
 getCurrentPosition() {
-
+  console.log("get current pos"); 
   this.geolocation.getCurrentPosition().then(
     (position) => {
         console.log(position.coords.latitude, position.coords.longitude);
@@ -128,17 +133,22 @@ getCurrentPosition() {
         
     
     },
-    
-  )
+    (err) => {
+      console.log(err);
+    }
+  );
+  
 }
 
 dummymarkers()
 {
-  var image = "../assets/imgs/dummy.png";
+  //var image = './assets/imgs/dummy.png';
   var beachMarker = new google.maps.Marker({
     position: {lat: 31.5360264, lng: 74.4069842},
     map: this.map,
-    icon: image
+    icon: {
+      url: 'assets/imgs/dummy.png'
+      }
   });
 
 console.log("dummy markers"); 
@@ -146,13 +156,15 @@ console.log("dummy markers");
 }
 customeMarker(position) {
 
-  let image = "../assets/imgs/dummy.png";
+  //let image = './assets/imgs/dummy.png';
   
   let beachMarker = new google.maps.Marker({
     position: position,
     map: this.map,
     animation: google.maps.Animation.DROP,
-    icon: image
+    icon: {
+      url: 'assets/imgs/dummy.png'
+      }
   });
 
   return beachMarker;

@@ -502,6 +502,10 @@ console.log("Iam the one");
     let Userdata;
     let Src = JSON.parse(JSON.stringify(this.Source));
     let Dst = JSON.parse(JSON.stringify(this.Destination));
+    let SLat = Src["lat"];
+    let SLng = Src["lng"];
+    let DLat = Dst["lat"];
+    let DLng = Dst["lng"];
     let Image = this.convertBase64(this.lastImage1);
     if (this.TransportType == 'Freelance') {
       Userdata = {
@@ -513,10 +517,10 @@ console.log("Iam the one");
         'PackageSize': this.PackageSize,
         'TransporTransportType': this.TransportType,
         'VehicleType': this.VehicleType,
-        'SourceLongitude': Src["Lng"],
-        'SourceLatitude': Src["Lat"],
-        'DestinationLongitude':Dst["Lng"],
-        'DestinationLatitude':Dst["Lat"],
+        'SourceLongitude': SLng,
+        'SourceLatitude': SLat,
+        'DestinationLongitude':DLng,
+        'DestinationLatitude':DLat,
         'TransporterID': null,
         'UserID': null,
         'Status': "Active",
@@ -550,7 +554,7 @@ console.log("Iam the one");
 
     console.log(Userdata);
     console.log(Src);
-    console.log(Src[0]);
+    console.log(Image);
     console.log(Src["lat"]);
     // this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
     //   let responseData = data;
@@ -690,9 +694,9 @@ console.log("Iam the one");
     return newFileName;
   }
 
-  // Copy the image to a local folder
+ // Copy the image to a local folder
   private copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+    this.file.copyFile(namePath, currentName, cordova.file.externalDataDirectory, newFileName).then(success => {
       this.lastImage1 = newFileName;
 
     }, error => {
