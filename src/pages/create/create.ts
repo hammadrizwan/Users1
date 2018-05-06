@@ -4,7 +4,7 @@ import { HomePage } from '../../pages/home/home';
 import { IonicPage, NavController, NavParams, ActionSheetController, App, ToastController, Platform, LoadingController, Loading, Segment } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { AlertController } from 'ionic-angular';
@@ -83,6 +83,7 @@ export class CreatePage {
   q = HomePage;
   CurrentScreen: string = "S1";
   lastImage1: string = null;
+  IPath: string = null;
   Screen1: boolean;
   Screen2: boolean;
   Screen3: boolean;
@@ -107,11 +108,11 @@ export class CreatePage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
-    private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
+    private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public http: Http,
     public geolocation: Geolocation, public app: App,
-    public alertCtrl: AlertController, public zone: NgZone,private base64: Base64, ) {
-      this.CurrentScreen = "S1";
+    public alertCtrl: AlertController, public zone: NgZone, private base64: Base64, private transfer: FileTransfer) {
+    this.CurrentScreen = "S1";
     this.data = this.formBuilder.group({
       PackageName: ['', Validators.required],
       PackageDesc: ['', Validators.required],
@@ -127,7 +128,7 @@ export class CreatePage {
 
     this.presentLoadingDefault();
 
-   // this.platform.ready().then(() => this.loadMaps());
+    // this.platform.ready().then(() => this.loadMaps());
 
   }
   //_________________GOOGLE MAPS________________________________________________________________________________________//
@@ -139,22 +140,23 @@ export class CreatePage {
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-  
+
     loading.present();
-  
+
     setTimeout(() => {
       loading.dismiss();
       this.platform.ready().then(() => this.loadMaps());
-    }, 4000);}
+    }, 4000);
+  }
 
   loadMaps() {
 
     if (!!google) {
-      
+
       this.initializeMap();
       this.initAutocomplete();
       console.log("Hello");
-      
+
     } else {
       this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
     }
@@ -198,51 +200,51 @@ export class CreatePage {
   }
 
   initAutocomplete(): void {
-  
-      this.addressElement1 = this.searchbar1.nativeElement.querySelector('.searchbar-input');
-      this.createAutocomplete(this.addressElement1).subscribe((location) => {
-        console.log('First Search', location);
-        this.Source = new google.maps.LatLng(location.lat(), location.lng());
-        let options = {
-          center: location,
-          zoom: 13
-        };
-        this.map.setOptions(options);
-        this.addMarker(location, "Searched");
 
-      });
+    this.addressElement1 = this.searchbar1.nativeElement.querySelector('.searchbar-input');
+    this.createAutocomplete(this.addressElement1).subscribe((location) => {
+      console.log('First Search', location);
+      this.Source = new google.maps.LatLng(location.lat(), location.lng());
+      let options = {
+        center: location,
+        zoom: 13
+      };
+      this.map.setOptions(options);
+      this.addMarker(location, "Searched");
 
-    
-    
-      this.addressElement = this.searchbar.nativeElement.querySelector('.searchbar-input');
-      this.createAutocomplete(this.addressElement).subscribe((location) => {
-        console.log('Second Search', location);
-        this.Destination = new google.maps.LatLng(location.lat(), location.lng());
-        let options = {
-          center: location,
-          zoom: 13
-        };
-        this.map.setOptions(options);
-        this.addMarker(location, "Searched");
-      });
-    
+    });
+
+
+
+    this.addressElement = this.searchbar.nativeElement.querySelector('.searchbar-input');
+    this.createAutocomplete(this.addressElement).subscribe((location) => {
+      console.log('Second Search', location);
+      this.Destination = new google.maps.LatLng(location.lat(), location.lng());
+      let options = {
+        center: location,
+        zoom: 13
+      };
+      this.map.setOptions(options);
+      this.addMarker(location, "Searched");
+    });
+
   }
 
   findPath() {
-    
+
     this.SourceString = this.searchbar1.nativeElement.querySelector('.searchbar-input').value;
     this.DestinationString = this.searchbar.nativeElement.querySelector('.searchbar-input').value;
     if (this.SourceString != "" && this.DestinationString != "") {
       let loading = this.loadingCtrl.create({
         content: 'Please wait...'
       });
-    
+
       loading.present();
-    
+
       setTimeout(() => {
         loading.dismiss();
-       // this.platform.ready().then(() => this.loadMaps());
-    let directionsService = new google.maps.DirectionsService;
+        // this.platform.ready().then(() => this.loadMaps());
+        let directionsService = new google.maps.DirectionsService;
         let directionsDisplay = new google.maps.DirectionsRenderer;
         const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 9,
@@ -260,26 +262,26 @@ export class CreatePage {
             window.alert('Directions request failed due to ' + status);
           }
         });
-      
-      
-    }, 2000);
+
+
+      }, 2000);
     }
     console.log("I am not the one");
-    
+
   }
 
   findPath1() {
-console.log("Iam the one");
+    console.log("Iam the one");
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-  
+
     loading.present();
-  
+
     setTimeout(() => {
       loading.dismiss();
-     // this.platform.ready().then(() => this.loadMaps());
-  let directionsService = new google.maps.DirectionsService;
+      // this.platform.ready().then(() => this.loadMaps());
+      let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
       const map = new google.maps.Map(document.getElementById('map1'), {
         zoom: 9,
@@ -297,9 +299,9 @@ console.log("Iam the one");
           window.alert('Directions request failed due to ' + status);
         }
       });
-    
-    
-  }, 2000);
+
+
+    }, 2000);
   }
 
   createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
@@ -442,7 +444,7 @@ console.log("Iam the one");
           };
           this.map.setOptions(options);
           this.addMarker(myPos, "I am Here!");
-          
+
         });
       },
       (error) => {
@@ -498,72 +500,7 @@ console.log("Iam the one");
   //   }});
   // }
 
-  formSubmit() {
-    let Userdata;
-    let Src = JSON.parse(JSON.stringify(this.Source));
-    let Dst = JSON.parse(JSON.stringify(this.Destination));
-    let SLat = Src["lat"];
-    let SLng = Src["lng"];
-    let DLat = Dst["lat"];
-    let DLng = Dst["lng"];
-    let Image = this.convertBase64(this.lastImage1);
-    if (this.TransportType == 'Freelance') {
-      Userdata = {
-        'ID': 0,
-        'PackageName': this.PackageName.value,
-        'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.SourceString,
-        'DestAddress': this.DestinationString,
-        'PackageSize': this.PackageSize,
-        'TransporTransportType': this.TransportType,
-        'VehicleType': this.VehicleType,
-        'SourceLongitude': SLng,
-        'SourceLatitude': SLat,
-        'DestinationLongitude':DLng,
-        'DestinationLatitude':DLat,
-        'TransporterID': null,
-        'UserID': null,
-        'Status': "Active",
-        'PImage': Image,
-        'Fare': 0,
 
-      };
-    }
-    else {
-      Userdata = {
-        'ID': 0,
-        'PackageName': this.PackageName.value,
-        'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.SourceString,
-        'DestAddress': this.DestinationString,
-        'PackageSize': this.PackageSize,
-        'TransporType': this.TransportType,
-        'CourierType': this.CourierType,
-        'SourceLongitude': Src["lng"],
-        'SourceLatitude': Src["lat"],
-        'DestinationLongitude':Dst["lng"],
-        'DestinationLatitude':Dst["lat"],
-        'TransporterID': null,
-        'UserID': null,
-        'Status': "Active",
-        'PImage': Image,
-        'Fare': 0,
-      };
-    }
-
-
-    console.log(Userdata);
-    console.log(Src);
-    console.log(Image);
-    console.log(Src["lat"]);
-    // this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-    //   let responseData = data;
-    //   console.log(responseData);
-    // },
-    //   err => {
-    //     console.log(err);
-    //   });
-  }
 
   next() {
     if (this.CurrentScreen == "S3") {
@@ -661,9 +598,9 @@ console.log("Iam the one");
   public takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
-      quality: 100,
+      quality: 10,
       sourceType: sourceType,
-      saveToPhotoAlbum: false,
+      saveToPhotoAlbum: true,
       correctOrientation: true
     };
 
@@ -675,15 +612,19 @@ console.log("Iam the one");
           .then(filePath => {
             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+            console.log(currentName);
+            console.log(correctPath);
             this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
           });
       } else {
         var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+        //this.lastImage1 = currentName;
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
       }
     }, (err) => {
       this.presentToast('Error while selecting image.');
+      console.log(err);
     });
   }
 
@@ -694,22 +635,15 @@ console.log("Iam the one");
     return newFileName;
   }
 
- // Copy the image to a local folder
+  // Copy the image to a local folder
   private copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, cordova.file.externalDataDirectory, newFileName).then(success => {
+    this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
       this.lastImage1 = newFileName;
-
-    }, error => {
+      this.IPath = this.pathForImage(this.lastImage1);
+    }, (error) => {
       this.presentToast('Error while storing file.');
+      console.log(error);
     });
-  }
-
-  private convertBase64(filePath){
-this.base64.encodeFile(filePath).then((base64File: string) => {
-  return base64File;
-}, (err) => {
-  console.log(err);
-});
   }
 
   private presentToast(text) {
@@ -728,6 +662,90 @@ this.base64.encodeFile(filePath).then((base64File: string) => {
     } else {
       return cordova.file.dataDirectory + img;
     }
+  }
+
+
+
+  upload() {
+    let fileTransfer: FileTransferObject = this.transfer.create();
+    let options: FileUploadOptions = {
+      fileKey: 'file',
+      fileName: this.lastImage1,
+      headers: {}
+
+    }
+
+    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload', options, true)
+      .then((data) => {
+        console.log(data)
+      }, (err) => {
+        console.log(err)
+      })
+  }
+
+
+  formSubmit() {
+    this.upload();
+    let Userdata;
+    let Src = JSON.parse(JSON.stringify(this.Source));
+    let Dst = JSON.parse(JSON.stringify(this.Destination));
+    let SLat = Src["lat"];
+    let SLng = Src["lng"];
+    let DLat = Dst["lat"];
+    let DLng = Dst["lng"];
+    if (this.TransportType == 'Freelance') {
+      Userdata = {
+        'ID': 0,
+        'PackageName': this.PackageName.value,
+        'PackageDesc': this.PackageDesc.value,
+        'PickAddress': this.SourceString,
+        'DestAddress': this.DestinationString,
+        'PackageSize': this.PackageSize,
+        'TransporTransportType': this.TransportType,
+        'VehicleType': this.VehicleType,
+        'SourceLongitude': SLng,
+        'SourceLatitude': SLat,
+        'DestinationLongitude': DLng,
+        'DestinationLatitude': DLat,
+        'TransporterID': null,
+        'SenderID': 1,
+        'Status': "Active",
+        'PImage': this.lastImage1,
+        'Fare': 0,
+
+      };
+    }
+    else {
+      Userdata = {
+        'ID': 0,
+        'PackageName': this.PackageName.value,
+        'PackageDesc': this.PackageDesc.value,
+        'PickAddress': this.SourceString,
+        'DestAddress': this.DestinationString,
+        'PackageSize': this.PackageSize,
+        'TransporType': this.TransportType,
+        'CourierType': this.CourierType,
+        'SourceLongitude': Src["lng"],
+        'SourceLatitude': Src["lat"],
+        'DestinationLongitude': Dst["lng"],
+        'DestinationLatitude': Dst["lat"],
+        'TransporterID': null,
+        'SenderID': 1,
+        'Status': "Active",
+        'PImage': this.lastImage1,
+        'Fare': 0,
+      };
+    }
+
+
+    console.log(Userdata);
+    this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+      let responseData = data;
+      console.log(responseData);
+    },
+      err => {
+        console.log(err);
+      });
   }
 
 }

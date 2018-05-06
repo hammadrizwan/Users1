@@ -22,10 +22,12 @@ import { PackagedetailPage } from '../pages/packagedetail/packagedetail';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Base64 } from '@ionic-native/base64';
+
 
 
 @NgModule({
@@ -77,6 +79,8 @@ import { Base64 } from '@ionic-native/base64';
     SplashScreen,
     Geolocation,
     Base64,
+    FileTransfer,
+    FileTransferObject,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

@@ -14,55 +14,42 @@
 
 
 <ion-content >
+<ion-list *ngFor="let item of activedata">
   <ion-card>
 
-    <img src="./assets/imgs/welltaped.jpg">
+    <img src="http://localhost:5000/uploads/{{item.PImage}}">
 
 
 
     <ion-item>
       <h2>Package Name:</h2>
-      <ion-note item-end>Fragile Box </ion-note>
+      <ion-note item-end>{{item.PackageName}} </ion-note>
     </ion-item>
     <ion-item>
-      <ion-note item-end>Fragile Box weighing 2 Kg to be delivered inter city on urgent basis. </ion-note>
+      <ion-note item-end>{{item.PackageDesc}} </ion-note>
     </ion-item>
     <ion-item>
       <h2>Cost</h2>
-      <ion-note item-end>Rs. 250/-</ion-note>
+      <ion-note item-end>{{item.Fare}}</ion-note>
     </ion-item>
 
     <ion-item>
       <h2>Size:</h2>
-      <ion-note item-end> Medium </ion-note>
+      <ion-note item-end>{{item.PackageSize}}</ion-note>
     </ion-item>
 
     <ion-item>
       <h2>Delivery Type:</h2>
-      <ion-note item-end> Freelance </ion-note>
+      <ion-note item-end> {{item.TransporTransportType}} </ion-note>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="{{item.TransporTransportType}} == Freelance">
       <h2>Transport Type:</h2>
-      <ion-note item-end> Car </ion-note>
+      <ion-note item-end> {{item.VehicleType}} </ion-note>
     </ion-item>
+    <ion-item *ngIf="{{item.TransporTransportType}} == !Freelance">
+        <h2>Transport Type:</h2>
+        <ion-note item-end> {{item.TransporType}} </ion-note>
+      </ion-item>
   </ion-card>
-
-
-  <ion-card>
-    <ion-item>
-      <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>
-      <h2>To: 24D Bahar Shah Rd, Lahore
-      </h2>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>
-      <h2>From: 161 main peco road Lahore
-      </h2>
-    </ion-item>
-
-    <img src="./assets/imgs/maps.png">
-
-
-  </ion-card>
+</ion-list>
 </ion-content>
