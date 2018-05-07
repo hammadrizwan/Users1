@@ -38079,6 +38079,11 @@ ion-avatar img {
   background-color: #f4f4f4;
 }
 
+.nodata {
+  text-align: center;
+  font-size: 20px;
+}
+
 .bgg {
   background-color: #f4f4f4;
 }

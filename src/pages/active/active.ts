@@ -25,10 +25,11 @@ export class ActivePage {
 
   path: string;
   activedata: any;
+  nodata: boolean =false;
   constructor(public navCtrl: NavController, public navParams: NavParams,private file: File, private filePath: FilePath,
     public http: Http,private transfer: FileTransfer) {
       this.getPackages();
-      //this.download();  
+     
   }
 
   ionViewDidLoad() {
@@ -40,18 +41,27 @@ export class ActivePage {
     });
   }
   getPackages() {
-    this.http.get('http://localhost:5000/active',{params:{'SenderID': 1}}).map(res => res.json()).subscribe(data => {
-            this.activedata = data;
-    console.log(this.activedata);
-    console.log(this.activedata[0]['PImage'])
-        });
     
+    const sub =  this.http.get('http://localhost:5000/active',{params:{'SenderID': 1}}).map(res => res.json()).subscribe(data => {
+    if(data['content'] == "failed"){
+      this.nodata = true;
+    }  
+    this.activedata = data;
+          
+    console.log(this.activedata);
+    
+        },
+      (err)=>{
+        
+        console.log(err);
+        
+      });
+      // setTimeout(() => {
+      //   sub.unsubscribe();
+      //   console.log("Unsubbed");
+      // }, 10)
   }
 
   
-
-  viewActive(){
-   
-  }
 
 }

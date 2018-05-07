@@ -38079,6 +38079,11 @@ ion-avatar img {
   background-color: #f4f4f4;
 }
 
+.nodata {
+  text-align: center;
+  font-size: 20px;
+}
+
 .bgg {
   background-color: #f4f4f4;
 }
@@ -38404,6 +38409,20 @@ ion-searchbar {
 
 .hh ion-card-content {
   background-color: #d4d2cc;
+}
+
+.bgg {
+  background-color: #f4f4f4;
+}
+
+#map1 {
+  height: 95%;
+  width: 95%;
+  right: 10px;
+  left: 10px;
+  position: absolute !important;
+  overflow: hidden !important;
+  display: block;
 }
 
 .cl {

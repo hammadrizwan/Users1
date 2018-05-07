@@ -190,9 +190,9 @@
 
 
           <ion-item>
-            <input id="CourierSevice" name="TransportType" [(ngModel)]="TransportType" [ngModelOptions]="{standalone: true}" type="radio" value="CourierSevice"
+            <input id="CourierService" name="TransportType" [(ngModel)]="TransportType" [ngModelOptions]="{standalone: true}" type="radio" value="CourierService"
             />
-            <label for="CourierSevice">Courier</label>
+            <label for="CourierService">Courier</label>
           </ion-item>
 
           <ion-item *ngIf="TransportType == null && Screen4">
@@ -270,7 +270,7 @@
             </ion-item>
           </div>
         </div>
-        <div *ngIf="TransportType === 'CourierSevice'">
+        <div *ngIf="TransportType === 'CourierService'">
           <div class="cc-selector">
             <ion-item class="center">
               <ion-label class="lbl">

@@ -16,7 +16,8 @@
 </ion-header>
 
 
-<ion-content class="bgg">
+<ion-content class="bgg" >
+  <div *ngIf="!nodata">
   <ion-list *ngFor="let item of activedata">
   <ion-card>
       <div style="position: relative">
@@ -43,5 +44,9 @@
     </button>
   </ion-card>
 </ion-list>
+</div>
+<div *ngIf="nodata" class="nodata">
+  <ion-label >No Packages Active Right Now :( </ion-label>
+</div>
 </ion-content>
 
