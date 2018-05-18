@@ -38411,6 +38411,20 @@ ion-searchbar {
   background-color: #d4d2cc;
 }
 
+.bgg {
+  background-color: #f4f4f4;
+}
+
+#map1 {
+  height: 95%;
+  width: 95%;
+  right: 10px;
+  left: 10px;
+  position: absolute !important;
+  overflow: hidden !important;
+  display: block;
+}
+
 .cl {
   width: 60px;
   height: 30px;

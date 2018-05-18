@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PackagedetailPage } from '../../pages/packagedetail/packagedetail';
 import { Http } from '@angular/http';
+
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { normalizeURL} from 'ionic-angular';
+import { FCM } from '@ionic-native/fcm';
+
 
 /**
  * Generated class for the ActivePage page.
@@ -27,10 +30,31 @@ export class ActivePage {
   activedata: any;
   nodata: boolean =false;
   constructor(public navCtrl: NavController, public navParams: NavParams,private file: File, private filePath: FilePath,
-    public http: Http,private transfer: FileTransfer) {
-      this.getPackages();
-     
-  }
+    public http: Http,private transfer: FileTransfer,private fcm: FCM,) {
+//       this.fcm.subscribeToTopic('marketing');
+
+// this.fcm.getToken().then(token => {
+//   //backend.registerToken(token);
+//   console.log(token);
+// });
+
+// this.fcm.onNotification().subscribe(data => {
+//   if(data.wasTapped){
+//     console.log("Received in background");
+//   } else {
+//     console.log("Received in foreground");
+//   };
+// });
+
+// this.fcm.onTokenRefresh().subscribe(token => {
+//   //backend.registerToken(token);
+//   console.log(token);
+// });
+
+// this.fcm.unsubscribeFromTopic('marketing');
+//       this.getPackages();
+       
+ }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ActivePage');
@@ -61,7 +85,7 @@ export class ActivePage {
       //   console.log("Unsubbed");
       // }, 10)
   }
-
+  
   
 
 }

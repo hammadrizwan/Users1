@@ -5,10 +5,13 @@ import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { AlertController } from 'ionic-angular';
-
+import { FCM } from '@ionic-native/fcm';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 declare var cordova: any;
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Storage } from '@ionic/storage';
+import { HomePage } from '../../pages/home/home';
 /**
  * Generated class for the SignUpPage page.
  *
@@ -39,11 +42,14 @@ export class SignUpPage {
   Month:AbstractControl;
   Year:AbstractControl;
   Gender:AbstractControl;
+  Token: any;
+  id: number;
   
   constructor(public navCtrl: NavController, private camera: Camera,
      private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
-    private formBuilder: FormBuilder,private alertCtrl: AlertController,public http: Http) {
+    private formBuilder: FormBuilder,private alertCtrl: AlertController,public http: Http,private fcm: FCM,
+     private transfer: FileTransfer,public storage: Storage) {
     
       this.data = this.formBuilder.group({
         lastImage1:['',Validators.required],
@@ -74,17 +80,26 @@ export class SignUpPage {
       this.Year=this.data.controls['Year'];
       this.Gender=this.data.controls['Gender'];
       this.submitAttempted=false;
+      
   }
   
   logForm(){
     this.submitAttempted=true;
-
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    this.loading.present();
     // if(this.lastImage1 ==null){
     //   let alert = this.alertCtrl.create({
     //     title: 'Profile Image Missing',
     //     subTitle: 'Please upload the required image',
     //     buttons: ['Dismiss']
     //   });
+    this.fcm.getToken().then(token => {
+      this.upload();
+      this.Token = token;
+      console.log(token);
+
       let Userdata= {
         'Name': this.Name.value,
         'Email':this.Email.value,
@@ -96,39 +111,43 @@ export class SignUpPage {
         'Month':this.Month.value,
         'Year':this.Year.value,
         'Gender':this.Gender.value,
+        'FCMToken':this.Token,
+        'ProfilePicture':this.lastImage1,
     };  
-   // console.log(Userdata);
-    this.http.post('http://localhost:5000/signup',JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-      let responseData = data;
-      console.log(responseData);
-  },
-  err => {
-      console.log('error');
-  });
-    //   alert.present();
-    //   return;
-    // }
+   //console.log(Userdata);
+    this.http.post('http://localhost:5000/signup', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+        let responseData = data;
+        let id = responseData['content'];
+        console.log(responseData.Error);
+        console.log(responseData);
+        console.log(responseData['content']);
+        this.loading.dismiss();
+        if (responseData.Error != "none") {
+          this.presentErrorAlert(responseData.Error);
+        }
+        else {//if account creation successfull store these value in local storage as they will be required by the application
+          this.storage.set('Name', this.Name.value);
+          this.storage.set('Email', this.Email.value);
+          this.storage.set('Password', this.Password.value)
+          this.storage.set('ID', id);
+          this.storage.set('Rating', 0);
+          this.navCtrl.setRoot(HomePage);
+        }
+      },
+        err => {
+          console.log('error');
+        });
+});
+  }
 
-    // if( this.lastImage2==null){
-    //   let alert = this.alertCtrl.create({
-    //     title: 'Liscence Image Missing',
-    //     subTitle: 'Please upload the required image',
-    //     buttons: ['Dismiss']  
-    //   });
-    //   alert.present();
-    //   return;
-    // }
-    // if( this.lastImage3==null){
-    //   let alert = this.alertCtrl.create({
-    //     title: 'Vehicle Registration Image Missing',
-    //     subTitle: 'Please upload all required image',
-    //     buttons: ['Dismiss']
-    //   });
-    //   alert.present();
-    //   return;
-    // }
-    //ALL things are now set just need to send data to the back end check for valid!!!/
-    
+
+  presentErrorAlert(text) {
+    let alert = this.alertCtrl.create({
+      title: 'Error',
+      subTitle: text,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad SignUpPage');
@@ -158,6 +177,8 @@ export class SignUpPage {
     });
     actionSheet.present();
   }
+
+
   public takePicture(sourceType,id) {
     // Create options for the Camera Dialog
     var options = {
@@ -185,6 +206,23 @@ export class SignUpPage {
     }, (err) => {
       this.presentToast('Error while selecting image.');
     });
+  }
+
+  upload() {
+    let fileTransfer: FileTransferObject = this.transfer.create();
+    let options: FileUploadOptions = {
+      fileKey: 'file',
+      fileName: this.lastImage1,
+      headers: {}
+
+    }
+
+    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/senderprofileimage', options, true)
+      .then((data) => {
+        console.log(data)
+      }, (err) => {
+        console.log(err)
+      })
   }
 
   private createFileName() {

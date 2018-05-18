@@ -27,7 +27,7 @@ import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Base64 } from '@ionic-native/base64';
-
+import { FCM } from '@ionic-native/fcm';
 
 
 @NgModule({
@@ -81,6 +81,7 @@ import { Base64 } from '@ionic-native/base64';
     Base64,
     FileTransfer,
     FileTransferObject,
+    FCM,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

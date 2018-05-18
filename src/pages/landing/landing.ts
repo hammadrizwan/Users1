@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef,NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Storage } from '@ionic/storage';
 /**
  * Generated class for the LandingPage page.
  *
@@ -21,9 +22,14 @@ export class LandingPage {
   @ViewChild('map') mapElement: ElementRef;
   map:any;
   loading:any;
-  constructor(public toastCtrl: ToastController,public navCtrl: NavController, public navParams: NavParams, public zone: NgZone,public alertCtrl: AlertController,public loadingCtrl: LoadingController,public geolocation: Geolocation,public platform: Platform) {
+  constructor(public toastCtrl: ToastController,public navCtrl: NavController, public navParams: NavParams, 
+    public zone: NgZone,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
+    public geolocation: Geolocation,public platform: Platform,public storage: Storage) {
   
     this.presentLoadingDefault();
+      this.storage.get('ID').then((val)=>{
+        console.log('ID is +',val);
+      });
   }
 
   ionViewDidLoad() {
@@ -147,7 +153,7 @@ dummymarkers()
     position: {lat: 31.5360264, lng: 74.4069842},
     map: this.map,
     icon: {
-      url: 'assets/imgs/dummy.png'
+      url: 'assets/imgs/ss.png'
       }
   });
 
@@ -163,7 +169,7 @@ customeMarker(position) {
     map: this.map,
     animation: google.maps.Animation.DROP,
     icon: {
-      url: 'assets/imgs/dummy.png'
+      url: 'assets/imgs/ss.png'
       }
   });
 

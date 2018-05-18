@@ -14,5 +14,29 @@
 
 
 <ion-content padding>
-
+<ion-card>
+  <div style="position: relative">
+    <img src="http://localhost:5000/uploads/{{this.image}}" />
+    </div>
+</ion-card>
+<ion-card>
+  <ion-label>Name:</ion-label>
+  <h3 ion-text>{{this.name}}</h3>
+  <ion-label>Phone Number:</ion-label>
+  <h3 ion-text>{{this.phoneno}}</h3>
+  <ion-label>Email:</ion-label>
+  <h3 ion-text>{{this.email}}</h3>
+  <ion-label>Address:</ion-label>
+  <h3 ion-text>{{this.address}}</h3>
+</ion-card>
+<ion-card>
+    <ion-label>Number of Packages Delivered:</ion-label>
+    <h3 ion-text></h3>
+    <ion-label>Number of Packages Active:</ion-label>
+    <h3 ion-text></h3>
+    <ion-label>Number of Packages Pending:</ion-label>
+    <h3 ion-text></h3>
+    <ion-label>Last Package Sent on:</ion-label>
+    <h3 ion-text></h3>
+</ion-card>
 </ion-content>

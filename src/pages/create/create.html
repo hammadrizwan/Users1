@@ -368,10 +368,10 @@
 
           <ion-item>
             <h2>Package Name:</h2>
-            <ion-note item-end>Fragile Box </ion-note>
+            <ion-note item-end>{{this.PackageName.value}}</ion-note>
           </ion-item>
           <ion-item>
-            <ion-note item-end>Fragile Box weighing 2 Kg to be delivered inter city on urgent basis. </ion-note>
+            <ion-note item-end>{{this.PackageDesc.value}}</ion-note>
           </ion-item>
           <ion-item>
             <h2>Cost</h2>
@@ -380,16 +380,16 @@
 
           <ion-item>
             <h2>Size:</h2>
-            <ion-note item-end> Medium </ion-note>
+            <ion-note item-end>{{this.PackageSize}}</ion-note>
           </ion-item>
 
           <ion-item>
             <h2>Delivery Type:</h2>
-            <ion-note item-end> Freelance </ion-note>
+            <ion-note item-end> {{this.TransportType}} </ion-note>
           </ion-item>
           <ion-item>
             <h2>Transport Type:</h2>
-            <ion-note item-end> Car </ion-note>
+            <ion-note item-end> {{this.VehicleType}} </ion-note>
           </ion-item>
         </ion-card>
 

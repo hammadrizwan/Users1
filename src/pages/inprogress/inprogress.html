@@ -17,51 +17,35 @@
 
 
 <ion-content padding class="bgg">
+  <div *ngIf="!nodata">
+    <ion-list *ngFor="let item of activedata">
     <ion-card>
-        <ion-item>
-            <h2>Package Name:</h2>
-            <ion-note item-end>Fragile Box </ion-note>
-          </ion-item>
-          <ion-item>
-              <h2>Package ID:</h2>
-              <ion-note item-end>528491</ion-note>
-            </ion-item>
-          <ion-item>
-              <h2>Transporter:</h2>
-              <ion-note item-end>M. Bhutta </ion-note>
-            </ion-item>
-            <button ion-button color="navbarcolor" full>Track Package</button>
+        <div style="position: relative">
+      <img src="http://localhost:5000/uploads/{{item.PImage}}" />
+      <ion-fab  right top>
+        <button class="buttoncolor" ion-fab>
+          <ion-icon name="trash" ></ion-icon>
+        </button>
+      </ion-fab>
+  </div>
+  
+      <ion-item>
+        <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>
+        <h2>{{item.PickAddress}}</h2>
+      </ion-item>
+  
+      <ion-item>
+        <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>
+        <h2>{{item.DestAddress}}</h2>
+      </ion-item>
+  
+      <button class="colornavbar" ion-button full (click)="viewLive(item.ID)">
+        View Live
+      </button>
     </ion-card>
-
-    <ion-card>
-        <ion-item>
-            <h2>Package Name:</h2>
-            <ion-note item-end>Geek Aegis Mod </ion-note>
-          </ion-item>
-          <ion-item>
-              <h2>Package ID:</h2>
-              <ion-note item-end>564123</ion-note>
-            </ion-item>
-          <ion-item>
-              <h2>Transporter:</h2>
-              <ion-note item-end>Leopard Courier</ion-note>
-            </ion-item>
-            <button ion-button color="navbarcolor" full>Track Package</button>
-    </ion-card>
-
-    <ion-card>
-        <ion-item>
-            <h2>Package Name:</h2>
-            <ion-note item-end>Radiation Rod </ion-note>
-          </ion-item>
-          <ion-item>
-              <h2>Package ID:</h2>
-              <ion-note item-end>523491</ion-note>
-            </ion-item>
-          <ion-item>
-              <h2>Transporter:</h2>
-              <ion-note item-end>S Abid </ion-note>
-            </ion-item>
-            <button ion-button color="navbarcolor" full>Track Package</button>
-    </ion-card>
+  </ion-list>
+  </div>
+  <div *ngIf="nodata" class="nodata">
+    <ion-label >No one accepted any of your packages you lonely b*tch!</ion-label>
+  </div>
 </ion-content>
