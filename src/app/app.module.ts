@@ -18,7 +18,7 @@ import { ActivePage } from '../pages/active/active';
 import { AllPage } from '../pages/all/all';
 import { ProfilePage } from '../pages/profile/profile';
 import { PackagedetailPage } from '../pages/packagedetail/packagedetail';
-
+import { ViewtransporterprofilePage } from '../pages/viewtransporterprofile/viewtransporterprofile';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
@@ -45,7 +45,8 @@ import { FCM } from '@ionic-native/fcm';
     ActivePage,
     AllPage,
     ProfilePage,
-    PackagedetailPage
+    PackagedetailPage,
+    ViewtransporterprofilePage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +69,8 @@ import { FCM } from '@ionic-native/fcm';
     ActivePage,
     AllPage,
     ProfilePage,
-    PackagedetailPage
+    PackagedetailPage,
+    ViewtransporterprofilePage
   ],
   providers: [
     File,

@@ -12,6 +12,7 @@ declare var cordova: any;
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../../pages/home/home';
+import { Events } from 'ionic-angular';
 /**
  * Generated class for the SignUpPage page.
  *
@@ -49,7 +50,7 @@ export class SignUpPage {
      private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,private alertCtrl: AlertController,public http: Http,private fcm: FCM,
-     private transfer: FileTransfer,public storage: Storage) {
+     private transfer: FileTransfer,public storage: Storage,public events: Events) {
     
       this.data = this.formBuilder.group({
         lastImage1:['',Validators.required],
@@ -115,7 +116,7 @@ export class SignUpPage {
         'ProfilePicture':this.lastImage1,
     };  
    //console.log(Userdata);
-    this.http.post('http://localhost:5000/signup', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+    this.http.post('http://localhost:5000/signupsender', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
         let responseData = data;
         let id = responseData['content'];
         console.log(responseData.Error);
@@ -131,6 +132,9 @@ export class SignUpPage {
           this.storage.set('Password', this.Password.value)
           this.storage.set('ID', id);
           this.storage.set('Rating', 0);
+          let Notifications = [];//to hold notification data
+          this.storage.set('NotificationData', Notifications);//notification data
+          this.events.publish('user:loggedin',"yo");
           this.navCtrl.setRoot(HomePage);
         }
       },
@@ -210,14 +214,12 @@ export class SignUpPage {
 
   upload() {
     let fileTransfer: FileTransferObject = this.transfer.create();
-    let options: FileUploadOptions = {
+    let options1: FileUploadOptions = {//file options for profile image
       fileKey: 'file',
       fileName: this.lastImage1,
       headers: {}
-
     }
-
-    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/senderprofileimage', options, true)
+    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload?type=' + 'Profile', options1, true)
       .then((data) => {
         console.log(data)
       }, (err) => {

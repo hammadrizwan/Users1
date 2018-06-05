@@ -80,6 +80,8 @@ export class LoginPage {
         this.storage.set('Password', responseData.content[0].Password)
         this.storage.set('ID', responseData.content[0].ID);
         this.storage.set('Rating', responseData.content[0].Rating);
+        let Notifications = [];//to hold notification data
+        this.storage.set('NotificationData', Notifications);//notification data
         this.events.publish('user:loggedin',"yo");
         this.openPage(HomePage);
       }

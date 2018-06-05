@@ -359,7 +359,7 @@
 
 
       <div *ngSwitchCase="'S6'"  >
-
+<ion-scroll scrollY="true">
         <ion-card>
 
           <img src={{IPath}}>
@@ -410,11 +410,12 @@
         </ion-card>
         <ion-card>
 <div  id="map1" #map1 (onCreate)="findPath1()"></div>
+
 </ion-card>
 
        
             <!-- <button ion-button full color="secondary" type="submit">CREATE</button> -->
-            
+          </ion-scroll>  
       </div>
     </form>
   </div>

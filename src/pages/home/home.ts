@@ -11,7 +11,7 @@ export class HomePage {
   
   LandRoot = LandingPage;
   NotificationRoot = NotificationPage;
-
+  tab1BadgeCount=1;
   constructor(public navCtrl: NavController,app: App, menu: MenuController) {
     
   }

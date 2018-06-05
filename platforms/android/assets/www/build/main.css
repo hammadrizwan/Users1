@@ -38290,6 +38290,14 @@ ion-chip ion-label {
   overflow: hidden !important;
 }
 
+ion-scroll {
+  min-height: 700px;
+}
+
+ion-scroll .scroll-content {
+  padding: 0px !important;
+}
+
 .hidemap {
   visibility: hidden;
   margin-top: -1000px;

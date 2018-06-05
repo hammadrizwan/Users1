@@ -98,7 +98,8 @@
               "xml": "<service android:name=\"com.gae.scaffolder.plugin.MyFirebaseInstanceIDService\"><intent-filter><action android:name=\"com.google.firebase.INSTANCE_ID_EVENT\" /></intent-filter></service>",
               "count": 1
             }
-          ]
+          ],
+          "/manifest": []
         }
       },
       "config.xml": {

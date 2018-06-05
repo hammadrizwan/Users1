@@ -92,7 +92,7 @@ export class CreatePage {
   Screen6: boolean;
   Scr6: boolean = true;
   Global: boolean = true;
-
+  distance: any;
   data: FormGroup;
   PackageName: AbstractControl;
   PackageDesc: AbstractControl;
@@ -257,6 +257,8 @@ export class CreatePage {
           travelMode: 'DRIVING'
         }, function (response, status) {
           if (status === 'OK') {
+            this.distance = response.routes[0].legs[0].distance.value / 1000;
+            console.log(response.routes[0].legs[0].distance.value / 1000);
             directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
@@ -712,7 +714,7 @@ export class CreatePage {
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
-
+        'Distance':this.distance,
       };
     }
     else {
@@ -734,6 +736,7 @@ export class CreatePage {
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
+        'Distance':this.distance,
       };
     }
 

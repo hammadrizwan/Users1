@@ -49,7 +49,7 @@ export class InprogressPage {
 
   viewLive(ID) {
 
-    //this.findPath1();
+    
   }
 
 }
