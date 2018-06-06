@@ -169,7 +169,7 @@ ion-chip ion-label{
 .ioniconcolor2{
     color : color($colors, navbarcolor);
  }
- #map {
+ #mapCreatePackage {
     height: 100%;
     width: 100%;
     top: 0;
@@ -227,7 +227,17 @@ ion-searchbar {
         margin: 0;
         padding: 0;
     }
+
+    
 }
 
+#textDisplay{
+   width: 90%;
+   opacity: .7;
+}
 
+.photo1{
+    display: block;
+    margin: 0 auto;
+}
 

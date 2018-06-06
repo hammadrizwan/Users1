@@ -16,6 +16,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Base64 } from '@ionic-native/base64';
 declare var google: any;
 declare var MarkerClusterer: any;
+
 /**
  * Generated class for the CreatePage page.
  *
@@ -56,7 +57,7 @@ export class CreatePage {
   }
   //MAPS VARS_______________________________________________________________________________________________________
 
-  @ViewChild('map') mapElement: ElementRef;
+  @ViewChild('mapCreatePackage') mapElement: ElementRef;
   @ViewChild('searchbar', { read: ElementRef }) searchbar: ElementRef;
   addressElement: HTMLInputElement = null;
   @ViewChild('searchbar1', { read: ElementRef }) searchbar1: ElementRef;
@@ -68,11 +69,13 @@ export class CreatePage {
   MyLocation: any;
   listSearch: string = '';
   map: any;
+  map1: any;
   marker: any;
   loading: any;
   search: boolean = false;
+  pageload: boolean = false;
+  imageerror: boolean = false;
   error: any;
-  switch: string = "map";
   regionals: any = [];
   currentregional: any;
   //__________________________________________________________________________________________________________
@@ -93,6 +96,9 @@ export class CreatePage {
   Scr6: boolean = true;
   Global: boolean = true;
   distance: any;
+  marker1: any;
+  marker2: any;
+  observer: any;
   data: FormGroup;
   PackageName: AbstractControl;
   PackageDesc: AbstractControl;
@@ -126,7 +132,7 @@ export class CreatePage {
     this.PickAddress = this.data.controls['PickAddress'];
     this.DestAddress = this.data.controls['DestAddress'];
 
-    this.presentLoadingDefault();
+    //this.presentLoadingDefault();
 
     // this.platform.ready().then(() => this.loadMaps());
 
@@ -136,18 +142,28 @@ export class CreatePage {
     console.log('Clicked Marker', id);
   }
 
-  presentLoadingDefault() {
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
+  // presentLoadingDefault() {
+  //   let loading = this.loadingCtrl.create({
+  //     content: 'Please wait...'
+  //   });
 
-    loading.present();
+  //   loading.present();
 
-    setTimeout(() => {
-      loading.dismiss();
-      this.platform.ready().then(() => this.loadMaps());
-    }, 4000);
+  //   setTimeout(() => {
+  //     loading.dismiss();
+  //     this.platform.ready().then(() => this.loadMaps());
+  //   }, 4000);
+  // }
+
+  ionViewDidLoad() {
+    this.platform.ready().then(() => this.loadMaps());
+    this.checkIfLocationChange();
   }
+
+  ionViewDidLeave() {
+    this.observer.unsubscribe();//unsubscribe to any changes made to markers
+  }
+
 
   loadMaps() {
 
@@ -199,146 +215,179 @@ export class CreatePage {
     });
   }
 
+  checkIfLocationChange() {//method checks if marker position is changed
+    let input = document.getElementById('textDisplay');//get the div in which new position text is to be shown
+    this.observer = Observable.interval(2000).subscribe(() => {//new observable runs every 2 sec
+      if (this.marker1 != null) {//check if marker actually exits
+        if (this.Source != this.marker1.getPosition()) {//check if postion has changed
+          this.Source = this.marker1.getPosition();//set source to new postion
+          let geocoder = new google.maps.Geocoder;//reverse geocoding to get location text
+          geocoder.geocode({ 'location': this.Source }, function (results, status) {
+            if (status === 'OK') {
+              if (results[0]) {
+                input.innerText = results[0].formatted_address;//set text in div
+                this.SourceString = results[0].formatted_address;
+                //map.setZoom(11);
+                // let input = document.getElementById('s1');
+                //infowindow.setContent(results[0].formatted_address);
+                //infowindow.open(map, marker123);
+              }
+            }
+          });
+        }
+      }
+      if (this.marker2 != null) {//check if marker actually exits
+        if (this.Destination != this.marker2.getPosition()) {//check if postion has changed
+          this.Destination = this.marker2.getPosition();//set destination to new postion
+          let geocoder = new google.maps.Geocoder;//reverse geocoding to get location text
+          geocoder.geocode({ 'location': this.Destination }, function (results, status) {
+            if (status === 'OK') {
+              if (results[0]) {
+                input.innerText = results[0].formatted_address;
+                this.DestinationString = results[0].formatted_address;
+                //map.setZoom(11);
+                // let input = document.getElementById('s1');  
+                //infowindow.setContent(results[0].formatted_address);
+                //infowindow.open(map, marker123);  
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+
   initAutocomplete(): void {
 
-    this.addressElement1 = this.searchbar1.nativeElement.querySelector('.searchbar-input');
-    this.createAutocomplete(this.addressElement1).subscribe((location) => {
+    this.addressElement1 = this.searchbar1.nativeElement.querySelector('.searchbar-input');//get the search bar DOM
+    this.createAutocomplete(this.addressElement1).subscribe((location) => {//subscribe to observable that is returned
       console.log('First Search', location);
-      this.Source = new google.maps.LatLng(location.lat(), location.lng());
+      this.Source = new google.maps.LatLng(location.lat(), location.lng());//Source marker location
       let options = {
-        center: location,
+        center: this.Source,
         zoom: 13
       };
-      this.map.setOptions(options);
-      this.addMarker(location, "Searched");
-
+      this.map.setOptions(options);//reset zoom and focus to source marker using options above
+      this.marker1.setMap(null);//remove previous marker
+      // this.addMarker(this.Origin, "Origin",this.marker1);
+      this.marker1 = new google.maps.Marker({//drop new marker
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: this.Source,
+        draggable: true
+      });
+      this.addInfoWindow(this.marker1, "Origin");//info shown when marker is clicked
     });
 
-
-
-    this.addressElement = this.searchbar.nativeElement.querySelector('.searchbar-input');
-    this.createAutocomplete(this.addressElement).subscribe((location) => {
+    this.addressElement = this.searchbar.nativeElement.querySelector('.searchbar-input');//subscribe to observable that is returned
+    this.createAutocomplete1(this.addressElement).subscribe((location) => {
       console.log('Second Search', location);
-      this.Destination = new google.maps.LatLng(location.lat(), location.lng());
+      this.Destination = new google.maps.LatLng(location.lat(), location.lng());//Destination marker location
       let options = {
-        center: location,
+        center: this.Destination,
         zoom: 13
       };
-      this.map.setOptions(options);
-      this.addMarker(location, "Searched");
+      this.map.setOptions(options);//reset zoom and focus to Destination marker using options abov
+      // this.addMarker(this.Dest, "Destination",this.marker2  );
+      this.marker2 = new google.maps.Marker({//drop new marker
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: this.Destination,
+        draggable: true
+      });
+      this.addInfoWindow(this.marker2, "Destination");//info shown when marker is clicked
     });
 
   }
 
   findPath() {
 
-    this.SourceString = this.searchbar1.nativeElement.querySelector('.searchbar-input').value;
-    this.DestinationString = this.searchbar.nativeElement.querySelector('.searchbar-input').value;
-    if (this.SourceString != "" && this.DestinationString != "") {
-      let loading = this.loadingCtrl.create({
-        content: 'Please wait...'
-      });
-
-      loading.present();
-
-      setTimeout(() => {
-        loading.dismiss();
-        // this.platform.ready().then(() => this.loadMaps());
-        let directionsService = new google.maps.DirectionsService;
-        let directionsDisplay = new google.maps.DirectionsRenderer;
-        const map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 9,
-          center: { lat: 41.85, lng: -87.65 }
-        });
-        directionsDisplay.setMap(map);
-        directionsService.route({
-          origin: this.Source,
-          destination: this.Destination,
-          travelMode: 'DRIVING'
-        }, function (response, status) {
-          if (status === 'OK') {
-            this.distance = response.routes[0].legs[0].distance.value / 1000;
-            console.log(response.routes[0].legs[0].distance.value / 1000);
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-
-
-      }, 2000);
-    }
-    console.log("I am not the one");
-
-  }
-
-  findPath1() {
-    console.log("Iam the one");
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-
-    loading.present();
-
-    setTimeout(() => {
-      loading.dismiss();
-      // this.platform.ready().then(() => this.loadMaps());
+    if (this.marker2 != null) {
       let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
-      const map = new google.maps.Map(document.getElementById('map1'), {
+      this.map = new google.maps.Map(document.getElementById('mapCreatePackage'), {
         zoom: 9,
-        center: { lat: 41.85, lng: -87.65 }
-      });
-      directionsDisplay.setMap(map);
-      directionsService.route({
-        origin: this.Source,
-        destination: this.Destination,
+        center: { lat: 31.4826352, lng: 74.0712721 }
+      });//new map
+      directionsDisplay.setMap(this.map);//set direction diplay method to show on this map
+      directionsService.route({//create new route show on  map
+        origin: this.Source,//location A origin marker
+        destination: this.Destination,//location B destination marker
         travelMode: 'DRIVING'
       }, function (response, status) {
         if (status === 'OK') {
-          directionsDisplay.setDirections(response);
+          directionsDisplay.setDirections(response);//diplay directions
+          //this.distance = response.routes[0].legs[0].distance.value / 1000;
+          console.log(response.routes[0].legs[0].distance.value / 1000)
         } else {
           window.alert('Directions request failed due to ' + status);
         }
       });
+    }
 
+  }
 
-    }, 2000);
+  findPath1() {
+    setTimeout(() => {
+    if (this.marker2 != null) {
+      let directionsService = new google.maps.DirectionsService;
+      let directionsDisplay = new google.maps.DirectionsRenderer;
+      this.map1 = new google.maps.Map(document.getElementById('map1'), {
+        zoom: 9,
+        center: { lat: 31.4826352, lng: 74.0712721 }
+      });//new map
+      directionsDisplay.setMap(this.map1);//set direction diplay method to show on this map
+      directionsService.route({//create new route show on  map
+        origin: this.Source,//location A origin marker
+        destination: this.Destination,//location B destination marker
+        travelMode: 'DRIVING'
+      }, function (response, status) {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(response);//diplay directions
+          //this.distance = response.routes[0].legs[0].distance.value / 1000;
+          console.log(response.routes[0].legs[0].distance.value / 1000)
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    }
+  }, 1500);
   }
 
   createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
-
-    {
-      //  let locationOptions = { timeout: 10000, enableHighAccuracy: true };
-      this.geolocation.getCurrentPosition().then(
-        (position) => {
-          console.log(position.coords.latitude, position.coords.longitude);
-          let myPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          //this.MyLocation= new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          let options = {
-            center: myPos,
-            zoom: 13
-          };
-          this.map.setOptions(options);
-          this.addMarker(myPos, "I am Here!");
-
-
-        },
-        (error) => {
-          this.loading.dismiss().then(() => {
-            this.showToast('Location not found. Please enable your GPS!');
-            console.log(error);
-          });
-        }
-      )
-    }
-
     const autocomplete = new google.maps.places.Autocomplete(addressEl);
     autocomplete.bindTo('bounds', this.map);
     return new Observable((sub: any) => {
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
-        if (!place.geometry) {
+        this.SourceString = place.formatted_address;
+        console.log("Hola" + place.formatted_address)
+        //this.LocationText=autocomplete.gm_accessors_.place.fd.formattedPrediction;
+        if (!place) {
+          sub.error({
+            message: 'Autocomplete returned place with no geometry'
+          });
+        } else {
+          //console.log('Search', place.geometry.locat;
+          console.log('Search Lat', place.geometry.location.lat());
+          console.log('Search Lng', place.geometry.location.lng());
+          sub.next(place.geometry.location);
+          //sub.complete();
+        }
+      });
+    });
+  }
+
+  createAutocomplete1(addressEl: HTMLInputElement): Observable<any> {
+    const autocomplete = new google.maps.places.Autocomplete(addressEl);
+    autocomplete.bindTo('bounds', this.map);
+    return new Observable((sub: any) => {
+      google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        const place = autocomplete.getPlace();
+        this.DestinationString = place.formatted_address;
+        console.log("Hola" + place.formatted_address)
+        //this.LocationText=autocomplete.gm_accessors_.place.fd.formattedPrediction;
+        if (!place) {
           sub.error({
             message: 'Autocomplete returned place with no geometry'
           });
@@ -354,26 +403,18 @@ export class CreatePage {
   }
 
   initializeMap() {
-    if (this.mapElement) {
-      this.zone.run(() => {
+    var mapEle = this.mapElement.nativeElement;//get map div
+    this.map = new google.maps.Map(mapEle, {//new map create with the following settings
+      zoom: 12,
+      center: { lat: 31.4826352, lng: 74.0712721 },
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDoubleClickZoom: false,
+      disableDefaultUI: true,
+      zoomControl: true,
+      scaleControl: true,
+    });
 
-
-        var mapEle = this.mapElement.nativeElement;
-
-        this.map = new google.maps.Map(mapEle, {
-          zoom: 12,
-          center: { lat: 31.5360264, lng: 74.4069842 },
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          // styles: [{ "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 21 }] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#dedede" }, { "lightness": 21 }] }, { "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#f2f2f2" }, { "lightness": 19 }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#fefefe" }, { "lightness": 17 }, { "weight": 1.2 }] }],
-          disableDoubleClickZoom: false,
-          disableDefaultUI: true,
-          zoomControl: true,
-          scaleControl: true,
-        });
-        // this.getCurrentPosition();
-
-      });
-    }
+    this.getCurrentPosition();//set the default location at the users current position
   }
 
   //Center zoom
@@ -424,39 +465,36 @@ export class CreatePage {
 
   // go show currrent location
   getCurrentPosition() {
-    this.loading = this.loadingCtrl.create({
-      content: 'Searching Location ...'
-    });
-    this.loading.present();
-
-    let locationOptions = { timeout: 10000, enableHighAccuracy: true };
-
+   
+    let locationOptions = { timeout: 10000 };
     this.geolocation.getCurrentPosition(locationOptions).then(
       (position) => {
-        this.loading.dismiss().then(() => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        this.Source = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        let options = {
+          center: this.Source,
+          zoom: 12
 
-          this.showToast('Location found!');
-
-          console.log(position.coords.latitude, position.coords.longitude);
-          let myPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          let options = {
-            center: myPos,
-            zoom: 12
-
-          };
-          this.map.setOptions(options);
-          this.addMarker(myPos, "I am Here!");
-
+        };
+        this.map.setOptions(options);//set new options to map
+        this.marker1 = new google.maps.Marker({//drop marker at current location with the following settings
+          map: this.map,
+          animation: google.maps.Animation.DROP,
+          position: this.Source,
+          draggable: true
         });
-      },
+        console.log("this is the lat" + this.marker1.getPosition().lat());
+        console.log("this is the lng" + this.marker1.getPosition().lng());
+
+      }),
       (error) => {
-        this.loading.dismiss().then(() => {
-          this.showToast('Location not found. Please enable your GPS!');
-
-          console.log(error);
-        });
+        //     this.loading.dismiss().then(() => {
+        //     this.showToast('Location not found. Please enable your GPS!');
+        //     this.loading.dismiss();
+        //     console.log(error);
+        //   });
+        console.log(error);
       }
-    )
   }
 
   toggleSearch() {
@@ -471,7 +509,8 @@ export class CreatePage {
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: position
+      position: position,
+      draggable: true
     });
 
     this.addInfoWindow(marker, content);
@@ -537,9 +576,16 @@ export class CreatePage {
       return;
     }
     if (this.CurrentScreen == "S2") {
-      this.Screen2 = true;
+      if(this.lastImage1 != null)
+      {
+        this.Screen2 = true;
       this.CurrentScreen = "S3";
       return;
+      }
+      else{
+        this.imageerror = true;
+      }
+      
     }
   }
 

@@ -14,10 +14,24 @@ import { NotificationPage } from '../pages/notification/notification';
 import { AllPage } from '../pages/all/all';
 import { ActivePage } from '../pages/active/active';
 import { ViewtransporterprofilePage } from '../pages/viewtransporterprofile/viewtransporterprofile';
+import { LivetrackPage } from '../pages/livetrack/livetrack';
 import { ProfilePage } from '../pages/profile/profile';
 import { FCM } from '@ionic-native/fcm';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import * as firebase from 'Firebase';
+import "rxjs/add/observable/interval";
+var config = {
+  apiKey: "AIzaSyDK3eYlkVHJTY83OOYXVIZQRq5C549pBcc",
+  authDomain: "transporterdnd.firebaseapp.com",
+  databaseURL: "https://transporterdnd.firebaseio.com",
+  projectId: "transporterdnd",
+  storageBucket: "transporterdnd.appspot.com",
+  messagingSenderId: "680127595430"
+};
+
+
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -29,13 +43,15 @@ export class MyApp {
   loggedIn: Boolean;
   ID:any;
   Token:any
+  ref: any;//firebase reference
   @ViewChild(Nav) nav: Nav;
   pages: Array<{ title: string, component: any }>;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private fcm: FCM,
     public storage: Storage,private http:Http,public events: Events  ) {
     platform.ready().then(() => {
       //Notifications
-     
+      firebase.initializeApp(config);//intialise firebase
+      this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
 
 
       //end notifications.
@@ -43,7 +59,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.storage.get('ID').then((val) => {//check if user initals are set or not
+      this.storage.get('Name').then((val) => {//check if user initals are set or not
         if (val == null) {
           this.rootPage = LoginPage; //set landing page as login page
         }
@@ -65,8 +81,8 @@ export class MyApp {
     this.loadData().then(() => {
       
       // this.subscribeWatch();
-      this.updateToken();
-      this.onNotification();
+      // this.updateToken();
+      // this.onNotification();
     })
     events.subscribe('user:loggedin', (text) => {
       this.storage.get('Name').then((val) => {

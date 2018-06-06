@@ -3,6 +3,9 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { CreatePage } from '../create/create';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs/Observable';
+import * as firebase from 'Firebase';
+
 /**
  * Generated class for the LandingPage page.
  *
@@ -18,17 +21,47 @@ declare var google: any;
   templateUrl: 'landing.html',
 })
 export class LandingPage {
-
-  @ViewChild('map') mapElement: ElementRef;
+  ref: any;//firebase reference
+  snapshotToArray:any;
+   observer: any
+  @ViewChild('mapLanding') mapElement: ElementRef;
   map:any;
   loading:any;
+  markers=[];
   constructor(public toastCtrl: ToastController,public navCtrl: NavController, public navParams: NavParams, 
     public zone: NgZone,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
     public geolocation: Geolocation,public platform: Platform,public storage: Storage) {
-  
+      this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
     this.presentLoadingDefault();
       this.storage.get('ID').then((val)=>{
         console.log('ID is +',val);
+      });
+      this.getArrayref();
+      this.observer = Observable.interval(3000).subscribe(() => {
+        this.ref.on('value', resp => {
+          this.deleteMarkers();
+          this.snapshotToArray(resp).forEach(data => {
+            
+             // let image = 'assets/imgs/green-bike.png';
+              let updatelocation = new google.maps.LatLng(data.latitude,data.longitude);
+              // if(this.mapsetter){
+              //   this.initMap(updatelocation);
+              //   this.mapsetter = false;
+              // }
+              
+              console.log(updatelocation);
+              this.addMarker(updatelocation);
+              //his.setMapOnAll(this.map);
+              console.log("inside the top if");
+            
+            //  let image = 'assets/imgs/blue-bike.png';
+              // updatelocation = new google.maps.LatLng(data.latitude,data.longitude);
+              // this.addMarker(updatelocation);
+              // this.setMapOnAll(this.map);
+              // console.log("inside the top else");
+            
+          });
+        });
       });
   }
 
@@ -36,9 +69,14 @@ export class LandingPage {
     console.log('ionViewDidLoad LandingPage');
   }
 
+  ionViewDidLeave() {
+    console.log("Looks like I'm about to leave :(");
+    this.observer.unsubscribe();//unsubsribe to geolocation tracking
+  }
+
   opencreate()
 {
-  this.navCtrl.setRoot(CreatePage);
+  this.navCtrl.push(CreatePage);
 }
 
 presentLoadingDefault() {
@@ -82,7 +120,49 @@ errorAlert(title, message) {
   alert.present();
 }
 
+addMarker(location) {
+  let marker = new google.maps.Marker({
+    position: location,
+    map: this.map,
+    icon: {
+      url: 'assets/imgs/ss.png'
+      }
+   // icon: image
+  });
+  this.markers.push(marker);
+  //this.map.setCenter(marker.getPosition());
+}
 
+setMapOnAll(map) {
+  for (var i = 0; i < this.markers.length; i++) {
+   this.markers[i].setMap(map);
+  }
+}
+
+clearMarkers() {
+  this.setMapOnAll(null);
+}
+
+deleteMarkers() {
+  this.clearMarkers();
+  this.markers = [];
+}
+getArrayref(){
+  this.snapshotToArray = snapshot => {
+   let returnArr = [];
+   snapshot.forEach(childSnapshot => {
+      let item = childSnapshot.val();
+      console.log(item);
+    //console.log("value of item"+childSnapshot.toJSON());  
+      item.key = childSnapshot.key;
+   //  console.log("value of item.key"+item.key);
+       returnArr.push(item);
+       console.log("hello hey whtsupp"); 
+ });
+    return returnArr;
+ };
+ 
+}
 
 
 initializeMap() {
@@ -106,13 +186,15 @@ initializeMap() {
       
       this.getCurrentPosition();
       
-      this.dummymarkers();
+      
     }
   );
   }
 }
 
-addMarker(position, content) {
+
+
+addMarker1(position, content) {
   console.log("add marker"); 
   let marker = new google.maps.Marker({
     map: this.map,
@@ -135,7 +217,7 @@ getCurrentPosition() {
 
         };
         this.map.setOptions(options);
-        this.addMarker(myPos, "I am Here!");
+        this.addMarker1(myPos, "I am Here!");
         
     
     },

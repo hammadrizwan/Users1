@@ -38274,7 +38274,7 @@ ion-chip ion-label {
   color: #e52d27;
 }
 
-#map {
+#mapCreatePackage {
   height: 100%;
   width: 100%;
   top: 0;
@@ -38331,6 +38331,16 @@ ion-searchbar {
   width: 100px;
   margin: 0;
   padding: 0;
+}
+
+#textDisplay {
+  width: 90%;
+  opacity: .7;
+}
+
+.photo1 {
+  display: block;
+  margin: 0 auto;
 }
 
 .aa {
@@ -38406,13 +38416,18 @@ ion-searchbar {
   background-color: #ecebeb;
 }
 
-#map {
+#mapLanding {
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
   position: absolute !important;
   overflow: hidden !important;
+}
+
+.menuebg {
+  background-color: #32db64;
+  color: white;
 }
 
 .hh ion-card-content {

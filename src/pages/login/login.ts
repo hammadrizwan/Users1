@@ -67,7 +67,7 @@ export class LoginPage {
     // this.storage.set('Name',this.Email.value);
     // this.storage.set('Password',this.Password.value);
     console.log(Userdata);
-    this.http.post('http://localhost:5000/login', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+    this.http.post('http://localhost:5000/loginsender', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       if (responseData.Error != "none") {
         this.loading.dismissAll();
