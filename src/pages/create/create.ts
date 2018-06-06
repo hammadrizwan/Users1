@@ -64,8 +64,8 @@ export class CreatePage {
   addressElement1: HTMLInputElement = null;
   Source: any = null;
   Destination: any = null;
-  SourceString: string = "";
-  DestinationString: string = "";
+  SourceString: string;
+  DestinationString: string;
   MyLocation: any;
   listSearch: string = '';
   map: any;
@@ -75,6 +75,7 @@ export class CreatePage {
   search: boolean = false;
   pageload: boolean = false;
   imageerror: boolean = false;
+  routeerror: Boolean = false;
   error: any;
   regionals: any = [];
   currentregional: any;
@@ -86,7 +87,7 @@ export class CreatePage {
   q = HomePage;
   CurrentScreen: string = "S1";
   lastImage1: string = null;
-  IPath: string = null;
+  ImagePath: string = null;
   Screen1: boolean;
   Screen2: boolean;
   Screen3: boolean;
@@ -108,6 +109,7 @@ export class CreatePage {
   CourierType: String;
   VehicleType: String;
   TransportType: String;
+
 
   @ViewChild('signupSlider') signupSlider: any;
   @ViewChild('myInput') myInput: ElementRef;
@@ -329,29 +331,29 @@ export class CreatePage {
 
   findPath1() {
     setTimeout(() => {
-    if (this.marker2 != null) {
-      let directionsService = new google.maps.DirectionsService;
-      let directionsDisplay = new google.maps.DirectionsRenderer;
-      this.map1 = new google.maps.Map(document.getElementById('map1'), {
-        zoom: 9,
-        center: { lat: 31.4826352, lng: 74.0712721 }
-      });//new map
-      directionsDisplay.setMap(this.map1);//set direction diplay method to show on this map
-      directionsService.route({//create new route show on  map
-        origin: this.Source,//location A origin marker
-        destination: this.Destination,//location B destination marker
-        travelMode: 'DRIVING'
-      }, function (response, status) {
-        if (status === 'OK') {
-          directionsDisplay.setDirections(response);//diplay directions
-          //this.distance = response.routes[0].legs[0].distance.value / 1000;
-          console.log(response.routes[0].legs[0].distance.value / 1000)
-        } else {
-          window.alert('Directions request failed due to ' + status);
-        }
-      });
-    }
-  }, 1500);
+      if (this.marker2 != null) {
+        let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer;
+        this.map1 = new google.maps.Map(document.getElementById('map1'), {
+          zoom: 9,
+          center: { lat: 31.4826352, lng: 74.0712721 }
+        });//new map
+        directionsDisplay.setMap(this.map1);//set direction diplay method to show on this map
+        directionsService.route({//create new route show on  map
+          origin: this.Source,//location A origin marker
+          destination: this.Destination,//location B destination marker
+          travelMode: 'DRIVING'
+        }, function (response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);//diplay directions
+            //this.distance = response.routes[0].legs[0].distance.value / 1000;
+            console.log(response.routes[0].legs[0].distance.value / 1000)
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    }, 1500);
   }
 
   createAutocomplete(addressEl: HTMLInputElement): Observable<any> {
@@ -465,7 +467,7 @@ export class CreatePage {
 
   // go show currrent location
   getCurrentPosition() {
-   
+
     let locationOptions = { timeout: 10000 };
     this.geolocation.getCurrentPosition(locationOptions).then(
       (position) => {
@@ -548,6 +550,7 @@ export class CreatePage {
       this.Screen3 = true;
       if (this.PackageSize != null && this.PackageName.value != "" && this.PackageDesc.value != "") {
         this.CurrentScreen = "S4";
+        this.Screen3 = false;
       }
       return;
     }
@@ -556,6 +559,7 @@ export class CreatePage {
       this.Screen4 = true;
       if (this.TransportType != null) {
         this.CurrentScreen = "S5";
+        this.Screen4=false;
       }
       return;
     }
@@ -564,6 +568,7 @@ export class CreatePage {
       this.Screen5 = true;
       if (this.CourierType != null || this.VehicleType != null) {
         this.CurrentScreen = "S6";
+        this.Screen5=false;
         this.Scr6 = false;
         this.findPath1();
       }
@@ -572,20 +577,26 @@ export class CreatePage {
 
     if (this.CurrentScreen == "S1") {
       this.Screen1 = true;
-      this.CurrentScreen = "S2";
+      if (this.Source!=null && this.Destination!=null) {
+        this.CurrentScreen = "S2";
+        this.Screen2 = false;
+      }
+      else {
+        this.routeerror = true;
+      }
       return;
     }
     if (this.CurrentScreen == "S2") {
-      if(this.lastImage1 != null)
-      {
-        this.Screen2 = true;
-      this.CurrentScreen = "S3";
-      return;
+      this.Screen2 = true;
+      if (this.lastImage1 != null) {
+        this.Screen2 = false;
+        this.CurrentScreen = "S3";
+        return;
       }
-      else{
+      else {
         this.imageerror = true;
       }
-      
+
     }
   }
 
@@ -607,7 +618,8 @@ export class CreatePage {
       this.CurrentScreen = "S4"
       return;
     }
-    if (this.CurrentScreen == "S6") {
+    if (this.CurrentScreen == "S6") {this.Scr6 = false;
+      this.Scr6 = true;
       this.CurrentScreen = "S5"
       return;
     }
@@ -687,7 +699,7 @@ export class CreatePage {
   private copyFileToLocalDir(namePath, currentName, newFileName) {
     this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
       this.lastImage1 = newFileName;
-      this.IPath = this.pathForImage(this.lastImage1);
+      this.ImagePath = this.pathForImage(this.lastImage1);
     }, (error) => {
       this.presentToast('Error while storing file.');
       console.log(error);
@@ -760,7 +772,7 @@ export class CreatePage {
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
-        'Distance':this.distance,
+        'Distance': this.distance,
       };
     }
     else {
@@ -782,7 +794,7 @@ export class CreatePage {
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
-        'Distance':this.distance,
+        'Distance': this.distance,
       };
     }
 

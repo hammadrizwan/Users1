@@ -38290,6 +38290,16 @@ ion-chip ion-label {
   overflow: hidden !important;
 }
 
+#buttonSearch {
+  margin-top: 50px;
+  padding: none;
+  font-size: 12px;
+  width: 70px;
+  height: 40px;
+  float: right;
+  background: #e52d27;
+}
+
 ion-scroll {
   min-height: 700px;
 }
@@ -38334,7 +38344,6 @@ ion-searchbar {
 }
 
 #textDisplay {
-  width: 90%;
   opacity: .7;
 }
 

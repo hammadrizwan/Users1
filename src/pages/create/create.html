@@ -14,7 +14,7 @@
   </ion-navbar>
   <ion-toolbar no-border-top mode="ios">
     <ion-segment (ionChange)="updatePage(CurrentScreen)" mode="ios" [(ngModel)]="CurrentScreen">
-      <ion-segment-button value="S1" disabled="false">Step 1
+      <ion-segment-button value="S1" disabled="true">Step 1
       </ion-segment-button>
       <ion-segment-button value="S2" disabled="true">Step 2
       </ion-segment-button>
@@ -24,7 +24,7 @@
       </ion-segment-button>
       <ion-segment-button value="S5" disabled="true">Step 5
       </ion-segment-button>
-      <ion-segment-button value="S6" disabled="false">Step 6
+      <ion-segment-button value="S6" disabled="true">Step 6
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -35,39 +35,25 @@
 
   <div [ngSwitch]="CurrentScreen">
     <ion-list (onCreate)="loadMaps()" no-padding *ngSwitchCase="'S1'">
+     
 
-
-      <div class="map">
-        <ion-searchbar class="searchbars" #searchbar1 placeholder="Enter Location:"></ion-searchbar>
-        <ion-item></ion-item>
-        <ion-searchbar class="searchbars" #searchbar placeholder="Enter Destination:"></ion-searchbar>
-      </div>
-      <ion-card id="mapCreatePackage" #mapCreatePackage></ion-card>
-      <br>
-      <br>
-      <br>
-
-      <button ion-button (click)=findPath()>Find Path</button>
-      <ion-card id="divider"></ion-card>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-
-      <ion-item id="textDisplay">
-        <ion-textarea></ion-textarea>
-      </ion-item>
+          
+          <ion-searchbar class="searchbars" #searchbar1 placeholder="Enter Location:"></ion-searchbar>
+          <ion-item></ion-item>
+          <ion-searchbar class="searchbars" #searchbar placeholder="Enter Destination:"></ion-searchbar>
+          <ion-card id="mapCreatePackage" #mapCreatePackage></ion-card>
+          <br>
+          <br>
+          <br>
+          <button ion-button (click)=findPath()>Find Path</button>
+        
+          <ion-card id="positionText">
+            <ion-textarea id="textDisplay"></ion-textarea>
+          </ion-card>
+          <ion-item *ngIf="routeerror">
+            <p ion-text color="danger">*Please enter Destination</p>
+          </ion-item>
+       
       <!-- <ion-item>
             <ion-label floating>Pickup Address: </ion-label>
             <ion-textarea formControlName="PickAddress"></ion-textarea>
@@ -99,35 +85,29 @@
             </ion-row> -->
     </ion-list>
     <ion-list no-padding *ngSwitchCase="'S2'">
-      <ion-item>
+      <ion-card>
+
+        <img src="{{ImagePath}}" *ngIf="lastImage1!=null">
+        
         <ion-row>
-
-
           <ion-icon class="photo1" *ngIf="lastImage1==null" name="add-circle" large></ion-icon>
-          <img src="{{pathForImage(lastImage1)}}" class="avatar1" *ngIf="lastImage1!=null">
-
-
         </ion-row>
-
+        
+          
+      
         <ion-row>
           <button ion-button full icon-left (click)="presentActionSheet(1)">
             <ion-icon name="camera"></ion-icon>Select Image
           </button>
-          
         </ion-row>
-<ion-item *ngIf="imageerror">
-              <p ion-text color="danger">*Please take an image of the package</p>
-            </ion-item>
-
-      </ion-item>
-
+        <ion-item *ngIf="imageerror">
+          <p ion-text color="danger">*Please take an image of the package</p>
+        </ion-item>
+      </ion-card>
     </ion-list>
 
     <form [formGroup]="data">
       <ion-list no-lines *ngSwitchCase="'S3'">
-
-
-
         <ion-row>
           <ion-col col-12>
             <ion-item>
@@ -393,7 +373,7 @@
         <ion-scroll scrollY="true">
           <ion-card>
 
-            <img src={{IPath}}>
+            <img src={{ImagePath}}>
 
 
 
@@ -440,7 +420,7 @@
 
           </ion-card>
           <ion-card>
-            <div  id="map1" #map1 (onCreate)="findPath1()"></div>
+            <div id="map1" #map1 (onCreate)="findPath1()"></div>
 
           </ion-card>
 
@@ -460,7 +440,6 @@
     </ion-col>
     <ion-col col-6>
       <button full ion-button (click)="next()" *ngIf="Scr6">NEXT</button>
-
       <button ion-button full color="secondary" type="submit" *ngIf="!Scr6" (click)="formSubmit()">CREATE</button>
 
     </ion-col>

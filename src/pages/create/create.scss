@@ -175,8 +175,7 @@ ion-chip ion-label{
     top: 0;
     left: 0;
     position: absolute!important;
-    overflow: hidden!important;
-
+     overflow: hidden!important;
 }
 
 #map1{
@@ -185,9 +184,18 @@ ion-chip ion-label{
     position: absolute!important;
     overflow: hidden!important;
 }
-
-
-
+#divider{
+   
+}
+#buttonSearch{
+    margin-top:50px;
+    padding:none;
+    font-size: 12px;
+    width:70px;
+    height: 40px;
+    float:right;
+    background:color($colors,navbarcolor);
+}
 
 
 ion-scroll {
@@ -232,7 +240,6 @@ ion-searchbar {
 }
 
 #textDisplay{
-   width: 90%;
    opacity: .7;
 }
 

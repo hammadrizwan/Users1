@@ -60,10 +60,12 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       this.storage.get('Name').then((val) => {//check if user initals are set or not
-        if (val == null) {
+        console.log("Name"+ val);
+        if (val == null) {   
           this.rootPage = LoginPage; //set landing page as login page
         }
         else {
+          console.log("Name"+ val);
           this.rootPage = HomePage;//set landing page as home page
         }
       });
@@ -84,11 +86,6 @@ export class MyApp {
       // this.updateToken();
       // this.onNotification();
     })
-    events.subscribe('user:loggedin', (text) => {
-      this.storage.get('Name').then((val) => {
-        this.Name = val;
-      });
-    });
   }
 
   private loadData(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
