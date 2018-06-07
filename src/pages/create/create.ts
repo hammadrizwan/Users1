@@ -1,6 +1,7 @@
 import { Component, ViewChild, NgZone, ElementRef, OnInit } from '@angular/core';
 import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { HomePage } from '../../pages/home/home';
+import { ActivePage } from '../../pages/active/active';
 import { IonicPage, NavController, NavParams, ActionSheetController, App, ToastController, Platform, LoadingController, Loading, Segment } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
@@ -14,6 +15,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Base64 } from '@ionic-native/base64';
+import { Storage } from '@ionic/storage';
 declare var google: any;
 declare var MarkerClusterer: any;
 
@@ -71,6 +73,7 @@ export class CreatePage {
   map: any;
   map1: any;
   marker: any;
+  ID: any;
   loading: any;
   search: boolean = false;
   pageload: boolean = false;
@@ -119,7 +122,7 @@ export class CreatePage {
     private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public http: Http,
     public geolocation: Geolocation, public app: App,
-    public alertCtrl: AlertController, public zone: NgZone, private base64: Base64, private transfer: FileTransfer) {
+    public alertCtrl: AlertController, public zone: NgZone, private base64: Base64, private transfer: FileTransfer,public storage: Storage) {
     this.CurrentScreen = "S1";
     this.data = this.formBuilder.group({
       PackageName: ['', Validators.required],
@@ -735,7 +738,7 @@ export class CreatePage {
 
     }
 
-    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload', options, true)
+    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload?type='+'Package', options, true)
       .then((data) => {
         console.log(data)
       }, (err) => {
@@ -753,9 +756,11 @@ export class CreatePage {
     let SLng = Src["lng"];
     let DLat = Dst["lat"];
     let DLng = Dst["lng"];
+    this.storage.get('ID').then((val) => {
+      this.ID = val;
     if (this.TransportType == 'Freelance') {
       Userdata = {
-        'ID': 0,
+        'PackageID': 0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
         'PickAddress': this.SourceString,
@@ -768,16 +773,17 @@ export class CreatePage {
         'DestinationLongitude': DLng,
         'DestinationLatitude': DLat,
         'TransporterID': null,
-        'SenderID': 1,
+        'SenderID': this.ID,
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
         'Distance': this.distance,
+        'Verificationkey':"sa",
       };
     }
     else {
       Userdata = {
-        'ID': 0,
+        'PackageID': 0,
         'PackageName': this.PackageName.value,
         'PackageDesc': this.PackageDesc.value,
         'PickAddress': this.SourceString,
@@ -790,7 +796,7 @@ export class CreatePage {
         'DestinationLongitude': Dst["lng"],
         'DestinationLatitude': Dst["lat"],
         'TransporterID': null,
-        'SenderID': 1,
+        'SenderID': this.ID,
         'Status': "Active",
         'PImage': this.lastImage1,
         'Fare': 0,
@@ -803,10 +809,14 @@ export class CreatePage {
     this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       console.log(responseData);
+      this.presentToast("Your Package has been created!");
+      this.navCtrl.setRoot(ActivePage);
     },
       err => {
+        this.presentToast("Your Package was not created");
         console.log(err);
       });
-  }
+  });
 
+}
 }

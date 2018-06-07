@@ -82,9 +82,9 @@ export class MyApp {
     ];
     this.loadData().then(() => {
       
-      // this.subscribeWatch();
-      // this.updateToken();
-      // this.onNotification();
+      //this.subscribeWatch();
+      this.updateToken();
+      this.onNotification();
     })
   }
 
@@ -148,14 +148,14 @@ export class MyApp {
         console.log("Received in background");
         console.log(data);
         //this.NotificationData.push(data);
-        this.nav.setRoot(ViewtransporterprofilePage, {transporter : data});
+        this.nav.push(ViewtransporterprofilePage, {transporter : data});
       
       } else {
         console.log("Received in foreground");
         console.log(data);
-        console.log(data);
+        console.log(data.TransporterID);
         //this.NotificationData.push(data);
-        this.nav.setRoot(ViewtransporterprofilePage, {transporter : data});
+        this.nav.push(ViewtransporterprofilePage, {transporter : data});
       };
     });
 

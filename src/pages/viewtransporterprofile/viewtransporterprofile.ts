@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
+import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 /**
  * Generated class for the ViewtransporterprofilePage page.
@@ -32,11 +33,9 @@ export class ViewtransporterprofilePage {
   Transporterparams: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage
     , public http: Http, private alertCtrl: AlertController) {
+
     
-      this.Transporterparams = navParams.get('data');
-      this.ID = this.Transporterparams.TransporterID;
-      this.skips = 0;
-    /*get Transporter ID from localstorage and  request data and put it into variables to show in view________________*/
+    this.onload().then(() => {
 
       this.http.get('http://localhost:5000/getransporterdata', { params: { 'TransporterID': this.ID } }).map(res => res.json()).subscribe(response => {
         console.log(response.content);
@@ -63,7 +62,7 @@ export class ViewtransporterprofilePage {
 
         response.content.map(item => {
           //console.log(item['rating'])
-          item['ratings'] = Array(item['rating']).fill(item['rating']);  
+          item['ratings'] = Array(item['rating']).fill(item['rating']);
           //console.log("After"+item['ratings'])
           //console.log(item)
           this.userReviews.push(item);
@@ -74,6 +73,21 @@ export class ViewtransporterprofilePage {
           console.log('error');
         });
 
+    });
+
+    this.skips = 0;
+    /*get Transporter ID from localstorage and  request data and put it into variables to show in view________________*/
+
+
+  }
+  onload(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
+    return new Promise((resolve, reject) => {
+      this.Transporterparams = this.navParams.get('transporter');
+      this.ID = this.Transporterparams.TransporterID;
+      console.log(this.Transporterparams.TransporterID)
+      console.log("inhere");
+      resolve();
+    });
   }
   doInfinite(infiniteScroll) {
     this.infiniteScroll = infiniteScroll;
@@ -117,7 +131,7 @@ export class ViewtransporterprofilePage {
   }
 
 
-  accept(){
+  accept() {
     let userdecision;
 
     userdecision = {
@@ -142,7 +156,7 @@ export class ViewtransporterprofilePage {
       });
   }
 
-  reject(){
+  reject() {
     let userdecision;
 
     userdecision = {
@@ -165,8 +179,8 @@ export class ViewtransporterprofilePage {
         console.log(err);
       });
   }
-  
 
-  
+
+
 
 }

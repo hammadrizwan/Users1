@@ -10,7 +10,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { FilePath } from '@ionic-native/file-path';
 import { normalizeURL} from 'ionic-angular';
 import { FCM } from '@ionic-native/fcm';
-
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the ActivePage page.
@@ -25,12 +25,13 @@ import { FCM } from '@ionic-native/fcm';
   templateUrl: 'active.html',
 })
 export class ActivePage {
-
+  ID:any;
   path: string;
   activedata: any;
   nodata: boolean =false;
   constructor(public navCtrl: NavController, public navParams: NavParams,private file: File, private filePath: FilePath,
-    public http: Http,private transfer: FileTransfer,private fcm: FCM,) {
+    public http: Http,private transfer: FileTransfer,private fcm: FCM,public storage: Storage) {
+      this.getPackages();
 //       this.fcm.subscribeToTopic('marketing');
 
 // this.fcm.getToken().then(token => {
@@ -65,13 +66,14 @@ export class ActivePage {
     });
   }
   getPackages() {
-    
-    const sub =  this.http.get('http://localhost:5000/active',{params:{'SenderID': 1}}).map(res => res.json()).subscribe(data => {
+    this.storage.get('ID').then((val) => {
+      this.ID = val;
+      //this.showNotification("thy name" + val);    
+    const sub =  this.http.get('http://localhost:5000/active',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
     if(data['content'] == "failed"){
       this.nodata = true;
     }  
     this.activedata = data;
-          
     console.log(this.activedata);
     
         },
@@ -80,6 +82,7 @@ export class ActivePage {
         console.log(err);
         
       });
+    });
       // setTimeout(() => {
       //   sub.unsubscribe();
       //   console.log("Unsubbed");

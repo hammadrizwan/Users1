@@ -74,6 +74,10 @@ export class LandingPage {
     this.observer.unsubscribe();//unsubsribe to geolocation tracking
   }
 
+  stop(){
+    this.observer.unsubscribe();//unsubsribe to geolocation tracking
+  }
+
   opencreate()
 {
   this.navCtrl.push(CreatePage);
