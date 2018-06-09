@@ -1,10 +1,12 @@
 import { Component, ViewChild, ElementRef,NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform, ToastController } from 'ionic-angular';
+import { ActivePage } from '../../pages/active/active';
 import { CreatePage } from '../create/create';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'Firebase';
+
 
 /**
  * Generated class for the LandingPage page.
@@ -26,13 +28,15 @@ export class LandingPage {
    observer: any
   @ViewChild('mapLanding') mapElement: ElementRef;
   map:any;
+  thing1: any;
   loading:any;
   markers=[];
   constructor(public toastCtrl: ToastController,public navCtrl: NavController, public navParams: NavParams, 
     public zone: NgZone,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
     public geolocation: Geolocation,public platform: Platform,public storage: Storage) {
       this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
-    this.presentLoadingDefault();
+    
+      this.presentLoadingDefault();
       this.storage.get('ID').then((val)=>{
         console.log('ID is +',val);
       });
@@ -65,6 +69,16 @@ export class LandingPage {
       });
   }
 
+  public ionViewWillEnter() {
+    this.thing1 = null;
+    this.thing1 = this.navParams.get('thing1')|| null;
+    if(this.thing1 != null)
+    {
+    this.presentConfirm(this.thing1.name)
+    }
+    
+    
+} 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LandingPage');
   }
@@ -74,6 +88,30 @@ export class LandingPage {
     this.observer.unsubscribe();//unsubsribe to geolocation tracking
   }
 
+  presentConfirm(name) {
+    let alert = this.alertCtrl.create({
+      title: 'Success!',
+      message: 'Your Package ' +name+ ' was created successfully. Would you like to view it?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('No clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.navCtrl.push(ActivePage)
+            console.log('Yes clicked');
+          }
+        }
+      ]
+    });
+    alert.present();
+    this.thing1 = null;
+  }
   stop(){
     this.observer.unsubscribe();//unsubsribe to geolocation tracking
   }

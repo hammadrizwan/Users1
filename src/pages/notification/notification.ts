@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { Storage } from '@ionic/storage';
 /**
  * Generated class for the NotificationPage page.
  *
@@ -17,14 +17,21 @@ export class NotificationPage {
   data: any;
   transporterID: any;
   packageID: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    
+  NotificationData = [];
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) {
+    this.storage.get('NotificationData').then((val) => {
+      this.NotificationData = val;
+      console.log(val);
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationPage');
   }
 
-
+  removeNotification(index){
+    console.log(index);
+    this.NotificationData.splice(index,1)
+  }
 
 }

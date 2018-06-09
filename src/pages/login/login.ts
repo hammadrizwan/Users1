@@ -76,10 +76,13 @@ export class LoginPage {
       else{
         this.loading.dismissAll();
         this.storage.set('Name', responseData.content[0].Name);
+        console.log('from server' + responseData.content[0].Name);
+        console.log('from storage' + this.storage.get('Name'));
         this.storage.set('Email', responseData.content[0].Email);
         this.storage.set('Password', responseData.content[0].Password)
         this.storage.set('ID', responseData.content[0].ID);
         this.storage.set('Rating', responseData.content[0].Rating);
+        this.storage.set('ProfileImage', responseData.content[0].ProfilePicture);
         let Notifications = [];//to hold notification data
         this.storage.set('NotificationData', Notifications);//notification data
         this.events.publish('user:loggedin',"yo");

@@ -29,7 +29,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Base64 } from '@ionic-native/base64';
 import { FCM } from '@ionic-native/fcm';
-
+import { Ionic2RatingModule } from 'ionic2-rating';
 
 @NgModule({
   declarations: [
@@ -54,6 +54,7 @@ import { FCM } from '@ionic-native/fcm';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
+    Ionic2RatingModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

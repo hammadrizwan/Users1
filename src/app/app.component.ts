@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, App, MenuController, Nav } from 'ionic-angular';
+import { Platform, NavController, App, AlertController, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Http } from '@angular/http';
@@ -19,6 +19,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { FCM } from '@ionic-native/fcm';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Ionic2RatingModule } from 'ionic2-rating';
 import * as firebase from 'Firebase';
 import "rxjs/add/observable/interval";
 var config = {
@@ -41,13 +42,13 @@ export class MyApp {
   NotificationData = [];
   profileImage: any;
   loggedIn: Boolean;
-  ID:any;
-  Token:any
+  ID: any;
+  Token: any
   ref: any;//firebase reference
   @ViewChild(Nav) nav: Nav;
   pages: Array<{ title: string, component: any }>;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private fcm: FCM,
-    public storage: Storage,private http:Http,public events: Events  ) {
+    public storage: Storage, private http: Http, public events: Events, public alertCtrl: AlertController) {
     platform.ready().then(() => {
       //Notifications
       firebase.initializeApp(config);//intialise firebase
@@ -60,28 +61,26 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       this.storage.get('Name').then((val) => {//check if user initals are set or not
-        console.log("Name"+ val);
-        if (val == null) {   
+        console.log("Name" + val);
+        if (val == null) {
           this.rootPage = LoginPage; //set landing page as login page
         }
         else {
-          console.log("Name"+ val);
+          console.log("Name" + val);
           this.rootPage = HomePage;//set landing page as home page
         }
       });
     });
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'Create Package', component: CreatePage },
       { title: 'All Packages', component: AllPage },
       { title: 'Active Packages', component: ActivePage },
       { title: 'In Transit', component: InprogressPage },
-      { title: 'Pending Reviews', component: PendingPage },
       { title: 'Help', component: HelpPage },
 
     ];
     this.loadData().then(() => {
-      
+
       //this.subscribeWatch();
       this.updateToken();
       this.onNotification();
@@ -102,7 +101,7 @@ export class MyApp {
           this.profileImage = val;
 
         });
-          resolve();
+        resolve();
         //wait just in case
       });
     });
@@ -137,7 +136,95 @@ export class MyApp {
     this.nav.push(ProfilePage)
   }
 
-  onNotification(){
+  logout() {
+
+    /*remove all storage values*/
+    this.storage.set('Name', null);
+    this.storage.set('Email', null);
+    this.storage.set('Password', null)
+    this.storage.set('ID', null);
+    this.storage.set('Rating', null);
+    this.storage.set('ProfileImage', null);
+    this.storage.set('FCMToken', null);
+    this.loggedIn = false;
+    /*________________________________*/
+    this.nav.setRoot(LoginPage);//reroute to to login page
+  }
+
+  presentConfirm() {
+    let myAlert = this.alertCtrl.create({
+      title: 'Package Delivered!',
+      enableBackdropDismiss: false,
+      message: 'Your Package *insertname* was successfully delivered!',
+      buttons: [
+        
+        {
+          text: 'Rate!',
+          handler: data => {
+            console.log('Rated. Data -> ' + JSON.stringify(data));
+            this.rateTransporter(data);
+          },
+          role: 'cancel'
+        }
+      ],
+      inputs: [
+        {
+          type: 'radio',
+          id: '1',
+          name: '1',
+          'label': '★',
+          value: '1',
+          'checked': false
+        },
+        {
+          type: 'radio',
+          id: '2',
+          name: '2',
+          'label': '★ ★',
+          value: '2',
+          'checked': false
+        },
+        {
+          type: 'radio',
+          id: '3',
+          name: '3',
+          'label': '★ ★ ★',
+          value: '3',
+          'checked': false
+        },
+        {
+          type: 'radio',
+          id: '4',
+          name: '4',
+          'label': '★ ★ ★ ★',
+          value: '4',
+          'checked': false
+        },
+        {
+          type: 'radio',
+          id: '5',
+          name: '5',
+          'label': '★ ★ ★ ★ ★',
+          value: '5',
+          'checked': false
+        },
+      ],
+      
+    });
+    myAlert.present();
+
+  }
+
+  rateTransporter(data){
+      if(data){//if the user has rated it then call the server
+        //server code here
+      }
+      else{//else ask the user to rate!
+        this.presentConfirm();
+      }
+  }
+
+  onNotification() {
     this.fcm.getToken().then(token => {
       //backend.registerToken(token);
       console.log("token is" + token);
@@ -146,16 +233,29 @@ export class MyApp {
     this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
         console.log("Received in background");
+        this.NotificationData.push(JSON.stringify(data));//open app and show notification page
         console.log(data);
-        //this.NotificationData.push(data);
-        this.nav.push(ViewtransporterprofilePage, {transporter : data});
-      
+        this.storage.get('NotificationData').then((val) => {
+          this.NotificationData.push(val);
+          this.storage.set('NotificationData', this.NotificationData);//notification data
+          this.nav.push(ViewtransporterprofilePage, { transporter: data });
+        });
+
+
       } else {
         console.log("Received in foreground");
-        console.log(data);
-        console.log(data.TransporterID);
-        //this.NotificationData.push(data);
-        this.nav.push(ViewtransporterprofilePage, {transporter : data});
+        if (data.Delivered == "true") {
+          this.presentConfirm();
+        }
+        else {
+          this.NotificationData.push(JSON.stringify(data));//open app and show notification page
+          console.log(data);
+          this.storage.get('NotificationData').then((val) => {
+            this.NotificationData.push(val);
+            this.storage.set('NotificationData', this.NotificationData);//notification data
+            this.nav.push(ViewtransporterprofilePage, { transporter: data });
+          });
+        }
       };
     });
 

@@ -132,6 +132,7 @@ export class SignUpPage {
           this.storage.set('Password', this.Password.value)
           this.storage.set('ID', id);
           this.storage.set('Rating', 0);
+          this.storage.set('ProfileImage', this.lastImage1);
           let Notifications = [];//to hold notification data
           this.storage.set('NotificationData', Notifications);//notification data
           this.events.publish('user:loggedin',"yo");

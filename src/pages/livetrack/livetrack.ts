@@ -28,7 +28,7 @@ export class LivetrackPage {
   observer: any
   markers=[];
   mapsetter= true;
-  @ViewChild('map') mapElement: ElementRef;
+  @ViewChild('mapLiveTracking') mapElement: ElementRef;
   constructor(public navCtrl: NavController, public navParams: NavParams,private geolocation: Geolocation) {
     this.initMap();
     this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation

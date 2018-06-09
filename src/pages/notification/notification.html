@@ -20,10 +20,20 @@
 
 <ion-content class="hh">
   
-  <ion-card >
-    <ion-card-content>
-      Your Package ID: blaaaaaaaaah
-    </ion-card-content>
+  <ion-card *ngFor="let item of NotificationData, let i= index">
+    <ion-row>
+      <ion-col col-2>
+        <ion-icon class="icon" name="paper-plane"></ion-icon>
+      </ion-col>
+      <ion-col col-8>
+        <h3>{{item}}</h3>
+      </ion-col>
+      <ion-col col-2>
+          <button ion-button icon-only color="dark" round (click)="removeNotification(i)">
+        <ion-icon class="icon"  ios="ios-close" md="md-close"></ion-icon>
+      </button>
+      </ion-col>
+    </ion-row>
   </ion-card>
 
 </ion-content>

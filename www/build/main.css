@@ -38228,7 +38228,7 @@ ion-chip ion-label {
 }
 
 .donate-now input[type="radio"]:checked + label {
-  background: #bec0c4;
+  color: red;
 }
 
 .donate-now label {
@@ -38239,7 +38239,8 @@ ion-chip ion-label {
 }
 
 .donate-now label:hover {
-  background: #bec0c4;
+  border: 2px solid red;
+  border-radius: 10px;
 }
 
 .center {
@@ -38439,6 +38440,15 @@ ion-searchbar {
   color: white;
 }
 
+page-livetrack #mapLiveTracking {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
 .hh ion-card-content {
   background-color: #d4d2cc;
 }
@@ -38480,6 +38490,22 @@ ul.rating li ion-icon {
   font-size: 30px;
 }
 
+page-profile .round {
+  width: 140px !important;
+  height: 140px !important;
+}
+
+page-profile .headerlabel {
+  text-align: center;
+  font-size: 15px;
+}
+
+page-profile .contents {
+  color: #2a4255;
+  font-style: italic;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .avatar1 {
   width: 100% !important;
   height: 100% !important;
@@ -38497,4 +38523,53 @@ ul.rating li ion-icon {
 
 .errorline {
   color: red;
+}
+
+page-viewtransporterprofile .background1 {
+  background: #f4f4f4;
+}
+
+page-viewtransporterprofile .round {
+  width: 140px !important;
+  height: 140px !important;
+}
+
+page-viewtransporterprofile .card2 {
+  padding: -15px;
+  text-align: center;
+}
+
+page-viewtransporterprofile .headerlabel {
+  text-align: center;
+  font-size: 15px;
+}
+
+page-viewtransporterprofile .badgevalues {
+  width: 100%;
+  background-color: #2a4255;
+  font-size: 15px;
+}
+
+page-viewtransporterprofile .headings {
+  width: 100%;
+  background-color: #033860;
+  font-size: 15px;
+}
+
+page-viewtransporterprofile .badge {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+page-viewtransporterprofile .rating {
+  color: #e52d27;
+  size: small;
+}
+
+page-viewtransporterprofile .contents {
+  color: #2a4255;
+  font-style: italic;
+  font-family: Arial, Helvetica, sans-serif;
 }

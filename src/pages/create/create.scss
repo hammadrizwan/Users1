@@ -125,7 +125,8 @@ ion-chip ion-label{
 }
 
 .donate-now input[type="radio"]:checked + label {
-   background:#bec0c4;
+   color: red;
+
 }
 
 .donate-now label {
@@ -139,7 +140,9 @@ ion-chip ion-label{
 }
 
 .donate-now label:hover {
-    background:#bec0c4;
+    // background:#bec0c4;
+    border: 2px solid red;
+    border-radius: 10px;
 }
 
 .center{

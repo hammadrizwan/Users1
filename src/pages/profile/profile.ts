@@ -28,17 +28,7 @@ export class ProfilePage {
     this.storage.get('ID').then((val)=>{
       this.id = val;
       console.log('ID is +',val);
-      this.getProfile(val);
-      
-    });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
-  }
-
-  getProfile(id){
-    this.http.get('http://localhost:5000/active',{params:{'SenderID': this.id}}).map(res => res.json()).subscribe(data => {
+      this.http.get('http://localhost:5000/senderprofile',{params:{'SenderID': this.id}}).map(res => res.json()).subscribe(data => {
     this.activedata = data;      
     console.log(this.activedata);
     this.name = data.content[0].Name;
@@ -52,6 +42,16 @@ export class ProfilePage {
         console.log(err);
         
       });
+      
+    });
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ProfilePage');
+  }
+
+  getProfile(id){
+    
   }
 
 }

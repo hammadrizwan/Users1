@@ -1,7 +1,7 @@
 import { Component, ViewChild, NgZone, ElementRef, OnInit } from '@angular/core';
 import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { HomePage } from '../../pages/home/home';
-import { ActivePage } from '../../pages/active/active';
+
 import { IonicPage, NavController, NavParams, ActionSheetController, App, ToastController, Platform, LoadingController, Loading, Segment } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
@@ -9,6 +9,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { AlertController } from 'ionic-angular';
+import { Navbar } from 'ionic-angular';
 declare var cordova: any;
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -116,7 +117,7 @@ export class CreatePage {
 
   @ViewChild('signupSlider') signupSlider: any;
   @ViewChild('myInput') myInput: ElementRef;
-
+  @ViewChild('navbar') navBar: Navbar;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private camera: Camera,
     private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
@@ -161,6 +162,14 @@ export class CreatePage {
   // }
 
   ionViewDidLoad() {
+    this.navBar.backButtonClick = (e: UIEvent) => {
+      // Print this event to the console
+      console.log(e);
+    
+      // Navigate to another page
+      this.navCtrl.getPrevious().data.thing1 =null;
+      this.navCtrl.pop();
+    }
     this.platform.ready().then(() => this.loadMaps());
     this.checkIfLocationChange();
   }
@@ -390,6 +399,7 @@ export class CreatePage {
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
         this.DestinationString = place.formatted_address;
+        this.routeerror = false;
         console.log("Hola" + place.formatted_address)
         //this.LocationText=autocomplete.gm_accessors_.place.fd.formattedPrediction;
         if (!place) {
@@ -583,6 +593,7 @@ export class CreatePage {
       if (this.Source!=null && this.Destination!=null) {
         this.CurrentScreen = "S2";
         this.Screen2 = false;
+        
       }
       else {
         this.routeerror = true;
@@ -748,6 +759,7 @@ export class CreatePage {
 
 
   formSubmit() {
+   
     this.upload();
     let Userdata;
     let Src = JSON.parse(JSON.stringify(this.Source));
@@ -809,14 +821,21 @@ export class CreatePage {
     this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       console.log(responseData);
-      this.presentToast("Your Package has been created!");
-      this.navCtrl.setRoot(ActivePage);
+      //this.presentToast("Your Package has been created!");
+      let data1 = 
+      {
+        name: data.content[0].PackageName
+      };
+    this.navCtrl.getPrevious().data.thing1 =data1;
+    this.navCtrl.pop();
     },
       err => {
-        this.presentToast("Your Package was not created");
+        //this.presentToast("Your Package was not created");
         console.log(err);
       });
   });
+
+  
 
 }
 }

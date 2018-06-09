@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PackagedetailPage } from '../../pages/packagedetail/packagedetail';
+import { HomePage } from '../../pages/home/home';
 import { Http } from '@angular/http';
-
+import { Navbar } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { File } from '@ionic-native/file';
@@ -11,7 +12,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { normalizeURL} from 'ionic-angular';
 import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
-
+import { ViewChild, ElementRef } from '@angular/core';
 /**
  * Generated class for the ActivePage page.
  *
@@ -29,6 +30,7 @@ export class ActivePage {
   path: string;
   activedata: any;
   nodata: boolean =false;
+  @ViewChild('navbar') navBar: Navbar;
   constructor(public navCtrl: NavController, public navParams: NavParams,private file: File, private filePath: FilePath,
     public http: Http,private transfer: FileTransfer,private fcm: FCM,public storage: Storage) {
       this.getPackages();
@@ -59,6 +61,14 @@ export class ActivePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ActivePage');
+    this.navBar.backButtonClick = (e: UIEvent) => {
+      // Print this event to the console
+      console.log(e);
+    
+      // Navigate to another page
+      this.navCtrl.getPrevious().data.thing1 =null;
+      this.navCtrl.pop();
+    }
   }
   packagedetails(ID){
     this.navCtrl.push(PackagedetailPage,{

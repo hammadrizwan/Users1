@@ -150,6 +150,7 @@ export class ViewtransporterprofilePage {
     this.http.put('http://localhost:5000/senderresponse', JSON.stringify(userdecision)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       console.log(responseData);
+      
     },
       err => {
         console.log(err);
