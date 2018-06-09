@@ -53,23 +53,31 @@ export class MyApp {
       //Notifications
       firebase.initializeApp(config);//intialise firebase
       this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
-
-
+      this.loggedIn = false;
       //end notifications.
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
       this.storage.get('Name').then((val) => {//check if user initals are set or not
-        console.log("Name" + val);
         if (val == null) {
           this.rootPage = LoginPage; //set landing page as login page
+          this.loadData().then(() => {
+            console.log("inhere")
+            this.updateToken();
+            this.onNotification();
+          })
         }
         else {
-          console.log("Name" + val);
           this.rootPage = HomePage;//set landing page as home page
+          this.getData().then(() => {
+            console.log("inhere")
+            this.loggedIn = true;
+            this.updateToken();
+            this.onNotification();
+          })
         }
-      });
+      })
     });
     this.pages = [
       { title: 'Home', component: HomePage },
@@ -79,12 +87,7 @@ export class MyApp {
       { title: 'Help', component: HelpPage },
 
     ];
-    this.loadData().then(() => {
-
-      //this.subscribeWatch();
-      this.updateToken();
-      this.onNotification();
-    })
+    
   }
 
   private loadData(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
@@ -105,6 +108,21 @@ export class MyApp {
         //wait just in case
       });
     });
+  }
+  private getData(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
+    return new Promise((resolve, reject) => {
+      //put the values in local storage
+      this.storage.get('Name').then((val) => {
+        this.Name = val;
+      });
+      this.storage.get('ProfileImage').then((val) => {
+        this.profileImage = val;
+      });
+      this.loggedIn = true;
+      resolve();
+      //wait just in case
+    })
+
   }
   updateToken() {
     this.fcm.getToken().then(token => {
