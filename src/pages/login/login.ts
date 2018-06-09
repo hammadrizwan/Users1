@@ -28,8 +28,8 @@ export class LoginPage {
   Password: AbstractControl;
   loading: Loading;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private formBuilder: FormBuilder, public http: Http, public storage: Storage, 
-    public alertCtrl:AlertController,public loadingCtrl: LoadingController,public events: Events ) {
+    private formBuilder: FormBuilder, public http: Http, public storage: Storage,
+    public alertCtrl: AlertController, public loadingCtrl: LoadingController, public events: Events) {
 
     this.data = this.formBuilder.group({
       Email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -73,26 +73,39 @@ export class LoginPage {
         this.loading.dismissAll();
         this.presentErrorAlert(responseData.Error);
       }
-      else{
-        this.loading.dismissAll();
-        this.storage.set('Name', responseData.content[0].Name);
-        console.log('from server' + responseData.content[0].Name);
-        console.log('from storage' + this.storage.get('Name'));
-        this.storage.set('Email', responseData.content[0].Email);
-        this.storage.set('Password', responseData.content[0].Password)
-        this.storage.set('ID', responseData.content[0].ID);
-        this.storage.set('Rating', responseData.content[0].Rating);
-        this.storage.set('ProfileImage', responseData.content[0].ProfilePicture);
-        let Notifications = [];//to hold notification data
-        this.storage.set('NotificationData', Notifications);//notification data
-        this.events.publish('user:loggedin',"yo");
-        this.openPage(HomePage);
+      else {
+        this.dataloaded(responseData).then(() => {//promise to wait for the data to be loaded
+          this.events.publish('user:loggedin', "dataloaded");//to set data values
+          this.loading.dismissAll();//dismiss loading
+          console.log("whysda")
+          this.navCtrl.setRoot(HomePage);//go to home page
+        })
       }
     },
       err => {
         console.log('error');
       });
     return;
+  }
+  dataloaded(responseData): Promise<any> {//promise used to ensure data has been loaded before it is acessed
+    return new Promise((resolve, reject) => {
+      //put the values in local storage
+      this.storage.set('Name', responseData.content[0].Name);
+      console.log("vals")
+      console.log(responseData.content[0].Name)
+      this.storage.set('Email', responseData.content[0].Email);
+      this.storage.set('Password', responseData.content[0].Password)
+      this.storage.set('ID', responseData.content[0].ID);
+      this.storage.set('Rating', responseData.content[0].Rating);
+      this.storage.set('FCMToken', responseData.content[0].FCMToken);
+      this.storage.set('ProfileImage', responseData.content[0].ProfilePicture);
+      console.log(responseData.content[0].ProfilePicture)
+      let Notifications = [];
+      this.storage.set('NotificationData', Notifications);//try to make this global 
+      setTimeout(() => {
+        resolve();
+      }, 2000);//wait just in case
+    })
   }
   presentErrorAlert(text) {
     let alert = this.alertCtrl.create({
@@ -102,13 +115,9 @@ export class LoginPage {
     });
     alert.present();
   }
-  
+
   signuppage(page) {
     this.navCtrl.push(SignUpPage);
   }
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.navCtrl.setRoot(page);
-  }
+
 }

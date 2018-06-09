@@ -31,8 +31,6 @@ var config = {
   messagingSenderId: "680127595430"
 };
 
-
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -41,7 +39,7 @@ export class MyApp {
   Name: any;
   NotificationData = [];
   profileImage: any;
-  loggedIn: Boolean;
+  loggedIn: Boolean=false;
   ID: any;
   Token: any
   ref: any;//firebase reference
@@ -64,8 +62,8 @@ export class MyApp {
           this.rootPage = LoginPage; //set landing page as login page
           this.loadData().then(() => {
             console.log("inhere")
-            this.updateToken();
-            this.onNotification();
+            //this.updateToken();
+            //this.onNotification();
           })
         }
         else {
@@ -73,8 +71,8 @@ export class MyApp {
           this.getData().then(() => {
             console.log("inhere")
             this.loggedIn = true;
-            this.updateToken();
-            this.onNotification();
+            //this.updateToken();
+            //this.onNotification();
           })
         }
       })
@@ -93,20 +91,17 @@ export class MyApp {
   private loadData(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
     return new Promise((resolve, reject) => {
       //put the values in local storage
-      this.loggedIn = true;
-      this.events.subscribe('user:loggedin', (text) => {
+    this.events.subscribe('user:loggedin', (text) => {//event fires when user logs in or signups
         this.storage.get('Name').then((val) => {
           this.Name = val;
-          //this.showNotification("thy name" + val);
-
         });
         this.storage.get('ProfileImage').then((val) => {
           this.profileImage = val;
-
         });
+        this.loggedIn = true;
         resolve();
         //wait just in case
-      });
+      })
     });
   }
   private getData(): Promise<any> {//promise used to ensure data has been loaded before it is acessed
@@ -164,8 +159,10 @@ export class MyApp {
     this.storage.set('Rating', null);
     this.storage.set('ProfileImage', null);
     this.storage.set('FCMToken', null);
-    this.loggedIn = false;
+    this.loggedIn=false;
     /*________________________________*/
+    console.log(this.nav.getAllChildNavs())
+    this.rootPage=LoginPage;
     this.nav.setRoot(LoginPage);//reroute to to login page
   }
 

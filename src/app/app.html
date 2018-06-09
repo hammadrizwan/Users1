@@ -78,7 +78,7 @@
   </ion-row>
   
   <ion-footer class="menubg">
-      <button ion-button full (click)="logout()" class="menubg">
+      <button  ion-button full  (click)="logout()" class="menubg">
         Logout
       </button>
     </ion-footer>
@@ -87,4 +87,4 @@
   
   </ion-menu>
   
-  <ion-nav #content [root]="rootPage"></ion-nav>
+  <ion-nav #content [root]="rootPage"  swipeBackEnabled="false"></ion-nav>
