@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PackagedetailPage } from '../../pages/packagedetail/packagedetail';
 import { Http } from '@angular/http';
+import { Storage } from '@ionic/storage';
+
 /**
  * Generated class for the AllPage page.
  *
@@ -16,8 +18,9 @@ import { Http } from '@angular/http';
 })
 export class AllPage {
   activedata: any;
+  ID: any;
   nodata: boolean =false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http,) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http,public storage: Storage) {
     this.getPackages();
   }
 
@@ -34,13 +37,14 @@ export class AllPage {
     });
   }
   getPackages() {
-    
-    const sub =  this.http.get('http://localhost:5000/all',{params:{'SenderID': 1}}).map(res => res.json()).subscribe(data => {
+    this.storage.get('ID').then((val) => {
+      this.ID = val;
+      //this.showNotification("thy name" + val);    
+    const sub =  this.http.get('http://localhost:5000/all',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
     if(data['content'] == "failed"){
       this.nodata = true;
     }  
     this.activedata = data;
-          
     console.log(this.activedata);
     
         },
@@ -49,5 +53,6 @@ export class AllPage {
         console.log(err);
         
       });
+    });
     }
 }

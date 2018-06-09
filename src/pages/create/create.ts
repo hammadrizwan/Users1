@@ -83,6 +83,7 @@ export class CreatePage {
   error: any;
   regionals: any = [];
   currentregional: any;
+  fare = 0;
   //__________________________________________________________________________________________________________
   id: any;
   lastrecord: any;
@@ -580,6 +581,13 @@ export class CreatePage {
     if (this.CurrentScreen == "S5") {
       this.Screen5 = true;
       if (this.CourierType != null || this.VehicleType != null) {
+        this.http.get('http://localhost:5000/getfare',{params:{'Distance': this.distance,'vehicle':this.VehicleType}}).map(res => res.json()).subscribe(data => {
+        console.log('Fare is ' + data);  
+        this.fare = data.fare;
+        },
+      (err)=>{
+        console.log(err);
+      });
         this.CurrentScreen = "S6";
         this.Screen5=false;
         this.Scr6 = false;
@@ -788,7 +796,7 @@ export class CreatePage {
         'SenderID': this.ID,
         'Status': "Active",
         'PImage': this.lastImage1,
-        'Fare': 0,
+        'Fare': this.fare,
         'Distance': this.distance,
         'Verificationkey':"sa",
       };
@@ -811,7 +819,7 @@ export class CreatePage {
         'SenderID': this.ID,
         'Status': "Active",
         'PImage': this.lastImage1,
-        'Fare': 0,
+        'Fare': this.fare,
         'Distance': this.distance,
       };
     }

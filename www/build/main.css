@@ -38209,9 +38209,10 @@ ion-chip ion-label {
 }
 
 .donate-now ion-item {
-  height: 40px;
+  height: 150px;
   position: relative;
   text-align: center;
+  font-size: 25px;
 }
 
 .donate-now label, .donate-now input {
@@ -38232,7 +38233,7 @@ ion-chip ion-label {
 }
 
 .donate-now label {
-  padding: 5px;
+  padding: 55px;
   cursor: pointer;
   -webkit-transition: all 100ms ease-in;
   transition: all 100ms ease-in;

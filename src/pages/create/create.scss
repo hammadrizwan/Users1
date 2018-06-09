@@ -105,9 +105,11 @@ ion-chip ion-label{
     //float:left;
    //margin:0 5px 0 0;
    //width:100px;
-   height:40px;
+   height:150px;
   position:relative;
   text-align: center;
+  font-size: 25px;
+
 }
 
 .donate-now label, .donate-now input {
@@ -130,7 +132,7 @@ ion-chip ion-label{
 }
 
 .donate-now label {
-    padding:5px;
+    padding:55px;
     //border:1px solid #CCC; 
     cursor:pointer;
     -webkit-transition: all 100ms ease-in;
