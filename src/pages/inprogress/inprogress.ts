@@ -16,28 +16,20 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'inprogress.html',
 })
 export class InprogressPage {
-  activedata: any;
+  intransitdata: any;
   nodata: boolean = false;
   SenderID: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public storage: Storage ) {
-    this.getPackages();
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad InprogressPage');
-  }
-
-  getPackages() {
-
     this.storage.get('ID').then((val) => {//get the user ID form storage
       this.SenderID = val;
     const sub = this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': this.SenderID } }).map(res => res.json()).subscribe(data => {
       if (data['content'] == "failed") {
         this.nodata = true;
       }
-      this.activedata = data;
-
-      console.log(this.activedata);
+      else  {
+      this.intransitdata = data;
+      }
+      console.log(this.intransitdata);
 
     },
       (err) => {
@@ -45,11 +37,11 @@ export class InprogressPage {
         console.log(err);
 
       });
-    // setTimeout(() => {
-    //   sub.unsubscribe();
-    //   console.log("Unsubbed");
-    // }, 10)
     });
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad InprogressPage');
   }
 
   viewLive(ID) {
@@ -57,6 +49,33 @@ export class InprogressPage {
       data: ID,
     });
     
+  }
+
+  doRefresh(refresher) {
+    console.log('refreshing', refresher);
+    this.intransitdata = []
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.storage.get('ID').then((val) => {//get the user ID form storage
+        this.SenderID = val;
+      const sub = this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': this.SenderID } }).map(res => res.json()).subscribe(data => {
+        if (data['content'] == "failed") {
+          this.nodata = true;
+        }
+        else  {
+        this.intransitdata = data;
+        }
+        console.log(this.intransitdata);
+  
+      },
+        (err) => {
+  
+          console.log(err);
+  
+        });
+      });
+      refresher.complete();
+    }, 2000);
   }
 
 }

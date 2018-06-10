@@ -1,21 +1,16 @@
-.cl{
-    width:60px;height:30px;
-}
-
 .bgg{
-    background-color: color($colors,light);
+  background-color: color($colors,light);
 }
 
-ul {
-    padding: 0px;
-  
-    &.rating li {
-      padding: 5px 10px !important;
-      background: none;
-      color: #ffb400;
-  
-      ion-icon {
-        font-size: 30px;
-      }
-    }
-  }
+.ioniconcolor1{
+  color : color($colors, themeblue);
+}
+
+
+.colornavbar{
+  background-color: color($colors, navbarcolor);
+}
+
+.buttoncolor{
+  background-color: color($colors, navbarcolor);
+}

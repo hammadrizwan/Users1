@@ -118,7 +118,7 @@ export class SignUpPage {
    //console.log(Userdata);
     this.http.post('http://localhost:5000/signupsender', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
         let responseData = data;
-        let id = responseData['content'];
+        
         console.log(responseData.Error);
         console.log(responseData);
         console.log(responseData['content']);
@@ -127,16 +127,11 @@ export class SignUpPage {
           this.presentErrorAlert(responseData.Error);
         }
         else {//if account creation successfull store these value in local storage as they will be required by the application
-          this.storage.set('Name', this.Name.value);
-          this.storage.set('Email', this.Email.value);
-          this.storage.set('Password', this.Password.value)
-          this.storage.set('ID', id);
-          this.storage.set('Rating', 0);
-          this.storage.set('ProfileImage', this.lastImage1);
-          let Notifications = [];//to hold notification data
-          this.storage.set('NotificationData', Notifications);//notification data
-          this.events.publish('user:loggedin',"yo");
-          this.navCtrl.setRoot(HomePage);
+          this.dataloaded(responseData).then(() => {//promise to wait for the data to be loaded
+            this.events.publish('user:loggedin', "dataloaded");//to set data values
+            this.loading.dismissAll();//dismiss loading
+            this.navCtrl.setRoot(HomePage);//go to home page
+          })
         }
       },
         err => {
@@ -145,6 +140,21 @@ export class SignUpPage {
 });
   }
 
+  private dataloaded(responseData): Promise<any> {//promise used to ensure data has been loaded before it is acessed
+    return new Promise((resolve, reject) => {
+      //put the values in local storage
+      this.storage.set('Name', this.Name.value);//user Name
+      this.storage.set('Email', this.Email.value);//user email
+      this.storage.set('ID', responseData.content);//User ID important
+      this.storage.set('FCMToken', this.Token);//FCM token
+      this.storage.set('ProfileImage', this.lastImage1);//profile image location
+      let Notifications = [];//to hold notification data
+      this.storage.set('NotificationData', Notifications);//notification data
+      setTimeout(() => {//wait to storage is set
+        resolve();
+      }, 2000);//wait just in case
+    })
+  }
 
   presentErrorAlert(text) {
     let alert = this.alertCtrl.create({

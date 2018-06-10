@@ -38474,7 +38474,7 @@ page-login .errors {
   background-color: #f4f4f4;
 }
 
-#map1 {
+#mapdetail {
   height: 95%;
   width: 95%;
   right: 10px;
@@ -38484,27 +38484,20 @@ page-login .errors {
   display: block;
 }
 
-.cl {
-  width: 60px;
-  height: 30px;
-}
-
 .bgg {
   background-color: #f4f4f4;
 }
 
-ul {
-  padding: 0px;
+.ioniconcolor1 {
+  color: #033860;
 }
 
-ul.rating li {
-  padding: 5px 10px !important;
-  background: none;
-  color: #ffb400;
+.colornavbar {
+  background-color: #e52d27;
 }
 
-ul.rating li ion-icon {
-  font-size: 30px;
+.buttoncolor {
+  background-color: #e52d27;
 }
 
 page-profile .round {

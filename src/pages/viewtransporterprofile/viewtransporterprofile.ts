@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
+import { LivetrackPage } from '../livetrack/livetrack';
 /**
  * Generated class for the ViewtransporterprofilePage page.
  *
@@ -150,7 +151,9 @@ export class ViewtransporterprofilePage {
     this.http.put('http://localhost:5000/senderresponse', JSON.stringify(userdecision)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       console.log(responseData);
-      
+      this.navCtrl.push(LivetrackPage,{
+        data: this.Transporterparams.TransporterID,
+      });
     },
       err => {
         console.log(err);
@@ -175,6 +178,7 @@ export class ViewtransporterprofilePage {
     this.http.post('http://localhost:5000/senderresponse', JSON.stringify(userdecision)).map(res => res.json()).subscribe(data => {
       let responseData = data;
       console.log(responseData);
+     
     },
       err => {
         console.log(err);

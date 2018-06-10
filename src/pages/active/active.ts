@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController  } from 'ionic-angular';
 import { PackagedetailPage } from '../../pages/packagedetail/packagedetail';
 import { HomePage } from '../../pages/home/home';
 import { Http } from '@angular/http';
@@ -28,35 +28,30 @@ import { ViewChild, ElementRef } from '@angular/core';
 export class ActivePage {
   ID:any;
   path: string;
-  activedata: any;
+  activedata=[];
   nodata: boolean =false;
+  delete: boolean =false;
   @ViewChild('navbar') navBar: Navbar;
   constructor(public navCtrl: NavController, public navParams: NavParams,private file: File, private filePath: FilePath,
-    public http: Http,private transfer: FileTransfer,private fcm: FCM,public storage: Storage) {
-      this.getPackages();
-//       this.fcm.subscribeToTopic('marketing');
-
-// this.fcm.getToken().then(token => {
-//   //backend.registerToken(token);
-//   console.log(token);
-// });
-
-// this.fcm.onNotification().subscribe(data => {
-//   if(data.wasTapped){
-//     console.log("Received in background");
-//   } else {
-//     console.log("Received in foreground");
-//   };
-// });
-
-// this.fcm.onTokenRefresh().subscribe(token => {
-//   //backend.registerToken(token);
-//   console.log(token);
-// });
-
-// this.fcm.unsubscribeFromTopic('marketing');
-//       this.getPackages();
-       
+    public http: Http,private transfer: FileTransfer,private fcm: FCM,public storage: Storage,private alertCtrl: AlertController
+    , public loadingCtrl: LoadingController) {
+      this.storage.get('ID').then((val) => {
+        this.ID = val;
+      this.http.get('http://localhost:5000/active',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
+      if(data['content'] == "failed"){
+        this.nodata = true;
+      }  
+      else  {
+      data.map(item => {
+        this.activedata.push(item);
+      })}
+      console.log(this.activedata);
+          },
+        (err)=>{ 
+          console.log(err);
+        });
+      });
+ 
  }
 
   ionViewDidLoad() {
@@ -70,34 +65,101 @@ export class ActivePage {
       this.navCtrl.pop();
     }
   }
-  packagedetails(ID){
-    this.navCtrl.push(PackagedetailPage,{
-      data: ID,
-    });
+  packagedetails(i: any){
+    this.navCtrl.push(PackagedetailPage, this.activedata[i]);
   }
-  getPackages() {
-    this.storage.get('ID').then((val) => {
-      this.ID = val;
-      //this.showNotification("thy name" + val);    
-    const sub =  this.http.get('http://localhost:5000/active',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
-    if(data['content'] == "failed"){
-      this.nodata = true;
-    }  
-    this.activedata = data;
-    console.log(this.activedata);
-    
-        },
-      (err)=>{
-        
-        console.log(err);
-        
+  
+  doRefresh(refresher) {
+    console.log('refreshing', refresher);
+    this.activedata = []
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.storage.get('ID').then((val) => {
+        this.ID = val;
+      this.http.get('http://localhost:5000/active',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
+      if(data['content'] == "failed"){
+        this.nodata = true;
+      }  
+      else  {
+      data.map(item => {
+        this.activedata.push(item);
+      })}
+      console.log(this.activedata);
+          },
+        (err)=>{ 
+          console.log(err);
+        });
       });
-    });
-      // setTimeout(() => {
-      //   sub.unsubscribe();
-      //   console.log("Unsubbed");
-      // }, 10)
+      refresher.complete();
+    }, 2000);
   }
+
+  deletepackage(PackageID, SenderID){
+
+    let alert = this.alertCtrl.create({
+      title: 'Delete Package',
+      message: 'Are you sure you want to delete this?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            this.delete = false;
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            let loading = this.loadingCtrl.create({
+              content: 'Please wait...'
+            });
+        
+            loading.present();
+        
+            setTimeout(() => {
+              loading.dismiss();
+            this.http.get('http://localhost:5000/deletepackage',{params:{'PackageID': PackageID, 'SenderID': SenderID}}).map(res => res.json()).subscribe(data => {
+              if(data['content'] == "notdeleted"){
+                let alert = this.alertCtrl.create({
+                  title: 'Package Not Deleted as it is ' + data['status'],
+                  buttons: [
+                    {
+                      text: 'Ok',
+                      role: 'cancel',
+                      handler: () => {
+                        console.log('Ok clicked');
+                      }
+                    }
+                  ]
+                });
+                alert.present();
+              }
+            
+             else if(data['content'] == "failed"){
+                this.nodata = true;
+              } 
+              else  { 
+                this.activedata = []
+              data.map(item => {
+                this.activedata.push(item);
+              })}
+              console.log(this.activedata);
+                  },
+                (err)=>{ 
+                  console.log(err);
+                });
+              }, 2000);
+            
+            console.log('Delete clicked');
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+    
   
   
 

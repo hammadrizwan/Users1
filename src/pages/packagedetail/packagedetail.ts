@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 /**
  * Generated class for the PackagedetailPage page.
@@ -21,27 +21,25 @@ export class PackagedetailPage {
   activedata: any;
   PackageID: any;
   switch: boolean;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public http: Http, public loadingCtrl: LoadingController) {
+  Source: any;
+  Destination: any;
+  item: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController) {
     this.PackageID = navParams.get('data');
-    this.getPackages(this.PackageID);
+    this.item = this.navParams.data;
+    console.log(this.item);
+    this.Source = new google.maps.LatLng(this.item.SourceLatitude, this.item.SourceLongitude);
+    console.log(this.Source)
+    this.Destination = new google.maps.LatLng(this.item.DestinationLatitude, this.item.DestinationLongitude);
+    console.log(this.Destination)
+    this.findPath1();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PackagedetailPage');
   }
 
-  getPackages(ID) {
-    this.http.get('http://localhost:5000/packagedetails',{params:{'PackageID': ID}}).map(res => res.json()).subscribe(data => {
-      if(data[0]['TransportType'] == "CourierService")
-      {
-        this.switch = true;
-      }        
-    this.activedata = data;
-    console.log(this.activedata);
-    
-        }); 
-        this.findPath1();
-  }
+
   findPath1() {
     console.log("Iam the one");
     let loading = this.loadingCtrl.create({
@@ -53,18 +51,17 @@ export class PackagedetailPage {
     setTimeout(() => {
       loading.dismiss();
       // this.platform.ready().then(() => this.loadMaps());
-      let Source = new google.maps.LatLng(this.activedata[0]['SourceLatitude'],this.activedata[0]['SourceLongitude']);
-      let Destination = new google.maps.LatLng(this.activedata[0]['DestinationLatitude'],this.activedata[0]['DestinationLongitude']);
+     
       let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
-      const map = new google.maps.Map(document.getElementById('map1'), {
+      const map = new google.maps.Map(document.getElementById('mapdetail'), {
         zoom: 9,
         center: { lat: 41.85, lng: -87.65 }
       });
       directionsDisplay.setMap(map);
       directionsService.route({
-        origin: Source,
-        destination: Destination,
+        origin: this.Source,
+        destination: this.Destination,
         travelMode: 'DRIVING'
       }, function (response, status) {
         if (status === 'OK') {

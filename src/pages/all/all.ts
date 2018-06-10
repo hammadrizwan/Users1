@@ -17,11 +17,26 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'all.html',
 })
 export class AllPage {
-  activedata: any;
+  alldata=[];
   ID: any;
   nodata: boolean =false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http,public storage: Storage) {
-    this.getPackages();
+    this.storage.get('ID').then((val) => {
+      this.ID = val;
+    const sub =  this.http.get('http://localhost:5000/all',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
+    if(data['content'] == "failed"){
+      this.nodata = true;
+    }
+    else  { 
+    data.map(item => {
+      this.alldata.push(item);
+    })}
+    console.log(this.alldata);
+        },
+      (err)=>{ 
+        console.log(err);
+      });
+    });
   }
 
   ionViewDidLoad() {
@@ -31,28 +46,52 @@ export class AllPage {
 
   
 
-  packagedetails(ID){
-    this.navCtrl.push(PackagedetailPage,{
-      data: ID,
-    });
+  packagedetails(i: any){
+    this.navCtrl.push(PackagedetailPage, this.alldata[i]);
   }
-  getPackages() {
-    this.storage.get('ID').then((val) => {
-      this.ID = val;
-      //this.showNotification("thy name" + val);    
-    const sub =  this.http.get('http://localhost:5000/all',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
-    if(data['content'] == "failed"){
-      this.nodata = true;
-    }  
-    this.activedata = data;
-    console.log(this.activedata);
-    
-        },
-      (err)=>{
-        
-        console.log(err);
-        
+
+  doRefresh(refresher) {
+    console.log('refreshing', refresher);
+this.alldata = []
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.storage.get('ID').then((val) => {
+        this.ID = val;
+      this.http.get('http://localhost:5000/all',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
+      if(data['content'] == "failed"){
+        this.nodata = true;
+      }  
+
+      else  {
+      data.map(item => {
+        this.alldata.push(item);
+      })}
+      console.log(this.alldata);
+          },
+        (err)=>{ 
+          console.log(err);
+        });
       });
-    });
-    }
+      refresher.complete();
+    }, 2000);
+  }
+//   getPackages() {
+//     this.storage.get('ID').then((val) => {
+//       this.ID = val;
+//       //this.showNotification("thy name" + val);    
+//     const sub =  this.http.get('http://localhost:5000/all',{params:{'SenderID': this.ID}}).map(res => res.json()).subscribe(data => {
+//     if(data['content'] == "failed"){
+//       this.nodata = true;
+//     }  
+//     this.alldata = data;
+//     console.log(this.alldata);
+    
+//         },
+//       (err)=>{
+        
+//         console.log(err);
+        
+//       });
+//     });
+//     }
 }

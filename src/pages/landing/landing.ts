@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef,NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform, ToastController, App } from 'ionic-angular';
 import { ActivePage } from '../../pages/active/active';
 import { CreatePage } from '../create/create';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -38,7 +38,7 @@ export class LandingPage {
     
       this.presentLoadingDefault();
       this.storage.get('ID').then((val)=>{
-        console.log('ID is +',val);
+        //console.log('ID is +',val);
       });
       this.getArrayref();
       this.observer = Observable.interval(3000).subscribe(() => {
@@ -53,10 +53,10 @@ export class LandingPage {
               //   this.mapsetter = false;
               // }
               
-              console.log(updatelocation);
+              //console.log(updatelocation);
               this.addMarker(updatelocation);
               //his.setMapOnAll(this.map);
-              console.log("inside the top if");
+              //console.log("inside the top if");
             
             //  let image = 'assets/imgs/blue-bike.png';
               // updatelocation = new google.maps.LatLng(data.latitude,data.longitude);
@@ -139,7 +139,7 @@ loadMaps() {
     
     this.initializeMap();
    // this.initAutocomplete();
-    console.log("Hellooo");
+   // console.log("Hellooo");
     
   } else {
     this.errorAlert('Error', 'Something went wrong with the Internet Connection. Please check your Internet.')
@@ -194,12 +194,12 @@ getArrayref(){
    let returnArr = [];
    snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
-      console.log(item);
+      //console.log(item);
     //console.log("value of item"+childSnapshot.toJSON());  
       item.key = childSnapshot.key;
    //  console.log("value of item.key"+item.key);
        returnArr.push(item);
-       console.log("hello hey whtsupp"); 
+      // console.log("hello hey whtsupp"); 
  });
     return returnArr;
  };
@@ -237,7 +237,7 @@ initializeMap() {
 
 
 addMarker1(position, content) {
-  console.log("add marker"); 
+  //console.log("add marker"); 
   let marker = new google.maps.Marker({
     map: this.map,
     animation: google.maps.Animation.DROP,
@@ -248,10 +248,10 @@ addMarker1(position, content) {
 }
 
 getCurrentPosition() {
-  console.log("get current pos"); 
+  //console.log("get current pos"); 
   this.geolocation.getCurrentPosition().then(
     (position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
+        //console.log(position.coords.latitude, position.coords.longitude);
         let myPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         let options = {
           center: myPos,
@@ -281,7 +281,7 @@ dummymarkers()
       }
   });
 
-console.log("dummy markers"); 
+//console.log("dummy markers"); 
 
 }
 customeMarker(position) {

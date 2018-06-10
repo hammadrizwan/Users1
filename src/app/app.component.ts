@@ -22,6 +22,7 @@ import { Storage } from '@ionic/storage';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import * as firebase from 'Firebase';
 import "rxjs/add/observable/interval";
+import { LandingPage } from '../pages/landing/landing';
 var config = {
   apiKey: "AIzaSyDK3eYlkVHJTY83OOYXVIZQRq5C549pBcc",
   authDomain: "transporterdnd.firebaseapp.com",
@@ -35,6 +36,7 @@ var config = {
   templateUrl: 'app.html'
 })
 export class MyApp {
+  observer: any;
   rootPage: any
   Name: any;
   NotificationData = [];
@@ -43,12 +45,16 @@ export class MyApp {
   ID: any;
   Token: any
   ref: any;//firebase reference
+  TransporterID: any;
+  PackageID: any;
+  string: any;
   @ViewChild(Nav) nav: Nav;
   pages: Array<{ title: string, component: any }>;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private fcm: FCM,
     public storage: Storage, private http: Http, public events: Events, public alertCtrl: AlertController) {
     platform.ready().then(() => {
       //Notifications
+      
       firebase.initializeApp(config);//intialise firebase
       this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
       this.loggedIn = false;
@@ -62,8 +68,9 @@ export class MyApp {
           this.rootPage = LoginPage; //set landing page as login page
           this.loadData().then(() => {
             console.log("inhere")
-            //this.updateToken();
-            //this.onNotification();
+            this.loggedIn = true;
+            // this.updateToken();
+            // this.onNotification();
           })
         }
         else {
@@ -71,8 +78,8 @@ export class MyApp {
           this.getData().then(() => {
             console.log("inhere")
             this.loggedIn = true;
-            //this.updateToken();
-            //this.onNotification();
+            // this.updateToken();
+            // this.onNotification();
           })
         }
       })
@@ -82,6 +89,7 @@ export class MyApp {
       { title: 'All Packages', component: AllPage },
       { title: 'Active Packages', component: ActivePage },
       { title: 'In Transit', component: InprogressPage },
+      { title: 'Delivered Packages', component: PendingPage },
       { title: 'Help', component: HelpPage },
 
     ];
@@ -98,8 +106,10 @@ export class MyApp {
         this.storage.get('ProfileImage').then((val) => {
           this.profileImage = val;
         });
-        this.loggedIn = true;
-        resolve();
+        setTimeout(() => {//wait to storage is set        
+          resolve();
+        }, 1000);
+       
         //wait just in case
       })
     });
@@ -113,7 +123,7 @@ export class MyApp {
       this.storage.get('ProfileImage').then((val) => {
         this.profileImage = val;
       });
-      this.loggedIn = true;
+      
       resolve();
       //wait just in case
     })
@@ -154,16 +164,18 @@ export class MyApp {
     /*remove all storage values*/
     this.storage.set('Name', null);
     this.storage.set('Email', null);
-    this.storage.set('Password', null)
+    
     this.storage.set('ID', null);
-    this.storage.set('Rating', null);
+    
     this.storage.set('ProfileImage', null);
     this.storage.set('FCMToken', null);
-    this.loggedIn=false;
+    
     /*________________________________*/
-    console.log(this.nav.getAllChildNavs())
-    this.rootPage=LoginPage;
-    this.nav.setRoot(LoginPage);//reroute to to login page
+    this.nav.setRoot(LoginPage);
+    setTimeout(() => {//wait to storage is set
+      this.loggedIn=false;
+    }, 1500);
+    //reroute to to login page
   }
 
   presentConfirm() {
@@ -175,14 +187,15 @@ export class MyApp {
         
         {
           text: 'Rate!',
-          handler: data => {
-            console.log('Rated. Data -> ' + JSON.stringify(data));
-            this.rateTransporter(data);
+          handler: rating => {
+            console.log('Rated. Data -> ' + rating);
+            this.presentAlert2(rating);
           },
           role: 'cancel'
         }
       ],
       inputs: [
+        
         {
           type: 'radio',
           id: '1',
@@ -223,6 +236,7 @@ export class MyApp {
           value: '5',
           'checked': false
         },
+       
       ],
       
     });
@@ -230,9 +244,51 @@ export class MyApp {
 
   }
 
-  rateTransporter(data){
-      if(data){//if the user has rated it then call the server
-        //server code here
+  presentAlert2(rating){
+    let alert = this.alertCtrl.create({
+      title: 'Add a comment',
+      inputs: [
+        {
+          type:'text',
+          name: 'comment',
+          placeholder: 'Please comment on your experience...'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Comment',
+          role: 'cancel',
+          handler: data => {
+            console.log('Comment was '+ data.comment);
+            this.rateTransporter(rating,data.comment);
+           
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  rateTransporter(rating,comment){
+      if(rating && comment){
+        this.storage.get('ID').then((val) => {
+          this.ID = val;
+          let Ratingdata = {
+            'rating': rating,
+            'content': comment,
+            'PackageID':this.PackageID,
+            'TransporterID':this.TransporterID,
+            'SenderID':this.ID,
+          }
+          this.http.post('http://localhost:5000/ratetransporter', JSON.stringify(Ratingdata)).map(res => res.json()).subscribe(data => {
+      let responseData = data;
+      console.log(responseData);
+      //this.presentToast("Your Package has been created!");
+    },
+      err => {
+        console.log(err);
+      });
+        });
       }
       else{//else ask the user to rate!
         this.presentConfirm();
@@ -240,6 +296,7 @@ export class MyApp {
   }
 
   onNotification() {
+    
     this.fcm.getToken().then(token => {
       //backend.registerToken(token);
       console.log("token is" + token);
@@ -260,15 +317,33 @@ export class MyApp {
       } else {
         console.log("Received in foreground");
         if (data.Delivered == "true") {
+          this.PackageID = data.PackageID;
+          this.TransporterID = data.TransporterID;
           this.presentConfirm();
         }
-        else {
-          this.NotificationData.push(JSON.stringify(data));//open app and show notification page
+        else if(data.Type == "Bid") {
+          this.string="You have recieved a Bid from"+data.TransporterName+"for Package" + data.PackageName;
           console.log(data);
           this.storage.get('NotificationData').then((val) => {
-            this.NotificationData.push(val);
+            if(val!=null){
+              this.NotificationData=val;
+            }
+            this.NotificationData.push(this.string);
+            this.string = "";
             this.storage.set('NotificationData', this.NotificationData);//notification data
             this.nav.push(ViewtransporterprofilePage, { transporter: data });
+          });
+        }
+        else{
+          this.storage.get('NotificationData').then((val) => {
+            console.log(data)
+            if(val!=null){
+              this.NotificationData=val;
+            }
+            this.NotificationData.push(data.Notification);
+            this.showNotification(data.Notification);
+            this.storage.set('NotificationData', this.NotificationData);//notification data
+           
           });
         }
       };
@@ -280,6 +355,15 @@ export class MyApp {
     });
 
     this.fcm.unsubscribeFromTopic('marketing');
+  }
+
+  showNotification(text) {
+    let alert = this.alertCtrl.create({
+      title: 'Notification',
+      subTitle: text,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 }
 

@@ -14,7 +14,7 @@
 
 
 <ion-content class="bgg" >
-  <ion-list *ngFor="let item of activedata">
+  
     <ion-card>
 
       <img src="http://localhost:5000/uploads/{{item.PImage}}">
@@ -67,8 +67,8 @@
 
     </ion-card>
     <ion-card >
-      <div id="map1" #map1 (onCreate)="findPath1()" ></div>
+      <div id="mapdetail" #mapdetail (onCreate)="findPath1()" ></div>
     </ion-card>
 
-  </ion-list>
+
 </ion-content>

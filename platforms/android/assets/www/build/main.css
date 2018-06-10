@@ -19591,16 +19591,16 @@ input.text-input:-webkit-autofill {
 
 .item-md.item-input.item-input-has-focus .item-inner,
 .item-md.item-input.input-has-focus .item-inner {
-  border-bottom-color: #e52d27;
-  -webkit-box-shadow: inset 0 -1px 0 0 #e52d27;
-  box-shadow: inset 0 -1px 0 0 #e52d27;
+  border-bottom-color: #488aff;
+  -webkit-box-shadow: inset 0 -1px 0 0 #488aff;
+  box-shadow: inset 0 -1px 0 0 #488aff;
 }
 
 .list-md .item-input.item-input-has-focus:last-child,
 .list-md .item-input.input-has-focus:last-child {
-  border-bottom-color: #e52d27;
-  -webkit-box-shadow: inset 0 -1px 0 0 #e52d27;
-  box-shadow: inset 0 -1px 0 0 #e52d27;
+  border-bottom-color: #488aff;
+  -webkit-box-shadow: inset 0 -1px 0 0 #488aff;
+  box-shadow: inset 0 -1px 0 0 #488aff;
 }
 
 .list-md .item-input.item-input-has-focus:last-child .item-inner,
@@ -21308,7 +21308,7 @@ ion-label[floating] {
 .input-has-focus .label-md[stacked],
 .item-input-has-focus .label-md[floating],
 .input-has-focus .label-md[floating] {
-  color: #e52d27;
+  color: #488aff;
 }
 
 .item-input-has-focus .label-md[floating],
@@ -38450,6 +38450,22 @@ page-livetrack #mapLiveTracking {
   overflow: hidden !important;
 }
 
+page-login .forms {
+  padding-top: 0%;
+}
+
+page-login .background {
+  background-color: #033860;
+}
+
+page-login .inputs {
+  color: white;
+}
+
+page-login .errors {
+  background-color: #033860;
+}
+
 .hh ion-card-content {
   background-color: #d4d2cc;
 }
@@ -38458,7 +38474,7 @@ page-livetrack #mapLiveTracking {
   background-color: #f4f4f4;
 }
 
-#map1 {
+#mapdetail {
   height: 95%;
   width: 95%;
   right: 10px;
@@ -38468,27 +38484,20 @@ page-livetrack #mapLiveTracking {
   display: block;
 }
 
-.cl {
-  width: 60px;
-  height: 30px;
-}
-
 .bgg {
   background-color: #f4f4f4;
 }
 
-ul {
-  padding: 0px;
+.ioniconcolor1 {
+  color: #033860;
 }
 
-ul.rating li {
-  padding: 5px 10px !important;
-  background: none;
-  color: #ffb400;
+.colornavbar {
+  background-color: #e52d27;
 }
 
-ul.rating li ion-icon {
-  font-size: 30px;
+.buttoncolor {
+  background-color: #e52d27;
 }
 
 page-profile .round {
@@ -38505,6 +38514,10 @@ page-profile .contents {
   color: #2a4255;
   font-style: italic;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+page-profile .cards {
+  padding-top: 15%;
 }
 
 .avatar1 {
@@ -38524,6 +38537,18 @@ page-profile .contents {
 
 .errorline {
   color: red;
+}
+
+.background {
+  background-color: #033860;
+}
+
+.inputs {
+  color: white;
+}
+
+.errors {
+  background-color: #033860;
 }
 
 page-viewtransporterprofile .background1 {

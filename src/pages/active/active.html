@@ -17,13 +17,21 @@
 
 
 <ion-content class="bgg" >
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Pull to refresh"
+          refreshingSpinner="circles"
+          refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
   <div *ngIf="!nodata">
-  <ion-list *ngFor="let item of activedata">
-  <ion-card>
+  
+  <ion-card *ngFor="let item of activedata, let i= index">
       <div style="position: relative">
     <img src="http://localhost:5000/uploads/{{item.PImage}}" />
     <ion-fab  right top>
-      <button class="buttoncolor" ion-fab>
+      <button class="buttoncolor" (click)="deletepackage(item.PackageID, item.SenderID)" ion-fab>
         <ion-icon name="trash" ></ion-icon>
       </button>
     </ion-fab>
@@ -44,14 +52,15 @@
       <h2>{{item.Verificationkey}}</h2>
     </ion-item>
 
-    <button class="colornavbar" ion-button full (click)="packagedetails(item.ID)">
+    <button class="colornavbar" ion-button full (click)="packagedetails(i)">
       View Details
     </button>
   </ion-card>
-</ion-list>
+
 </div>
 <div *ngIf="nodata" class="nodata">
-  <ion-label >No Packages Active Right Now :( </ion-label>
+  <p ion-text>No Packages Active Right Now :( </p>
 </div>
+
 </ion-content>
 
