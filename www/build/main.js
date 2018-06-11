@@ -165,8 +165,8 @@ var NotificationPage = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LandingPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_active_active__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__create_create__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_active_active__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__create_create__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Observable__ = __webpack_require__(9);
@@ -488,105 +488,8 @@ var HelpPage = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InprogressPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__livetrack_livetrack__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(18);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-/**
- * Generated class for the InprogressPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var InprogressPage = (function () {
-    function InprogressPage(navCtrl, navParams, http, storage) {
-        var _this = this;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.http = http;
-        this.storage = storage;
-        this.nodata = false;
-        this.storage.get('ID').then(function (val) {
-            _this.SenderID = val;
-            var sub = _this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': _this.SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                if (data['content'] == "failed") {
-                    _this.nodata = true;
-                }
-                else {
-                    _this.intransitdata = data;
-                }
-                console.log(_this.intransitdata);
-            }, function (err) {
-                console.log(err);
-            });
-        });
-    }
-    InprogressPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad InprogressPage');
-    };
-    InprogressPage.prototype.viewLive = function (ID) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__livetrack_livetrack__["a" /* LivetrackPage */], {
-            data: ID,
-        });
-    };
-    InprogressPage.prototype.doRefresh = function (refresher) {
-        var _this = this;
-        console.log('refreshing', refresher);
-        this.intransitdata = [];
-        setTimeout(function () {
-            console.log('Async operation has ended');
-            _this.storage.get('ID').then(function (val) {
-                _this.SenderID = val;
-                var sub = _this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': _this.SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                    if (data['content'] == "failed") {
-                        _this.nodata = true;
-                    }
-                    else {
-                        _this.intransitdata = data;
-                    }
-                    console.log(_this.intransitdata);
-                }, function (err) {
-                    console.log(err);
-                });
-            });
-            refresher.complete();
-        }, 2000);
-    };
-    InprogressPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-inprogress',template:/*ion-inline-start:"Y:\Users\src\pages\inprogress\inprogress.html"*/'<!--\n\n  Generated template for the PendingPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>In Transit</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content padding class="bgg">\n\n  \n\n  <div *ngIf="!nodata">\n\n    <ion-list *ngFor="let item of intransitdata">\n\n    <ion-card>\n\n        <div style="position: relative">\n\n      <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n      <ion-fab  right top>\n\n        <button class="buttoncolor" ion-fab>\n\n          <ion-icon name="trash" ></ion-icon>\n\n        </button>\n\n      </ion-fab>\n\n  </div>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n        <h2>{{item.PickAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n        <h2>{{item.DestAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <button class="colornavbar" ion-button full (click)="viewLive(item.TransporterID)">\n\n        View Live\n\n      </button>\n\n    </ion-card>\n\n  </ion-list>\n\n  </div>\n\n  <div *ngIf="nodata" class="nodata">\n\n    <ion-label >No Package Intransit Right Now!</ion-label>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"Y:\Users\src\pages\inprogress\inprogress.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]])
-    ], InprogressPage);
-    return InprogressPage;
-}());
-
-//# sourceMappingURL=inprogress.js.map
-
-/***/ }),
-
-/***/ 162:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sign_up_sign_up__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sign_up_sign_up__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__home_home__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(8);
@@ -732,107 +635,7 @@ var LoginPage = (function () {
 
 /***/ }),
 
-/***/ 163:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PendingPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_packagedetail_packagedetail__ = __webpack_require__(65);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-/**
- * Generated class for the PendingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var PendingPage = (function () {
-    function PendingPage(navCtrl, navParams, http, storage) {
-        var _this = this;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.http = http;
-        this.storage = storage;
-        this.delivereddata = [];
-        this.nodata = false;
-        this.storage.get('ID').then(function (val) {
-            _this.ID = val;
-            var sub = _this.http.get('http://localhost:5000/delivered', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                if (data['content'] == "failed") {
-                    _this.nodata = true;
-                }
-                else {
-                    data.map(function (item) {
-                        _this.delivereddata.push(item);
-                    });
-                }
-                console.log(_this.delivereddata);
-            }, function (err) {
-                console.log(err);
-            });
-        });
-    }
-    PendingPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad PendingPage');
-    };
-    PendingPage.prototype.packagedetails = function (i) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__pages_packagedetail_packagedetail__["a" /* PackagedetailPage */], this.delivereddata[i]);
-    };
-    PendingPage.prototype.doRefresh = function (refresher) {
-        var _this = this;
-        console.log('refreshing', refresher);
-        this.delivereddata = [];
-        setTimeout(function () {
-            console.log('Async operation has ended');
-            _this.storage.get('ID').then(function (val) {
-                _this.ID = val;
-                _this.http.get('http://localhost:5000/delivered', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                    if (data['content'] == "failed") {
-                        _this.nodata = true;
-                    }
-                    else {
-                        data.map(function (item) {
-                            _this.delivereddata.push(item);
-                        });
-                    }
-                    console.log(_this.delivereddata);
-                }, function (err) {
-                    console.log(err);
-                });
-            });
-            refresher.complete();
-        }, 2000);
-    };
-    PendingPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-pending',template:/*ion-inline-start:"Y:\Users\src\pages\pending\pending.html"*/'<!--\n\n  Generated template for the PendingPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>Delivered Packages</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content class="bgg">\n\n    <ion-refresher (ionRefresh)="doRefresh($event)">\n\n        <ion-refresher-content\n\n          pullingIcon="arrow-dropdown"\n\n          pullingText="Pull to refresh"\n\n          refreshingSpinner="circles"\n\n          refreshingText="Refreshing...">\n\n        </ion-refresher-content>\n\n      </ion-refresher>\n\n  <div *ngIf="!nodata">\n\n    \n\n    <ion-card *ngFor="let item of delivereddata, let i= index">\n\n        <div style="position: relative">\n\n      <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n  </div>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n        <h2>{{item.PickAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n        <h2>{{item.DestAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <button class="colornavbar" ion-button full (click)="packagedetails(i)">\n\n        View Details\n\n      </button>\n\n    </ion-card>\n\n  \n\n  </div>\n\n  <div *ngIf="nodata" class="nodata">\n\n    <p ion-text >No Packages to Display</p>\n\n  </div>\n\n  \n\n</ion-content>\n\n'/*ion-inline-end:"Y:\Users\src\pages\pending\pending.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]])
-    ], PendingPage);
-    return PendingPage;
-}());
-
-//# sourceMappingURL=pending.js.map
-
-/***/ }),
-
-/***/ 164:
+/***/ 162:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -914,7 +717,7 @@ var ProfilePage = (function () {
 
 /***/ }),
 
-/***/ 165:
+/***/ 163:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1095,6 +898,203 @@ var ViewtransporterprofilePage = (function () {
 
 /***/ }),
 
+/***/ 164:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PendingPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_packagedetail_packagedetail__ = __webpack_require__(65);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+/**
+ * Generated class for the PendingPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var PendingPage = (function () {
+    function PendingPage(navCtrl, navParams, http, storage) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.http = http;
+        this.storage = storage;
+        this.delivereddata = [];
+        this.nodata = false;
+        this.storage.get('ID').then(function (val) {
+            _this.ID = val;
+            var sub = _this.http.get('http://localhost:5000/delivered', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                if (data['content'] == "failed") {
+                    _this.nodata = true;
+                }
+                else {
+                    data.map(function (item) {
+                        _this.delivereddata.push(item);
+                    });
+                }
+                console.log(_this.delivereddata);
+            }, function (err) {
+                console.log(err);
+            });
+        });
+    }
+    PendingPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad PendingPage');
+    };
+    PendingPage.prototype.packagedetails = function (i) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__pages_packagedetail_packagedetail__["a" /* PackagedetailPage */], this.delivereddata[i]);
+    };
+    PendingPage.prototype.doRefresh = function (refresher) {
+        var _this = this;
+        console.log('refreshing', refresher);
+        this.delivereddata = [];
+        setTimeout(function () {
+            console.log('Async operation has ended');
+            _this.storage.get('ID').then(function (val) {
+                _this.ID = val;
+                _this.http.get('http://localhost:5000/delivered', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                    if (data['content'] == "failed") {
+                        _this.nodata = true;
+                    }
+                    else {
+                        data.map(function (item) {
+                            _this.delivereddata.push(item);
+                        });
+                    }
+                    console.log(_this.delivereddata);
+                }, function (err) {
+                    console.log(err);
+                });
+            });
+            refresher.complete();
+        }, 2000);
+    };
+    PendingPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'page-pending',template:/*ion-inline-start:"Y:\Users\src\pages\pending\pending.html"*/'<!--\n\n  Generated template for the PendingPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>Delivered Packages</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content class="bgg">\n\n    <ion-refresher (ionRefresh)="doRefresh($event)">\n\n        <ion-refresher-content\n\n          pullingIcon="arrow-dropdown"\n\n          pullingText="Pull to refresh"\n\n          refreshingSpinner="circles"\n\n          refreshingText="Refreshing...">\n\n        </ion-refresher-content>\n\n      </ion-refresher>\n\n  <div *ngIf="!nodata">\n\n    \n\n    <ion-card *ngFor="let item of delivereddata, let i= index">\n\n        <div style="position: relative">\n\n      <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n  </div>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n        <h2>{{item.PickAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n        <h2>{{item.DestAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <button class="colornavbar" ion-button full (click)="packagedetails(i)">\n\n        View Details\n\n      </button>\n\n    </ion-card>\n\n  \n\n  </div>\n\n  <div *ngIf="nodata" class="nodata">\n\n    <p ion-text >No Packages to Display</p>\n\n  </div>\n\n  \n\n</ion-content>\n\n'/*ion-inline-end:"Y:\Users\src\pages\pending\pending.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]])
+    ], PendingPage);
+    return PendingPage;
+}());
+
+//# sourceMappingURL=pending.js.map
+
+/***/ }),
+
+/***/ 165:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InprogressPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__livetrack_livetrack__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(18);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+/**
+ * Generated class for the InprogressPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var InprogressPage = (function () {
+    function InprogressPage(navCtrl, navParams, http, storage) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.http = http;
+        this.storage = storage;
+        this.nodata = false;
+        this.storage.get('ID').then(function (val) {
+            _this.SenderID = val;
+            var sub = _this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': _this.SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                if (data['content'] == "failed") {
+                    _this.nodata = true;
+                }
+                else {
+                    _this.intransitdata = data;
+                }
+                console.log(_this.intransitdata);
+            }, function (err) {
+                console.log(err);
+            });
+        });
+    }
+    InprogressPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad InprogressPage');
+    };
+    InprogressPage.prototype.viewLive = function (ID) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__livetrack_livetrack__["a" /* LivetrackPage */], {
+            data: ID,
+        });
+    };
+    InprogressPage.prototype.doRefresh = function (refresher) {
+        var _this = this;
+        console.log('refreshing', refresher);
+        this.intransitdata = [];
+        setTimeout(function () {
+            console.log('Async operation has ended');
+            _this.storage.get('ID').then(function (val) {
+                _this.SenderID = val;
+                var sub = _this.http.get('http://localhost:5000/intransit', { params: { 'SenderID': _this.SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                    if (data['content'] == "failed") {
+                        _this.nodata = true;
+                    }
+                    else {
+                        _this.intransitdata = data;
+                    }
+                    console.log(_this.intransitdata);
+                }, function (err) {
+                    console.log(err);
+                });
+            });
+            refresher.complete();
+        }, 2000);
+    };
+    InprogressPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'page-inprogress',template:/*ion-inline-start:"Y:\Users\src\pages\inprogress\inprogress.html"*/'<!--\n\n  Generated template for the PendingPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>In Transit</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content padding class="bgg">\n\n  \n\n  <div *ngIf="!nodata">\n\n    <ion-list *ngFor="let item of intransitdata">\n\n    <ion-card>\n\n        <div style="position: relative">\n\n      <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n      <ion-fab  right top>\n\n        <button class="buttoncolor" ion-fab>\n\n          <ion-icon name="trash" ></ion-icon>\n\n        </button>\n\n      </ion-fab>\n\n  </div>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n        <h2>{{item.PickAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <ion-item>\n\n        <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n        <h2>{{item.DestAddress}}</h2>\n\n      </ion-item>\n\n  \n\n      <button class="colornavbar" ion-button full (click)="viewLive(item.TransporterID)">\n\n        View Live\n\n      </button>\n\n    </ion-card>\n\n  </ion-list>\n\n  </div>\n\n  <div *ngIf="nodata" class="nodata">\n\n    <ion-label >No Package Intransit Right Now!</ion-label>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"Y:\Users\src\pages\inprogress\inprogress.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]])
+    ], InprogressPage);
+    return InprogressPage;
+}());
+
+//# sourceMappingURL=inprogress.js.map
+
+/***/ }),
+
 /***/ 174:
 /***/ (function(module, exports) {
 
@@ -1117,35 +1117,35 @@ webpackEmptyAsyncContext.id = 174;
 
 var map = {
 	"../pages/active/active.module": [
-		476,
+		479,
 		13
 	],
 	"../pages/all/all.module": [
-		477,
+		476,
 		12
 	],
 	"../pages/create/create.module": [
-		478,
+		477,
 		11
 	],
 	"../pages/help/help.module": [
-		479,
+		478,
 		10
 	],
 	"../pages/inprogress/inprogress.module": [
-		480,
+		489,
 		9
 	],
 	"../pages/landing/landing.module": [
-		481,
+		480,
 		8
 	],
 	"../pages/livetrack/livetrack.module": [
-		482,
+		481,
 		7
 	],
 	"../pages/login/login.module": [
-		483,
+		482,
 		6
 	],
 	"../pages/notification/notification.module": [
@@ -1153,23 +1153,23 @@ var map = {
 		5
 	],
 	"../pages/packagedetail/packagedetail.module": [
-		485,
+		483,
 		4
 	],
 	"../pages/pending/pending.module": [
-		486,
+		488,
 		3
 	],
 	"../pages/profile/profile.module": [
-		487,
+		485,
 		2
 	],
 	"../pages/sign-up/sign-up.module": [
-		488,
+		487,
 		1
 	],
 	"../pages/viewtransporterprofile/viewtransporterprofile.module": [
-		489,
+		486,
 		0
 	]
 };
@@ -1216,29 +1216,29 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_login_login__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_sign_up_sign_up__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_create_create__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_inprogress_inprogress__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_pending_pending__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_login_login__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_sign_up_sign_up__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_create_create__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_inprogress_inprogress__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_pending_pending__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_help_help__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_notification_notification__ = __webpack_require__(158);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_landing_landing__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_active_active__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_active_active__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_all_all__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_profile_profile__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_profile_profile__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_packagedetail_packagedetail__ = __webpack_require__(65);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_viewtransporterprofile_viewtransporterprofile__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_viewtransporterprofile_viewtransporterprofile__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_livetrack_livetrack__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_file__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_transfer__ = __webpack_require__(473);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_file_path__ = __webpack_require__(73);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_file_transfer__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_file_path__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_file_transfer__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_camera__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_storage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_geolocation__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_base64__ = __webpack_require__(258);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_fcm__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_fcm__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31_ionic2_rating__ = __webpack_require__(474);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1306,20 +1306,20 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/active/active.module#ActivePageModule', name: 'ActivePage', segment: 'active', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/all/all.module#AllPageModule', name: 'AllPage', segment: 'all', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/create/create.module#CreatePageModule', name: 'CreatePage', segment: 'create', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/help/help.module#HelpPageModule', name: 'HelpPage', segment: 'help', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/inprogress/inprogress.module#InprogressPageModule', name: 'InprogressPage', segment: 'inprogress', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/active/active.module#ActivePageModule', name: 'ActivePage', segment: 'active', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/landing/landing.module#LandingPageModule', name: 'LandingPage', segment: 'landing', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/livetrack/livetrack.module#LivetrackPageModule', name: 'LivetrackPage', segment: 'livetrack', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/notification/notification.module#NotificationPageModule', name: 'NotificationPage', segment: 'notification', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/packagedetail/packagedetail.module#PackagedetailPageModule', name: 'PackagedetailPage', segment: 'packagedetail', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/pending/pending.module#PendingPageModule', name: 'PendingPage', segment: 'pending', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/notification/notification.module#NotificationPageModule', name: 'NotificationPage', segment: 'notification', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/profile/profile.module#ProfilePageModule', name: 'ProfilePage', segment: 'profile', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/viewtransporterprofile/viewtransporterprofile.module#ViewtransporterprofilePageModule', name: 'ViewtransporterprofilePage', segment: 'viewtransporterprofile', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/sign-up/sign-up.module#SignUpPageModule', name: 'SignUpPage', segment: 'sign-up', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/viewtransporterprofile/viewtransporterprofile.module#ViewtransporterprofilePageModule', name: 'ViewtransporterprofilePage', segment: 'viewtransporterprofile', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/pending/pending.module#PendingPageModule', name: 'PendingPage', segment: 'pending', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/inprogress/inprogress.module#InprogressPageModule', name: 'InprogressPage', segment: 'inprogress', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_31_ionic2_rating__["a" /* Ionic2RatingModule */],
@@ -1378,16 +1378,16 @@ var AppModule = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(298);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_home_home__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_create_create__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_inprogress_inprogress__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_pending_pending__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_create_create__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_inprogress_inprogress__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_pending_pending__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_help_help__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_all_all__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_active_active__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_viewtransporterprofile_viewtransporterprofile__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_profile_profile__ = __webpack_require__(164);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_fcm__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_active_active__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_viewtransporterprofile_viewtransporterprofile__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_profile_profile__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_fcm__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_storage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_rxjs_add_observable_interval__ = __webpack_require__(469);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_rxjs_add_observable_interval___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_rxjs_add_observable_interval__);
@@ -1881,209 +1881,15 @@ var PackagedetailPage = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActivePage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_packagedetail_packagedetail__ = __webpack_require__(65);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__ = __webpack_require__(73);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_fcm__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(18);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Generated class for the ActivePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var ActivePage = (function () {
-    function ActivePage(navCtrl, navParams, file, filePath, http, transfer, fcm, storage, alertCtrl, loadingCtrl) {
-        var _this = this;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.file = file;
-        this.filePath = filePath;
-        this.http = http;
-        this.transfer = transfer;
-        this.fcm = fcm;
-        this.storage = storage;
-        this.alertCtrl = alertCtrl;
-        this.loadingCtrl = loadingCtrl;
-        this.activedata = [];
-        this.nodata = false;
-        this.delete = false;
-        this.storage.get('ID').then(function (val) {
-            _this.ID = val;
-            _this.http.get('http://localhost:5000/active', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                if (data['content'] == "failed") {
-                    _this.nodata = true;
-                }
-                else {
-                    data.map(function (item) {
-                        _this.activedata.push(item);
-                    });
-                }
-                console.log(_this.activedata);
-            }, function (err) {
-                console.log(err);
-            });
-        });
-    }
-    ActivePage.prototype.ionViewDidLoad = function () {
-        var _this = this;
-        console.log('ionViewDidLoad ActivePage');
-        this.navBar.backButtonClick = function (e) {
-            // Print this event to the console
-            console.log(e);
-            // Navigate to another page
-            _this.navCtrl.getPrevious().data.thing1 = null;
-            _this.navCtrl.pop();
-        };
-    };
-    ActivePage.prototype.packagedetails = function (i) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__pages_packagedetail_packagedetail__["a" /* PackagedetailPage */], this.activedata[i]);
-    };
-    ActivePage.prototype.doRefresh = function (refresher) {
-        var _this = this;
-        console.log('refreshing', refresher);
-        this.activedata = [];
-        setTimeout(function () {
-            console.log('Async operation has ended');
-            _this.storage.get('ID').then(function (val) {
-                _this.ID = val;
-                _this.http.get('http://localhost:5000/active', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                    if (data['content'] == "failed") {
-                        _this.nodata = true;
-                    }
-                    else {
-                        data.map(function (item) {
-                            _this.activedata.push(item);
-                        });
-                    }
-                    console.log(_this.activedata);
-                }, function (err) {
-                    console.log(err);
-                });
-            });
-            refresher.complete();
-        }, 2000);
-    };
-    ActivePage.prototype.deletepackage = function (PackageID, SenderID) {
-        var _this = this;
-        var alert = this.alertCtrl.create({
-            title: 'Delete Package',
-            message: 'Are you sure you want to delete this?',
-            buttons: [
-                {
-                    text: 'No',
-                    role: 'cancel',
-                    handler: function () {
-                        _this.delete = false;
-                        console.log('Cancel clicked');
-                    }
-                },
-                {
-                    text: 'Yes',
-                    handler: function () {
-                        var loading = _this.loadingCtrl.create({
-                            content: 'Please wait...'
-                        });
-                        loading.present();
-                        setTimeout(function () {
-                            loading.dismiss();
-                            _this.http.get('http://localhost:5000/deletepackage', { params: { 'PackageID': PackageID, 'SenderID': SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
-                                if (data['content'] == "notdeleted") {
-                                    var alert_1 = _this.alertCtrl.create({
-                                        title: 'Package Not Deleted as it is ' + data['status'],
-                                        buttons: [
-                                            {
-                                                text: 'Ok',
-                                                role: 'cancel',
-                                                handler: function () {
-                                                    console.log('Ok clicked');
-                                                }
-                                            }
-                                        ]
-                                    });
-                                    alert_1.present();
-                                }
-                                else if (data['content'] == "failed") {
-                                    _this.nodata = true;
-                                }
-                                else {
-                                    _this.activedata = [];
-                                    data.map(function (item) {
-                                        _this.activedata.push(item);
-                                    });
-                                }
-                                console.log(_this.activedata);
-                            }, function (err) {
-                                console.log(err);
-                            });
-                        }, 2000);
-                        console.log('Delete clicked');
-                    }
-                }
-            ]
-        });
-        alert.present();
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('navbar'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Navbar */])
-    ], ActivePage.prototype, "navBar", void 0);
-    ActivePage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-active',template:/*ion-inline-start:"Y:\Users\src\pages\active\active.html"*/'<!--\n\n  Generated template for the ActivePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar #navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>Active Packages</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content class="bgg" >\n\n    <ion-refresher (ionRefresh)="doRefresh($event)">\n\n        <ion-refresher-content\n\n          pullingIcon="arrow-dropdown"\n\n          pullingText="Pull to refresh"\n\n          refreshingSpinner="circles"\n\n          refreshingText="Refreshing...">\n\n        </ion-refresher-content>\n\n      </ion-refresher>\n\n  <div *ngIf="!nodata">\n\n  \n\n  <ion-card *ngFor="let item of activedata, let i= index">\n\n      <div style="position: relative">\n\n    <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n    <ion-fab  right top>\n\n      <button class="buttoncolor" (click)="deletepackage(item.PackageID, item.SenderID)" ion-fab>\n\n        <ion-icon name="trash" ></ion-icon>\n\n      </button>\n\n    </ion-fab>\n\n</div>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n      <h2>{{item.PickAddress}}</h2>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n      <h2>{{item.DestAddress}}</h2>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="key" item-left large></ion-icon>\n\n      <h2>{{item.Verificationkey}}</h2>\n\n    </ion-item>\n\n\n\n    <button class="colornavbar" ion-button full (click)="packagedetails(i)">\n\n      View Details\n\n    </button>\n\n  </ion-card>\n\n\n\n</div>\n\n<div *ngIf="nodata" class="nodata">\n\n  <p ion-text>No Packages Active Right Now :( </p>\n\n</div>\n\n\n\n</ion-content>\n\n\n\n'/*ion-inline-end:"Y:\Users\src\pages\active\active.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__["a" /* FilePath */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__["a" /* FileTransfer */], __WEBPACK_IMPORTED_MODULE_8__ionic_native_fcm__["a" /* FCM */], __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* LoadingController */]])
-    ], ActivePage);
-    return ActivePage;
-}());
-
-//# sourceMappingURL=active.js.map
-
-/***/ }),
-
-/***/ 91:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreatePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_sign_up_sign_up__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_sign_up_sign_up__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_home_home__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_camera__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_http__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__ = __webpack_require__(44);
@@ -2359,7 +2165,9 @@ var CreatePage = (function () {
         });
     };
     CreatePage.prototype.findPath = function () {
-        this.callback.bind(this);
+        this.distancePackage = this.getDistance();
+        console.log(this.distancePackage);
+        console.log(this.distancePackage);
         if (this.marker2 != null) {
             var directionsService = new google.maps.DirectionsService;
             var directionsDisplay_1 = new google.maps.DirectionsRenderer;
@@ -2384,27 +2192,26 @@ var CreatePage = (function () {
                     window.alert('Directions request failed due to ' + status);
                 }
             });
-            var service = new google.maps.DistanceMatrixService();
-            service.getDistanceMatrix({
-                origins: [this.Source],
-                destinations: [this.Destination],
-                travelMode: google.maps.TravelMode.DRIVING,
-                unitSystem: google.maps.UnitSystem.METRIC,
-                avoidHighways: false,
-                avoidTolls: false
-            }, this.callback);
         }
     };
-    CreatePage.prototype.callback = function (response, status) {
-        console.log(response.rows[0].elements[0].distance.value);
-        console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
-        console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
-        var stringser = JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
-        //this.distancePackage=parseFloat(stringser);
-        this.values(stringser);
-        console.log(this.distancePackage);
-        // console.log(this.distance)
-        // console.log(this.distance.text)
+    CreatePage.prototype.getDistance = function () {
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: [this.Source],
+            destinations: [this.Destination],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false
+        }, function (response, status) {
+            // console.log(response.rows[0].elements[0].distance.value)
+            // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
+            // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
+            var stringser = JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
+            return stringser;
+            // console.log(this.distance)
+            // console.log(this.distance.text)
+        });
     };
     CreatePage.prototype.findPath1 = function () {
         var _this = this;
@@ -2909,7 +2716,7 @@ var CreatePage = (function () {
 
 /***/ }),
 
-/***/ 92:
+/***/ 91:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2918,13 +2725,13 @@ var CreatePage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_file_path__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_file_path__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_fcm__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_fcm__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_http__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_map__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_file_transfer__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_file_transfer__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_storage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_home_home__ = __webpack_require__(60);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -3206,6 +3013,200 @@ var SignUpPage = (function () {
 }());
 
 //# sourceMappingURL=sign-up.js.map
+
+/***/ }),
+
+/***/ 92:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActivePage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_packagedetail_packagedetail__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_fcm__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(18);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the ActivePage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var ActivePage = (function () {
+    function ActivePage(navCtrl, navParams, file, filePath, http, transfer, fcm, storage, alertCtrl, loadingCtrl) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.file = file;
+        this.filePath = filePath;
+        this.http = http;
+        this.transfer = transfer;
+        this.fcm = fcm;
+        this.storage = storage;
+        this.alertCtrl = alertCtrl;
+        this.loadingCtrl = loadingCtrl;
+        this.activedata = [];
+        this.nodata = false;
+        this.delete = false;
+        this.storage.get('ID').then(function (val) {
+            _this.ID = val;
+            _this.http.get('http://localhost:5000/active', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                if (data['content'] == "failed") {
+                    _this.nodata = true;
+                }
+                else {
+                    data.map(function (item) {
+                        _this.activedata.push(item);
+                    });
+                }
+                console.log(_this.activedata);
+            }, function (err) {
+                console.log(err);
+            });
+        });
+    }
+    ActivePage.prototype.ionViewDidLoad = function () {
+        var _this = this;
+        console.log('ionViewDidLoad ActivePage');
+        this.navBar.backButtonClick = function (e) {
+            // Print this event to the console
+            console.log(e);
+            // Navigate to another page
+            _this.navCtrl.getPrevious().data.thing1 = null;
+            _this.navCtrl.pop();
+        };
+    };
+    ActivePage.prototype.packagedetails = function (i) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__pages_packagedetail_packagedetail__["a" /* PackagedetailPage */], this.activedata[i]);
+    };
+    ActivePage.prototype.doRefresh = function (refresher) {
+        var _this = this;
+        console.log('refreshing', refresher);
+        this.activedata = [];
+        setTimeout(function () {
+            console.log('Async operation has ended');
+            _this.storage.get('ID').then(function (val) {
+                _this.ID = val;
+                _this.http.get('http://localhost:5000/active', { params: { 'SenderID': _this.ID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                    if (data['content'] == "failed") {
+                        _this.nodata = true;
+                    }
+                    else {
+                        data.map(function (item) {
+                            _this.activedata.push(item);
+                        });
+                    }
+                    console.log(_this.activedata);
+                }, function (err) {
+                    console.log(err);
+                });
+            });
+            refresher.complete();
+        }, 2000);
+    };
+    ActivePage.prototype.deletepackage = function (PackageID, SenderID) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Delete Package',
+            message: 'Are you sure you want to delete this?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    handler: function () {
+                        _this.delete = false;
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: function () {
+                        var loading = _this.loadingCtrl.create({
+                            content: 'Please wait...'
+                        });
+                        loading.present();
+                        setTimeout(function () {
+                            loading.dismiss();
+                            _this.http.get('http://localhost:5000/deletepackage', { params: { 'PackageID': PackageID, 'SenderID': SenderID } }).map(function (res) { return res.json(); }).subscribe(function (data) {
+                                if (data['content'] == "notdeleted") {
+                                    var alert_1 = _this.alertCtrl.create({
+                                        title: 'Package Not Deleted as it is ' + data['status'],
+                                        buttons: [
+                                            {
+                                                text: 'Ok',
+                                                role: 'cancel',
+                                                handler: function () {
+                                                    console.log('Ok clicked');
+                                                }
+                                            }
+                                        ]
+                                    });
+                                    alert_1.present();
+                                }
+                                else if (data['content'] == "failed") {
+                                    _this.nodata = true;
+                                }
+                                else {
+                                    _this.activedata = [];
+                                    data.map(function (item) {
+                                        _this.activedata.push(item);
+                                    });
+                                }
+                                console.log(_this.activedata);
+                            }, function (err) {
+                                console.log(err);
+                            });
+                        }, 2000);
+                        console.log('Delete clicked');
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('navbar'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Navbar */])
+    ], ActivePage.prototype, "navBar", void 0);
+    ActivePage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'page-active',template:/*ion-inline-start:"Y:\Users\src\pages\active\active.html"*/'<!--\n\n  Generated template for the ActivePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar #navbar>\n\n      <button ion-button menuToggle icon-only>\n\n          <ion-icon name=\'menu\'></ion-icon>\n\n        </button>\n\n    <ion-title>Active Packages</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content class="bgg" >\n\n    <ion-refresher (ionRefresh)="doRefresh($event)">\n\n        <ion-refresher-content\n\n          pullingIcon="arrow-dropdown"\n\n          pullingText="Pull to refresh"\n\n          refreshingSpinner="circles"\n\n          refreshingText="Refreshing...">\n\n        </ion-refresher-content>\n\n      </ion-refresher>\n\n  <div *ngIf="!nodata">\n\n  \n\n  <ion-card *ngFor="let item of activedata, let i= index">\n\n      <div style="position: relative">\n\n    <img src="http://localhost:5000/uploads/{{item.PImage}}" />\n\n    <ion-fab  right top>\n\n      <button class="buttoncolor" (click)="deletepackage(item.PackageID, item.SenderID)" ion-fab>\n\n        <ion-icon name="trash" ></ion-icon>\n\n      </button>\n\n    </ion-fab>\n\n</div>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="pin" item-start large></ion-icon>\n\n      <h2>{{item.PickAddress}}</h2>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="radio-button-off" item-left large></ion-icon>\n\n      <h2>{{item.DestAddress}}</h2>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-icon class="ioniconcolor1" name="key" item-left large></ion-icon>\n\n      <h2>{{item.Verificationkey}}</h2>\n\n    </ion-item>\n\n\n\n    <button class="colornavbar" ion-button full (click)="packagedetails(i)">\n\n      View Details\n\n    </button>\n\n  </ion-card>\n\n\n\n</div>\n\n<div *ngIf="nodata" class="nodata">\n\n  <p ion-text>No Packages Active Right Now :( </p>\n\n</div>\n\n\n\n</ion-content>\n\n\n\n'/*ion-inline-end:"Y:\Users\src\pages\active\active.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_path__["a" /* FilePath */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Http */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__["a" /* FileTransfer */], __WEBPACK_IMPORTED_MODULE_8__ionic_native_fcm__["a" /* FCM */], __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* LoadingController */]])
+    ], ActivePage);
+    return ActivePage;
+}());
+
+//# sourceMappingURL=active.js.map
 
 /***/ }),
 

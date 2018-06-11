@@ -316,7 +316,8 @@ export class CreatePage {
   }
 
   findPath() {
-    this.callback.bind( this ); 
+    this.distancePackage=this.getDistance();
+    console.log(this.distancePackage) 
     if (this.marker2 != null) {
       let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
@@ -341,7 +342,12 @@ export class CreatePage {
           window.alert('Directions request failed due to ' + status);
         }
       });
-      let service = new google.maps.DistanceMatrixService();
+      
+    }
+
+  }
+  getDistance(){
+    let service = new google.maps.DistanceMatrixService();
       service.getDistanceMatrix(
         {
           origins: [this.Source],
@@ -350,20 +356,15 @@ export class CreatePage {
           unitSystem: google.maps.UnitSystem.METRIC,
           avoidHighways: false,
           avoidTolls: false
-        }, this.callback);
-    }
-
-  }
-  callback(response, status){      
-      console.log(response.rows[0].elements[0].distance.value)
-      console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
-      console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
-      let stringser=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
-      this.distancePackage=parseFloat(stringser);
-      console.log(stringser)
-      console.log(this.distancePackage)
-      // console.log(this.distance)
-      // console.log(this.distance.text)
+        }, function(response, status){      
+          // console.log(response.rows[0].elements[0].distance.value)
+          // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
+          // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
+          let stringser=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
+          return stringser;
+          // console.log(this.distance)
+          // console.log(this.distance.text)
+      });
   }
 
   findPath1() {
