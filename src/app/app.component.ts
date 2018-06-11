@@ -69,8 +69,8 @@ export class MyApp {
           this.loadData().then(() => {
             console.log("inhere")
             this.loggedIn = true;
-            // this.updateToken();
-            // this.onNotification();
+            this.updateToken();
+            this.onNotification();
           })
         }
         else {
@@ -78,8 +78,8 @@ export class MyApp {
           this.getData().then(() => {
             console.log("inhere")
             this.loggedIn = true;
-            // this.updateToken();
-            // this.onNotification();
+            this.updateToken();
+            this.onNotification();
           })
         }
       })
