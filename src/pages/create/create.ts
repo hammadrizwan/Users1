@@ -101,7 +101,7 @@ export class CreatePage {
   Screen6: boolean;
   Scr6: boolean = true;
   Global: boolean = true;
-  distance: any;
+  distancePackage: any=0;
   marker1: any;
   marker2: any;
   observer: any;
@@ -124,7 +124,7 @@ export class CreatePage {
     private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public http: Http,
     public geolocation: Geolocation, public app: App,
-    public alertCtrl: AlertController, public zone: NgZone, private base64: Base64, private transfer: FileTransfer,public storage: Storage) {
+    public alertCtrl: AlertController, public zone: NgZone, private base64: Base64, private transfer: FileTransfer, public storage: Storage) {
     this.CurrentScreen = "S1";
     this.data = this.formBuilder.group({
       PackageName: ['', Validators.required],
@@ -166,9 +166,9 @@ export class CreatePage {
     this.navBar.backButtonClick = (e: UIEvent) => {
       // Print this event to the console
       console.log(e);
-    
+
       // Navigate to another page
-      this.navCtrl.getPrevious().data.thing1 =null;
+      this.navCtrl.getPrevious().data.thing1 = null;
       this.navCtrl.pop();
     }
     this.platform.ready().then(() => this.loadMaps());
@@ -316,7 +316,7 @@ export class CreatePage {
   }
 
   findPath() {
-
+    this.callback.bind( this ); 
     if (this.marker2 != null) {
       let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
@@ -332,14 +332,38 @@ export class CreatePage {
       }, function (response, status) {
         if (status === 'OK') {
           directionsDisplay.setDirections(response);//diplay directions
-          //this.distance = response.routes[0].legs[0].distance.value / 1000;
-          console.log(response.routes[0].legs[0].distance.value / 1000)
+
+          //console.log(response.routes[0].legs[0].distance.value / 1000)
+          // this.distance = response.routes[0].legs[0].distance.value;
+          // this.distance = this.distance / 1000;
+          // console.log(this.distance)
         } else {
           window.alert('Directions request failed due to ' + status);
         }
       });
+      let service = new google.maps.DistanceMatrixService();
+      service.getDistanceMatrix(
+        {
+          origins: [this.Source],
+          destinations: [this.Destination],
+          travelMode: google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        }, this.callback);
     }
 
+  }
+  callback(response, status){      
+      console.log(response.rows[0].elements[0].distance.value)
+      console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
+      console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
+      let stringser=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
+      this.distancePackage=parseFloat(stringser);
+      console.log(stringser)
+      console.log(this.distancePackage)
+      // console.log(this.distance)
+      // console.log(this.distance.text)
   }
 
   findPath1() {
@@ -573,7 +597,7 @@ export class CreatePage {
       this.Screen4 = true;
       if (this.TransportType != null) {
         this.CurrentScreen = "S5";
-        this.Screen4=false;
+        this.Screen4 = false;
       }
       return;
     }
@@ -581,15 +605,15 @@ export class CreatePage {
     if (this.CurrentScreen == "S5") {
       this.Screen5 = true;
       if (this.CourierType != null || this.VehicleType != null) {
-        this.http.get('http://localhost:5000/getfare',{params:{'Distance': this.distance,'vehicle':this.VehicleType}}).map(res => res.json()).subscribe(data => {
-        console.log('Fare is ' + data);  
-        this.fare = data.fare;
+        this.http.get('http://localhost:5000/getfare', { params: { 'Distance': this.distancePackage, 'vehicle': this.VehicleType } }).map(res => res.json()).subscribe(data => {
+          console.log('Fare is ' + data);
+          this.fare = data.fare;
         },
-      (err)=>{
-        console.log(err);
-      });
+          (err) => {
+            console.log(err);
+          });
         this.CurrentScreen = "S6";
-        this.Screen5=false;
+        this.Screen5 = false;
         this.Scr6 = false;
         this.findPath1();
       }
@@ -598,10 +622,10 @@ export class CreatePage {
 
     if (this.CurrentScreen == "S1") {
       this.Screen1 = true;
-      if (this.Source!=null && this.Destination!=null) {
+      if (this.Source != null && this.Destination != null) {
         this.CurrentScreen = "S2";
         this.Screen2 = false;
-        
+
       }
       else {
         this.routeerror = true;
@@ -640,7 +664,8 @@ export class CreatePage {
       this.CurrentScreen = "S4"
       return;
     }
-    if (this.CurrentScreen == "S6") {this.Scr6 = false;
+    if (this.CurrentScreen == "S6") {
+    this.Scr6 = false;
       this.Scr6 = true;
       this.CurrentScreen = "S5"
       return;
@@ -757,7 +782,7 @@ export class CreatePage {
 
     }
 
-    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload?type='+'Package', options, true)
+    fileTransfer.upload(this.pathForImage(this.lastImage1), 'http://localhost:5000/imageupload?type=' + 'Package', options, true)
       .then((data) => {
         console.log(data)
       }, (err) => {
@@ -767,7 +792,7 @@ export class CreatePage {
 
 
   formSubmit() {
-   
+
     this.upload();
     let Userdata;
     let Src = JSON.parse(JSON.stringify(this.Source));
@@ -778,72 +803,72 @@ export class CreatePage {
     let DLng = Dst["lng"];
     this.storage.get('ID').then((val) => {
       this.ID = val;
-    if (this.TransportType == 'Freelance') {
-      Userdata = {
-        'PackageID': 0,
-        'PackageName': this.PackageName.value,
-        'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.SourceString,
-        'DestAddress': this.DestinationString,
-        'PackageSize': this.PackageSize,
-        'TransportType': this.TransportType,
-        'VehicleType': this.VehicleType,
-        'SourceLongitude': SLng,
-        'SourceLatitude': SLat,
-        'DestinationLongitude': DLng,
-        'DestinationLatitude': DLat,
-        'TransporterID': null,
-        'SenderID': this.ID,
-        'Status': "Active",
-        'PImage': this.lastImage1,
-        'Fare': this.fare,
-        'Distance': this.distance,
-        'Verificationkey':"sa",
-      };
-    }
-    else {
-      Userdata = {
-        'PackageID': 0,
-        'PackageName': this.PackageName.value,
-        'PackageDesc': this.PackageDesc.value,
-        'PickAddress': this.SourceString,
-        'DestAddress': this.DestinationString,
-        'PackageSize': this.PackageSize,
-        'TransportType': this.TransportType,
-        'CourierType': this.CourierType,
-        'SourceLongitude': Src["lng"],
-        'SourceLatitude': Src["lat"],
-        'DestinationLongitude': Dst["lng"],
-        'DestinationLatitude': Dst["lat"],
-        'TransporterID': null,
-        'SenderID': this.ID,
-        'Status': "Active",
-        'PImage': this.lastImage1,
-        'Fare': this.fare,
-        'Distance': this.distance,
-      };
-    }
+      if (this.TransportType == 'Freelance') {
+        Userdata = {
+          'PackageID': 0,
+          'PackageName': this.PackageName.value,
+          'PackageDesc': this.PackageDesc.value,
+          'PickAddress': this.SourceString,
+          'DestAddress': this.DestinationString,
+          'PackageSize': this.PackageSize,
+          'TransportType': this.TransportType,
+          'VehicleType': this.VehicleType,
+          'SourceLongitude': SLng,
+          'SourceLatitude': SLat,
+          'DestinationLongitude': DLng,
+          'DestinationLatitude': DLat,
+          'TransporterID': null,
+          'SenderID': this.ID,
+          'Status': "Active",
+          'PImage': this.lastImage1,
+          'Fare': this.fare,
+          'Distance': this.distancePackage,
+          'Verificationkey': "sa",
+        };
+      }
+      else {
+        Userdata = {
+          'PackageID': 0,
+          'PackageName': this.PackageName.value,
+          'PackageDesc': this.PackageDesc.value,
+          'PickAddress': this.SourceString,
+          'DestAddress': this.DestinationString,
+          'PackageSize': this.PackageSize,
+          'TransportType': this.TransportType,
+          'CourierType': this.CourierType,
+          'SourceLongitude': Src["lng"],
+          'SourceLatitude': Src["lat"],
+          'DestinationLongitude': Dst["lng"],
+          'DestinationLatitude': Dst["lat"],
+          'TransporterID': null,
+          'SenderID': this.ID,
+          'Status': "Active",
+          'PImage': this.lastImage1,
+          'Fare': this.fare,
+          'Distance': this.distancePackage,
+        };
+      }
 
 
-    console.log(Userdata);
-    this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
-      let responseData = data;
-      console.log(responseData);
-      //this.presentToast("Your Package has been created!");
-      let data1 = 
-      {
-        name: data.content[0].PackageName
-      };
-    this.navCtrl.getPrevious().data.thing1 =data1;
-    this.navCtrl.pop();
-    },
-      err => {
-        //this.presentToast("Your Package was not created");
-        console.log(err);
-      });
-  });
+      console.log(Userdata);
+      this.http.post('http://localhost:5000/createpackage', JSON.stringify(Userdata)).map(res => res.json()).subscribe(data => {
+        let responseData = data;
+        console.log(responseData);
+        //this.presentToast("Your Package has been created!");
+        let data1 =
+          {
+            name: data.content[0].PackageName
+          };
+        this.navCtrl.getPrevious().data.thing1 = data1;
+        this.navCtrl.pop();
+      },
+        err => {
+          //this.presentToast("Your Package was not created");
+          console.log(err);
+        });
+    });
 
-  
 
-}
+
+  }
 }

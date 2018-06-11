@@ -55,34 +55,35 @@ export class MyApp {
     platform.ready().then(() => {
       //Notifications
       
-      firebase.initializeApp(config);//intialise firebase
-      this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
+     // firebase.initializeApp(config);//intialise firebase
+      //this.ref = firebase.database().ref('geolocations/');//assign data base to store gelocation
       this.loggedIn = false;
       //end notifications.
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.storage.get('Name').then((val) => {//check if user initals are set or not
-        if (val == null) {
-          this.rootPage = LoginPage; //set landing page as login page
-          this.loadData().then(() => {
-            console.log("inhere")
-            this.loggedIn = true;
-            this.updateToken();
-            this.onNotification();
-          })
-        }
-        else {
-          this.rootPage = HomePage;//set landing page as home page
-          this.getData().then(() => {
-            console.log("inhere")
-            this.loggedIn = true;
-            this.updateToken();
-            this.onNotification();
-          })
-        }
-      })
+      // this.storage.get('Name').then((val) => {//check if user initals are set or not
+      //   if (val == null) {
+      //     this.rootPage = LoginPage; //set landing page as login page
+      //     this.loadData().then(() => {
+      //       console.log("inhere")
+      //       this.loggedIn = true;
+      //       this.updateToken();
+      //       this.onNotification();
+      //     })
+      //   }
+      //   else {
+      //     this.rootPage = HomePage;//set landing page as home page
+      //     this.getData().then(() => {
+      //       console.log("inhere")
+      //       this.loggedIn = true;
+      //       this.updateToken();
+      //       this.onNotification();
+      //     })
+      //   }
+      // })
+      this.rootPage=CreatePage;
     });
     this.pages = [
       { title: 'Home', component: HomePage },
@@ -168,8 +169,7 @@ export class MyApp {
     this.storage.set('ID', null);
     
     this.storage.set('ProfileImage', null);
-    this.storage.set('FCMToken', null);
-    
+    this.storage.set('FCMToken', null);  
     /*________________________________*/
     this.nav.setRoot(LoginPage);
     setTimeout(() => {//wait to storage is set
