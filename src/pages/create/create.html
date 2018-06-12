@@ -20,7 +20,7 @@
       </ion-segment-button>
       <ion-segment-button value="S3" disabled="true">Step 3
       </ion-segment-button>
-      <ion-segment-button value="S4" disabled="false">Step 4
+      <ion-segment-button value="S4" disabled="true">Step 4
       </ion-segment-button>
       <ion-segment-button value="S5" disabled="true">Step 5
       </ion-segment-button>
@@ -91,18 +91,21 @@
       <ion-card>
 
         <img src="{{ImagePath}}" *ngIf="lastImage1!=null">
-        
-        <ion-row>
-          <ion-icon class="photo1" *ngIf="lastImage1==null" name="add-circle" large></ion-icon>
+        <ion-grid>
+        <ion-row align-items-center>
+            <button  class="buttonImage" ion-button round full large icon-only color="primary" (click)="presentActionSheet(1)">
+                <ion-icon class="photo1" name="add-circle" large></ion-icon>
+              </button>
         </ion-row>
+      </ion-grid>
         
           
       
-        <ion-row>
+        <!-- <ion-row>
           <button ion-button full icon-left (click)="presentActionSheet(1)">
             <ion-icon name="camera"></ion-icon>Select Image
           </button>
-        </ion-row>
+        </ion-row> -->
         <ion-item *ngIf="imageerror">
           <p ion-text color="danger">*Please take an image of the package</p>
         </ion-item>

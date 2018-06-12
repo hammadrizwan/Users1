@@ -22,9 +22,9 @@
 
   <ion-item class="background">
     <ion-avatar item-start>
-        <button  *ngIf="lastImage1==null" ion-button round large icon-only color="primary" (click)="presentActionSheet(1)">
-            <ion-icon class="photo1"  name="add-circle" large></ion-icon>
-          </button>
+      <button *ngIf="lastImage1==null" ion-button round large icon-only color="primary" (click)="presentActionSheet(1)">
+        <ion-icon class="photo1" name="add-circle" large></ion-icon>
+      </button>
       <img src="{{pathForImage(lastImage1)}}" class="avatar1" *ngIf="lastImage1!=null">
     </ion-avatar>
     <h2 class="inputs">Take a Selfie!</h2>
@@ -38,7 +38,7 @@
     <!-- Name input -->
     <ion-item class="background">
       <ion-label color="light" floating>Name</ion-label>
-      <ion-input type="text" formControlName="Name"></ion-input>
+      <ion-input class="inputs" type="text" formControlName="Name"></ion-input>
     </ion-item>
     <ion-item *ngIf="Name.hasError('required') && submitAttempted">
       <p ion-text color="danger">*Please enter full name</p>
@@ -48,7 +48,7 @@
     <!-- Email input -->
     <ion-item class="background">
       <ion-label color="light" floating>Email</ion-label>
-      <ion-input  class="inputs" type="email" formControlName="Email"></ion-input>
+      <ion-input class="inputs" type="email" formControlName="Email"></ion-input>
     </ion-item>
     <ion-item class="background" *ngIf="Email.hasError('required') && submitAttempted">
       <p ion-text color="danger">*Please enter email</p>
@@ -60,7 +60,7 @@
     <!-- CNIC input -->
     <ion-item class="background">
       <ion-label color="light" floating>CNIC</ion-label>
-      <ion-input class="inputs"  formControlName="CNIC" type="text"></ion-input>
+      <ion-input class="inputs" formControlName="CNIC" type="text"></ion-input>
     </ion-item>
     <ion-item class="background" *ngIf="(CNIC.hasError('required')  && submitAttempted)">
       <p ion-text color="danger">*Please enter CNIC</p>
@@ -72,19 +72,19 @@
     <!-- Phone Number input -->
     <ion-item class="background">
       <ion-label color="light" floating>Phone Number</ion-label>
-      <ion-input class="inputs"  formControlName="Phone" type="text"></ion-input>
+      <ion-input class="inputs" formControlName="Phone" type="text"></ion-input>
     </ion-item>
     <ion-item class="background" *ngIf="Phone.hasError('required')  && submitAttempted">
       <p ion-text color="danger">*Please enter phone number</p>
     </ion-item>
-    <ion-item  class="background" *ngIf="Phone.hasError('pattern')  && Phone.touched">
+    <ion-item class="background" *ngIf="Phone.hasError('pattern')  && Phone.touched">
       <p ion-text color="danger"> *Please enter proper phone number(no +92)</p>
     </ion-item>
 
     <!-- Address input -->
-    <ion-item class="background" >
+    <ion-item class="background">
       <ion-label color="light" floating>Address</ion-label>
-      <ion-textarea class="inputs"  formControlName="Address"></ion-textarea>
+      <ion-textarea class="inputs" formControlName="Address"></ion-textarea>
     </ion-item>
     <ion-item class="background" *ngIf="Address.hasError('required')  && submitAttempted">
       <p ion-text color="danger">*Please enter Address</p>
@@ -104,7 +104,7 @@
     <!-- Date of Birth input -->
     <ion-item class="background">
       <ion-label color="light">D.O.B</ion-label>
-      <ion-select class="inputs"  formControlName="Date">
+      <ion-select class="inputs" formControlName="Date">
         <ion-option value="Date" selected>Date</ion-option>
         <ion-option value="1">1</ion-option>
         <ion-option value="2">2</ion-option>
@@ -138,7 +138,7 @@
         <ion-option value="30">30</ion-option>
         <ion-option value="31">31</ion-option>
       </ion-select>
-      <ion-select class="inputs"  formControlName="Month">
+      <ion-select class="inputs" formControlName="Month">
         <ion-option value="Month" selected>Month</ion-option>
         <ion-option value="Janaury">Janaury</ion-option>
         <ion-option value="February">February</ion-option>

@@ -316,8 +316,7 @@ export class CreatePage {
   }
 
   findPath() {
-    this.distancePackage=this.getDistance();
-    console.log(this.distancePackage) 
+    //this.getDistance();
     if (this.marker2 != null) {
       let directionsService = new google.maps.DirectionsService;
       let directionsDisplay = new google.maps.DirectionsRenderer;
@@ -330,14 +329,12 @@ export class CreatePage {
         origin: this.Source,//location A origin marker
         destination: this.Destination,//location B destination marker
         travelMode: 'DRIVING'
-      }, function (response, status) {
+      }, (response, status)=> {
         if (status === 'OK') {
           directionsDisplay.setDirections(response);//diplay directions
-
           //console.log(response.routes[0].legs[0].distance.value / 1000)
-          // this.distance = response.routes[0].legs[0].distance.value;
-          // this.distance = this.distance / 1000;
-          // console.log(this.distance)
+          this.distancePackage  = response.routes[0].legs[0].distance.value/1000;    
+          console.log(this.distancePackage)
         } else {
           window.alert('Directions request failed due to ' + status);
         }
@@ -346,26 +343,27 @@ export class CreatePage {
     }
 
   }
-  getDistance(){
-    let service = new google.maps.DistanceMatrixService();
-      service.getDistanceMatrix(
-        {
-          origins: [this.Source],
-          destinations: [this.Destination],
-          travelMode: google.maps.TravelMode.DRIVING,
-          unitSystem: google.maps.UnitSystem.METRIC,
-          avoidHighways: false,
-          avoidTolls: false
-        }, function(response, status){      
-          // console.log(response.rows[0].elements[0].distance.value)
-          // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
-          // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
-          let stringser=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
-          return stringser;
-          // console.log(this.distance)
-          // console.log(this.distance.text)
-      });
-  }
+  // getDistance(){
+  //   let service = new google.maps.DistanceMatrixService();
+  //     service.getDistanceMatrix(
+  //       {
+  //         origins: [this.Source],
+  //         destinations: [this.Destination],
+  //         travelMode: google.maps.TravelMode.DRIVING,
+  //         unitSystem: google.maps.UnitSystem.METRIC,
+  //         avoidHighways: false,
+  //         avoidTolls: false
+  //       },(response, status)=>{      
+  //         // console.log(response.rows[0].elements[0].distance.value)
+  //         // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance)));
+  //         // console.log(JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.text)));
+  //         let stringser=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
+  //         this.distancePackage=JSON.parse(JSON.stringify(response.rows[0].elements[0].distance.value));
+  //         console.log(this.distancePackage)
+  //         // console.log(this.distance)
+  //         // console.log(this.distance.text)
+  //     });
+  // }
 
   findPath1() {
     setTimeout(() => {
@@ -608,7 +606,9 @@ export class CreatePage {
       if (this.CourierType != null || this.VehicleType != null) {
         this.http.get('http://localhost:5000/getfare', { params: { 'Distance': this.distancePackage, 'vehicle': this.VehicleType } }).map(res => res.json()).subscribe(data => {
           console.log('Fare is ' + data);
-          this.fare = data.fare;
+          this.fare = Math.round(data.fare);
+          console.log(this.fare);
+  
         },
           (err) => {
             console.log(err);
@@ -623,6 +623,7 @@ export class CreatePage {
 
     if (this.CurrentScreen == "S1") {
       this.Screen1 = true;
+      this.findPath();
       if (this.Source != null && this.Destination != null) {
         this.CurrentScreen = "S2";
         this.Screen2 = false;
@@ -858,7 +859,7 @@ export class CreatePage {
         //this.presentToast("Your Package has been created!");
         let data1 =
           {
-            name: data.content[0].PackageName
+            name: data.content
           };
         this.navCtrl.getPrevious().data.thing1 = data1;
         this.navCtrl.pop();

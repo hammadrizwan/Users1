@@ -38354,6 +38354,10 @@ ion-searchbar {
   margin: 0 auto;
 }
 
+.buttonImage {
+  display: inline-block;
+}
+
 .aa {
   background-color: #2a4262;
 }
