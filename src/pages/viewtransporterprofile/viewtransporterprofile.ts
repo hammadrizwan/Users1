@@ -32,13 +32,14 @@ export class ViewtransporterprofilePage {
   skips: number;
   infiniteScroll: any;
   Transporterparams: any;
+  dataLoaded:Boolean=false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage
     , public http: Http, private alertCtrl: AlertController) {
 
-    
+
     this.onload().then(() => {
 
-      this.http.get('http://localhost:5000/getransporterdata', { params: { 'TransporterID': this.ID } }).map(res => res.json()).subscribe(response => {
+      this.http.get('http://localhost:5000/gettransporterdata', { params: { 'TransporterID': this.ID } }).map(res => res.json()).subscribe(response => {
         console.log(response.content);
         this.name = response.content[0].Name;
         console.log(this.name);
@@ -75,7 +76,7 @@ export class ViewtransporterprofilePage {
         });
 
     });
-
+    this.dataLoaded=true;
     this.skips = 0;
     /*get Transporter ID from localstorage and  request data and put it into variables to show in view________________*/
 
